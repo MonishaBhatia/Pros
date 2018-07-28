@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_launcher_background"
+    tools:context=".launch_screen.LaunchActivity">
+
+    <TextView
+        android:id="@+id/pros"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="PROS"
+        android:textSize="@dimen/sp_50"
+        android:textStyle="italic|bold"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/tvFbSignIn"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvSignIn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginLeft="@dimen/dp_32"
+        android:layout_marginRight="@dimen/dp_32"
+        android:layout_marginTop="@dimen/dp_50"
+        android:gravity="center"
+        android:text="Sign In"
+        android:textAllCaps="true"
+        android:background="@drawable/bg_oval"
+        app:layout_constraintBottom_toTopOf="@id/tvFbSignIn"
+        app:layout_constraintTop_toBottomOf="@id/pros" />
+
+    <TextView
+        android:id="@+id/tvFbSignIn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginLeft="@dimen/dp_32"
+        android:layout_marginRight="@dimen/dp_32"
+        android:gravity="center"
+        android:text="Sign In With Facebook"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_fb_blue_oval"
+        app:layout_constraintTop_toBottomOf="@id/tvSignIn"
+        app:layout_constraintBottom_toTopOf="@id/tvSignUp"/>
+
+    <TextView
+        android:id="@+id/tvSignUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_32"
+        android:layout_marginRight="@dimen/dp_32"
+        android:gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:text="Don't have an account? Sign Up"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="50dp" />
+
+</android.support.constraint.ConstraintLayout>

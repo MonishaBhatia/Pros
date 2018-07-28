@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/dp_32"
+    android:paddingRight="@dimen/dp_32"
+    android:background="@drawable/ic_launcher_background"
+    tools:context=".account.activity.SignUpActivity">
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/edtName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="FULL NAME"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="@dimen/sp_14"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:layout_marginTop="@dimen/dp_50"
+        />
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/edtEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_12"
+        android:gravity="center"
+        android:hint="EMAIL ADDRESS"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:textSize="@dimen/sp_14" />
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/edtPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="PASSWORD"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="@dimen/sp_14"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/dp_12"
+        />
+
+    <TextView
+        android:id="@+id/tvSignUp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginTop="@dimen/dp_18"
+        android:gravity="center"
+        android:text="CREATE ACCOUNT"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_transparent"
+        />
+
+    <TextView
+        android:id="@+id/tvSignIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:text="Already have an account? Sign In"
+        android:layout_marginTop="@dimen/dp_32"/>
+
+
+    <TextView
+        android:id="@+id/tvTnC"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:text="By creating an account with Pros,\n I accept the Terms and Privacy Policy"
+        android:layout_marginTop="@dimen/dp_32"/>
+</LinearLayout>

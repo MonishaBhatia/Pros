@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Pros</string>
+    <string name="enter_email">Please Enter Valid Email</string>
+    <string name="enter_password">Please Enter Valid Password</string>
+    <string name="enter_name">Please Enter Valid Name</string>
+    <string name="sign_up_error">Email has already been taken</string>
+    <string name="sign_in_error">There was a problem signing in to your account. Check your credentials and try again.</string>
+    <string name="forgot_paswd_error_title">Oh oh!</string>
+    <string name="forgot_paswd_error_text">We need your email address.\n\nEnter an email address in the field above, and reset instructions will be sent to your inbox</string>
+    <string name="password_reset">Password Reset</string>
+    <string name="password_reset_text">Your password has been reset. Please check your email for your temporary password.</string>
+    <string name="internal_error">Oops! Something went wrong.</string>
+</resources>
