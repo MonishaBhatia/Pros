@@ -6,19 +6,21 @@
     android:layout_height="match_parent"
     android:background="@drawable/ic_launcher_background"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/dp_32"
-    android:paddingRight="@dimen/dp_32"
     tools:context=".account.activity.SignInActivity">
+
+    <include layout="@layout/layout_toolbar" />
 
     <android.support.design.widget.TextInputEditText
         android:id="@+id/edtEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/dp_32"
+        android:layout_marginRight="@dimen/dp_32"
         android:layout_marginTop="@dimen/dp_50"
         android:gravity="center"
+        android:hint="@string/email"
         android:inputType="textEmailAddress"
-        android:hint="EMAIL ADDRESS"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
         android:textSize="@dimen/sp_14" />
@@ -28,9 +30,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/dp_32"
+        android:layout_marginRight="@dimen/dp_32"
         android:layout_marginTop="@dimen/dp_12"
         android:gravity="center"
-        android:hint="PASSWORD"
+        android:hint="@string/password"
         android:inputType="textPassword"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
@@ -40,10 +44,12 @@
         android:id="@+id/tvSignIn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48"
+        android:layout_marginLeft="@dimen/dp_32"
+        android:layout_marginRight="@dimen/dp_32"
         android:layout_marginTop="@dimen/dp_18"
         android:background="@drawable/bg_transparent"
         android:gravity="center"
-        android:text="Sign In"
+        android:text="@string/sign_in"
         android:textAllCaps="true"
         android:textColor="@color/white" />
 
@@ -51,9 +57,11 @@
         android:id="@+id/tvSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_32"
+        android:layout_marginRight="@dimen/dp_32"
         android:layout_marginTop="@dimen/dp_32"
         android:gravity="center_horizontal"
-        android:text="Don't have an account? Sign Up"
+        android:text="@string/sign_up_text"
         android:textColor="@color/white" />
 
 
@@ -61,8 +69,10 @@
         android:id="@+id/tvForgotPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_32"
+        android:layout_marginRight="@dimen/dp_32"
         android:layout_marginTop="@dimen/dp_32"
         android:gravity="center_horizontal"
-        android:text="Forgot Password?"
+        android:text="@string/forgot_pswd"
         android:textColor="@color/white" />
 </LinearLayout>

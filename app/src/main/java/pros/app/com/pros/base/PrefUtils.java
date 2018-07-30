@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.util.TypedValue;
 
 import pros.app.com.pros.ProsApplication;
+import pros.app.com.pros.account.model.AvatarModel;
 import pros.app.com.pros.account.model.SignInModel;
 import pros.app.com.pros.account.model.UserModel;
 
@@ -100,9 +101,12 @@ public final class PrefUtils {
 
     public static void saveUser(@NonNull UserModel user) {
         SharedPreferences.Editor editor = getUserPreferences().edit();
+        editor.putInt(UserKeys.USER_ID, user.getId());
         editor.putString(UserKeys.EMAIL, user.getEmail());
         editor.putString(UserKeys.FIRST_NAME, user.getFirstName());
         editor.putString(UserKeys.LAST_NAME, user.getLastName());
+        editor.putString(UserKeys.API_KEY, user.getApiKey());
+        editor.putString(UserKeys.USER_TYPE, user.getUserType());
         editor.apply();
 
         LogUtils.LOGI(PrefUtils.class.getSimpleName(), "saveUser() -> " + user.toString());
@@ -111,10 +115,11 @@ public final class PrefUtils {
 
     public static UserModel getUser() {
 
-        if (!getUserPreferences().contains(UserKeys.API_KEY))
+        if (!getUserPreferences().contains(UserKeys.USER_ID))
             return null;
 
         return new UserModel(
+                getUserPreferences().getInt(UserKeys.USER_ID, 0),
                 getUserPreferences().getString(UserKeys.EMAIL, ""),
                 getUserPreferences().getString(UserKeys.FIRST_NAME, ""),
                 getUserPreferences().getString(UserKeys.LAST_NAME, ""),

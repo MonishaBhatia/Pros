@@ -7,21 +7,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class AvatarModel {
 
     @JsonProperty("thumbnail_url")
-    private Object thumbnailUrl;
+    private String thumbnailUrl;
     @JsonProperty("medium_url")
-    private Object mediumUrl;
+    private String mediumUrl;
     @JsonProperty("original_url")
-    private Object originalUrl;
+    private String originalUrl;
 
-    public Object getThumbnailUrl() {
+    public String getThumbnailUrl() {
         return thumbnailUrl;
     }
 
-    public Object getMediumUrl() {
+    public String getMediumUrl() {
         return mediumUrl;
     }
 
-    public Object getOriginalUrl() {
+    public String getOriginalUrl() {
         return originalUrl;
     }
 }

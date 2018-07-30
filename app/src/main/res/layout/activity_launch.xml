@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,9 +13,9 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="PROS"
+        android:textColor="@color/white"
         android:textSize="@dimen/sp_50"
         android:textStyle="italic|bold"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@id/tvFbSignIn"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,11 +25,11 @@
         android:layout_height="@dimen/dp_48"
         android:layout_marginLeft="@dimen/dp_32"
         android:layout_marginRight="@dimen/dp_32"
-        android:layout_marginTop="@dimen/dp_50"
+        android:layout_marginTop="@dimen/dp_70"
+        android:background="@drawable/bg_oval"
         android:gravity="center"
         android:text="Sign In"
         android:textAllCaps="true"
-        android:background="@drawable/bg_oval"
         app:layout_constraintBottom_toTopOf="@id/tvFbSignIn"
         app:layout_constraintTop_toBottomOf="@id/pros" />
 
@@ -40,24 +39,24 @@
         android:layout_height="@dimen/dp_48"
         android:layout_marginLeft="@dimen/dp_32"
         android:layout_marginRight="@dimen/dp_32"
+        android:background="@drawable/bg_fb_blue_oval"
         android:gravity="center"
         android:text="Sign In With Facebook"
         android:textAllCaps="true"
         android:textColor="@color/white"
-        android:background="@drawable/bg_fb_blue_oval"
-        app:layout_constraintTop_toBottomOf="@id/tvSignIn"
-        app:layout_constraintBottom_toTopOf="@id/tvSignUp"/>
+        app:layout_constraintBottom_toTopOf="@id/tvSignUp"
+        app:layout_constraintTop_toBottomOf="@id/tvSignIn" />
 
     <TextView
         android:id="@+id/tvSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_50"
         android:layout_marginLeft="@dimen/dp_32"
         android:layout_marginRight="@dimen/dp_32"
         android:gravity="center_horizontal"
-        android:textColor="@color/white"
         android:text="Don't have an account? Sign Up"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="50dp" />
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

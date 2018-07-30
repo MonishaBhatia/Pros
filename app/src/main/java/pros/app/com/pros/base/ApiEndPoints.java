@@ -60,7 +60,9 @@ public enum ApiEndPoints {
 
     flag_post("/posts/%s/flag", 47),
 
-    block_user("/users/block_user", 48);
+    block_user("/users/block_user", 48),
+
+    upload_url_to_db("upload_url_to_db", 49);
 
     private static final String BASE_URL = "http://pros-staging.herokuapp.com/api/v1";
     private final String api;
