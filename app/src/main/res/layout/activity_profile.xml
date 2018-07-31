@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Testing Test"
+        tools:text="Testing Test"
         android:textColor="@color/white"
         android:textStyle="bold"
         android:textSize="@dimen/sp_24"
@@ -50,14 +50,26 @@
         app:layout_constraintTop_toBottomOf="@id/ivAvatar" />
 
     <TextView
-        android:id="@+id/tvFollowing"
+        android:id="@+id/tvNumFollowing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_32"
+        android:layout_marginTop="@dimen/dp_50"
         android:gravity="center"
-        android:text="31\nFollwing"
+        tools:text="31"
         android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/tvName" />
+        android:textSize="@dimen/sp_16"
+        app:layout_constraintTop_toBottomOf="@id/tvName"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/labelFollowing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/label_following"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/tvNumFollowing"
+        android:textSize="@dimen/sp_14" />
 
     <TextView
         android:id="@+id/tvLikedVideos"
@@ -65,12 +77,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_16"
         android:gravity="center"
-        android:text="0\nLiked Posts"
+        tools:text="0\nLiked Posts"
         android:textColor="@color/white"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginLeft="@dimen/dp_32"
         android:textAllCaps="true"
-        app:layout_constraintTop_toBottomOf="@id/tvFollowing" />
+        app:layout_constraintTop_toBottomOf="@id/labelFollowing" />
 
     <TextView
         android:id="@+id/tvLikedQuestions"
@@ -78,18 +90,19 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_16"
         android:gravity="center"
-        android:text="0\nLiked Questions"
+        tools:text="0\nLiked Questions"
         android:textColor="@color/white"
         android:layout_marginRight="@dimen/dp_32"
         app:layout_constraintRight_toRightOf="parent"
         android:textAllCaps="true"
-        app:layout_constraintTop_toBottomOf="@id/tvFollowing" />
+        app:layout_constraintTop_toBottomOf="@id/labelFollowing" />
 
     <TextView
+        android:id="@+id/label_nothing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableTop="@drawable/ic_slideshow"
-        android:text="No Liked Posts Yet"
+        android:text="@string/no_liked_posts"
         android:gravity="center"
         android:textColor="@color/white"
         android:layout_marginTop="@dimen/dp_50"

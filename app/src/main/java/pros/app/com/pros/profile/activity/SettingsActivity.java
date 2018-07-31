@@ -57,8 +57,7 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
 //        Picasso.get().load(PrefUtils.getUser().getAvatar().getMediumUrl()).error(R.drawable.ic_account).into(ivAvatar);
 
         tvName.setText(String.format("%s %s", PrefUtils.getUser().getFirstName(), PrefUtils.getUser().getLastName()));
-        //TODO:Put followers/following number
-        tvNumFollowing.setText("");
+        tvNumFollowing.setText(String.valueOf(getIntent().getIntExtra("Follow_Count", 0)));
     }
 
     @OnClick(R.id.tvContact)

@@ -33,5 +33,9 @@
     <string name="hint_new_pswd">NEW PASSWORD</string>
     <string name="hint_re_new_pswd">RE-ENTER PASSWORD</string>
     <string name="btn_save">SAVE</string>
+    <string name="label_liked_posts">%d\nLiked Posts</string>
+    <string name="label_liked_questions">%d\nLiked Questions</string>
+    <string name="no_liked_posts">No Liked Posts Yet</string>
+    <string name="no_liked_questions">No Liked Questions Yet</string>
 
 </resources>
