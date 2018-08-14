@@ -7,7 +7,7 @@ import pros.app.com.pros.base.HttpServiceUtil;
 import pros.app.com.pros.base.HttpServiceView;
 import pros.app.com.pros.base.JsonUtils;
 import pros.app.com.pros.base.ProsConstants;
-import pros.app.com.pros.home.model.HomePostModel;
+import pros.app.com.pros.home.model.HomeMainModel;
 import pros.app.com.pros.home.view.HomeView;
 
 public class HomePresenter implements HttpServiceView {
@@ -34,7 +34,7 @@ public class HomePresenter implements HttpServiceView {
     public void response(String response, int tag) {
         if (tag == ApiEndPoints.fans_profile_metadata.getTag()) {
             try {
-                HomePostModel homePostModel = JsonUtils.from(response, HomePostModel.class);
+                HomeMainModel homePostModel = JsonUtils.from(response, HomeMainModel.class);
                 view.bindData(homePostModel);
             } catch (IOException e) {
                 e.printStackTrace();

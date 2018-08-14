@@ -11,6 +11,9 @@ public class PostModel {
     @JsonProperty("id")
     private int id;
 
+    @JsonProperty("text")
+    private String text;
+
     @JsonProperty("content_type")
     private String contentType;
 
@@ -31,6 +34,9 @@ public class PostModel {
 
     @JsonProperty("athlete")
     private AthleteModel athlete;
+
+    @JsonProperty("questioner")
+    private AthleteModel questioner;
 
     @JsonProperty("likes")
     private LikeModel likes;
@@ -98,5 +104,13 @@ public class PostModel {
 
     public List<PostModel> getComments() {
         return comments;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public AthleteModel getQuestioner() {
+        return questioner;
     }
 }

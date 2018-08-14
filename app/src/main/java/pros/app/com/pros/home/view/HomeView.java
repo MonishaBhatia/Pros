@@ -1,8 +1,8 @@
 package pros.app.com.pros.home.view;
 
-import pros.app.com.pros.home.model.HomePostModel;
+import pros.app.com.pros.home.model.HomeMainModel;
 
 public interface HomeView {
 
-    void bindData(HomePostModel homePostModel);
+    void bindData(HomeMainModel homePostModel);
 }

@@ -9,7 +9,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pros.app.com.pros.R;
-import pros.app.com.pros.home.model.HomePostModel;
+import pros.app.com.pros.home.model.HomeMainModel;
 import pros.app.com.pros.home.presenter.HomePresenter;
 import pros.app.com.pros.home.view.HomeView;
 import pros.app.com.pros.profile.activity.ProfileActivity;
@@ -42,7 +42,7 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     }
 
     @Override
-    public void bindData(HomePostModel homePostModel) {
+    public void bindData(HomeMainModel homePostModel) {
 
     }
 }
