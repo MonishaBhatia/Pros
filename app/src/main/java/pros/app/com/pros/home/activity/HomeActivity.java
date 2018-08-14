@@ -9,13 +9,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pros.app.com.pros.R;
+import pros.app.com.pros.home.model.HomePostModel;
+import pros.app.com.pros.home.presenter.HomePresenter;
+import pros.app.com.pros.home.view.HomeView;
 import pros.app.com.pros.profile.activity.ProfileActivity;
 import pros.app.com.pros.search.activity.SearchActivity;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements HomeView {
 
     @BindView(R.id.rvPosts)
     RecyclerView rvPosts;
+    private HomePresenter homePresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +27,8 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         ButterKnife.bind(this);
+        homePresenter = new HomePresenter(this);
+        homePresenter.getPostData();
     }
 
     @OnClick(R.id.ivProfile)
@@ -35,4 +41,8 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(new Intent(this, SearchActivity.class));
     }
 
+    @Override
+    public void bindData(HomePostModel homePostModel) {
+
+    }
 }
