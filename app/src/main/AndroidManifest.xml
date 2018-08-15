@@ -5,8 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-
-    <uses-feature android:name="android.hardware.camera"
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
     <application
@@ -48,6 +48,7 @@
         <activity
             android:name=".profile.activity.SettingsActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".profile.activity.FollowingActivity"></activity>
     </application>
 
 </manifest>

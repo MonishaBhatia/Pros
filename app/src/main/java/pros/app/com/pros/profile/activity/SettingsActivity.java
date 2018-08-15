@@ -105,13 +105,11 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
 
     @OnClick({R.id.tvNumFollowing, R.id.labelFollowing})
     public void onCLickFollow() {
-        //TODO:Call Following fragment
+        startActivity(new Intent(this, FollowingActivity.class));
     }
 
     @OnClick(R.id.ivAvatar)
     public void onClickAvatar() {
-        //Todo: Open Camera and set image
-
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
