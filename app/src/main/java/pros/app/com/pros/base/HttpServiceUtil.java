@@ -6,6 +6,7 @@ import android.widget.Switch;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -32,6 +33,10 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
     private String jsonRequest;
     private final int tag;
     private RequestBody body;
+
+    private static final int LOW_CONNECT_TIMEOUT = 30 * 1000;
+    private static final long LOW_READ_TIMEOUT = 30 * 1000;
+    private static final int LOW_WRITE_TIME_OUT = 30 * 1000;
 
     private String getTokenHeader() {
         if (PrefUtils.getUser() != null) {
@@ -67,7 +72,14 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
     @Override
     protected String doInBackground(String... strings) {
 
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client;
+        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
+                .connectTimeout(LOW_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
+                .readTimeout(LOW_READ_TIMEOUT, TimeUnit.MILLISECONDS)
+                .writeTimeout(LOW_WRITE_TIME_OUT, TimeUnit.MILLISECONDS);
+
+        client = clientBuilder.build();
+
         MediaType mediaType = MediaType.parse("application/json");
 
 
