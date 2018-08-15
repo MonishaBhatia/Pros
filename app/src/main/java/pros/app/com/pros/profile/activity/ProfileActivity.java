@@ -42,7 +42,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     @BindView(R.id.rvPosts)
     RecyclerView rvPosts;
 
-    ProfilePresenter profilePresenter;
+    private ProfilePresenter profilePresenter;
     private MetaDataModel metaData;
 
     private int followCount;
@@ -68,7 +68,8 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     @OnClick(R.id.ivSettings)
     public void onClickSettings() {
         Intent intent = new Intent(ProfileActivity.this, SettingsActivity.class);
-        intent.putExtra("Follow_Count", metaData.getFollowCount());
+        if(metaData != null)
+            intent.putExtra("Follow_Count", metaData.getFollowCount());
         startActivity(intent);
     }
 
@@ -85,6 +86,11 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     @OnClick(R.id.tvLikedQuestions)
     public void onCLickLikedQuestions(){
         labelNothing.setText(getString(R.string.no_liked_questions));
+    }
+
+    @OnClick({R.id.tvNumFollowing, R.id.labelFollowing})
+    public void onCLickFollow() {
+        startActivity(new Intent(this, FollowingActivity.class));
     }
 
     @Override
