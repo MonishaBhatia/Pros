@@ -128,6 +128,8 @@
                 android:textColor="@color/white"
                 android:layout_gravity="bottom"
                 android:layout_margin="@dimen/dp_16"/>
+
+
         </FrameLayout>
 
     </LinearLayout>
