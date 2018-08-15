@@ -10,7 +10,7 @@ public class LogUtils {
         return cls.getSimpleName();
     }
 
-    private static final String PREFIX = "Pepperfry: ";
+    private static final String PREFIX = "PROS: ";
 
     public static void LOGI(String tag, String log){
         if(BuildConfig.DEBUG){

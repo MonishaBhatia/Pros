@@ -38,6 +38,7 @@
     <string name="no_liked_posts">No Liked Posts Yet</string>
     <string name="no_liked_questions">No Liked Questions Yet</string>
     <string name="label_search">Search</string>
+    <string name="label_explore">Explore</string>
     <string name="label_cancel">Cancel</string>
 
 </resources>
