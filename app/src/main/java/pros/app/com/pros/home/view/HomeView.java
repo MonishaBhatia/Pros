@@ -1,8 +1,10 @@
 package pros.app.com.pros.home.view;
 
-import pros.app.com.pros.home.model.HomeMainModel;
+import java.util.ArrayList;
+
+import pros.app.com.pros.home.model.PostModel;
 
 public interface HomeView {
 
-    void bindData(HomeMainModel homePostModel);
+    void bindData(ArrayList<PostModel> postsList);
 }

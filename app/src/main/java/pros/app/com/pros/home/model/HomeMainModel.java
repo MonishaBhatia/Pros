@@ -2,20 +2,29 @@ package pros.app.com.pros.home.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class HomeMainModel {
 
 
-    private List<PostModel> posts;
-    private List<PostModel> questions;
+    private ArrayList<PostModel> posts;
+    private ArrayList<PostModel> questions;
 
-    public List<PostModel> getPosts() {
+    public ArrayList<PostModel> getPosts() {
         return posts;
     }
 
-    public void setPosts(List<PostModel> posts) {
+    public void setPosts(ArrayList<PostModel> posts) {
         this.posts = posts;
+    }
+
+    public ArrayList<PostModel> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(ArrayList<PostModel> questions) {
+        this.questions = questions;
     }
 }

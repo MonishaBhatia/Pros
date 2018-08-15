@@ -3,13 +3,20 @@ package pros.app.com.pros.home.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pros.app.com.pros.R;
+import pros.app.com.pros.home.adapter.PostAdapter;
 import pros.app.com.pros.home.model.HomeMainModel;
+import pros.app.com.pros.home.model.PostModel;
 import pros.app.com.pros.home.presenter.HomePresenter;
 import pros.app.com.pros.home.view.HomeView;
 import pros.app.com.pros.profile.activity.ProfileActivity;
@@ -20,6 +27,7 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     @BindView(R.id.rvPosts)
     RecyclerView rvPosts;
     private HomePresenter homePresenter;
+    private PostAdapter postAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +50,13 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     }
 
     @Override
-    public void bindData(HomeMainModel homePostModel) {
+    public void bindData(ArrayList<PostModel> postsList) {
+
+        postAdapter = new PostAdapter(postsList);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        rvPosts.setLayoutManager(mLayoutManager);
+        rvPosts.setItemAnimator(new DefaultItemAnimator());
+        rvPosts.setAdapter(postAdapter);
 
     }
 }
