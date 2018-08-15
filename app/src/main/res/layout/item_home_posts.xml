@@ -64,7 +64,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2.5">
+            android:layout_weight="2.25">
 
             <View
                 android:id="@+id/question_container_background"
@@ -112,22 +112,39 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.75">
+            android:layout_weight="1">
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/post_end_gradient" />
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center|left">
+
             <TextView
                 android:id="@+id/athlete_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
-                android:textSize="20sp"
+                android:textSize="@dimen/sp_16"
                 android:textColor="@color/white"
                 android:layout_gravity="bottom"
-                android:layout_margin="@dimen/dp_16"/>
+                android:layout_marginLeft="@dimen/dp_16"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/athlete_thumb"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginLeft="@dimen/dp_16"
+                android:background="@drawable/circle"
+                android:src="@drawable/ic_account"
+                android:layout_below="@+id/athlete_name"
+                android:layout_marginTop="8dp"/>
+
+            </RelativeLayout>
 
 
         </FrameLayout>

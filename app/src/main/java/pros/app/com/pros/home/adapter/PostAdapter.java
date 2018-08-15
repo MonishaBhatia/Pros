@@ -34,6 +34,7 @@ import java.util.TimeZone;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import pros.app.com.pros.R;
 import pros.app.com.pros.base.DateUtils;
 import pros.app.com.pros.home.model.PostModel;
@@ -69,18 +70,21 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         {
             String athleteFullName = "";
             String thumbnailUrl = "";
+            String athleteThumbnailUrl = "";
 
             holder.postLike.setText("" + postModel.getLikes().getCount());
 
             if(postModel.getQuestioner() != null){
                 athleteFullName = postModel.getQuestioner().getName();
                 thumbnailUrl = postModel.getQuestioner().getAvatar().getThumbnailUrl();
+                athleteThumbnailUrl = postModel.getQuestioner().getAvatar().getThumbnailUrl();
                 holder.questionContainer.setVisibility(View.VISIBLE);
                 holder.questionContainer.setVisibility(View.VISIBLE);
                 holder.questionText.setText(postModel.getText());
                 holder.athleteName.setTextColor(Color.parseColor("#50e3c2"));
             } else {
                 thumbnailUrl= postModel.getUrls().getThumbnailUrl();
+                athleteThumbnailUrl =  postModel.getAthlete().getAvatar().getThumbnailUrl();
                 athleteFullName = postModel.getAthlete().getFirstName() + " " + postModel.getAthlete().getLastName();
                 holder.questionContainer.setVisibility(View.GONE);
                 holder.questionContainer.setVisibility(View.GONE);
@@ -89,6 +93,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
 
             Picasso.get().load(thumbnailUrl).into(holder.postImage);
+            Picasso.get().load(athleteThumbnailUrl).into(holder.athleteThumb);
             holder.athleteName.setText(athleteFullName);
             holder.createdAt.setText(dateDifference);
 
@@ -128,6 +133,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         @BindView(R.id.question_text)
         TextView questionText;
+
+        @BindView(R.id.athlete_thumb)
+        CircleImageView athleteThumb;
 
 
         public ViewHolder(View view){
