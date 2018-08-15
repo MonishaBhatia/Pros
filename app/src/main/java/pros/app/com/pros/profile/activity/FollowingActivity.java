@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pros.app.com.pros.R;
+import pros.app.com.pros.base.KeyboardAction;
 import pros.app.com.pros.profile.adapter.FollowingAdapter;
 import pros.app.com.pros.profile.model.FollowingModel;
 import pros.app.com.pros.profile.presenter.FollowingPresenter;
@@ -68,6 +70,8 @@ public class FollowingActivity extends AppCompatActivity implements FollowingVie
         followingPresenter.getFollowingList();
 
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         edtSearch.addTextChangedListener(watcher);
         edtSearch.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -115,12 +119,6 @@ public class FollowingActivity extends AppCompatActivity implements FollowingVie
     @OnClick(R.id.tvCancel)
     public void onClickCancel(){
         tvCancel.setVisibility(View.GONE);
-        try {
-            ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(
-                    InputMethodManager.SHOW_FORCED,
-                    InputMethodManager.HIDE_IMPLICIT_ONLY);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        KeyboardAction.hideSoftKeyboard(this, edtSearch);
     }
 }
