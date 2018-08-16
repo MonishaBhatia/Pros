@@ -48,7 +48,8 @@
         <activity
             android:name=".profile.activity.SettingsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".profile.activity.FollowingActivity"></activity>
+        <activity android:name=".profile.activity.FollowingActivity" />
+        <activity android:name=".profile.activity.AthleteProfileActivity"></activity>
     </application>
 
 </manifest>

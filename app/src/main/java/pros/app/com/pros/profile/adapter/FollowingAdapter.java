@@ -1,6 +1,7 @@
 package pros.app.com.pros.profile.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -23,15 +24,34 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pros.app.com.pros.R;
+import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.home.model.AthleteModel;
+import pros.app.com.pros.profile.activity.AthleteProfileActivity;
 import pros.app.com.pros.profile.activity.FollowingActivity;
+import pros.app.com.pros.profile.activity.ProfileActivity;
+import pros.app.com.pros.profile.presenter.FollowingPresenter;
+
+import static pros.app.com.pros.base.ProsConstants.IMAGE_URL;
+import static pros.app.com.pros.base.ProsConstants.NAME;
+import static pros.app.com.pros.base.ProsConstants.PROFILE_ID;
 
 public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.FollowingViewHolder> implements Filterable {
-    private final List<AthleteModel> athleteModelList;
+    private FollowingPresenter presenter;
+    private List<AthleteModel> athleteModelList = new ArrayList<>();
     private Context context;
     private FollowingActivity followingActivity;
-    private List<AthleteModel> model = new ArrayList<>();
     private List<AthleteModel> modelFiltered = new ArrayList<>();
+
+    public FollowingAdapter(Context context, List<AthleteModel> athleteModelList, FollowingActivity followingActivity, FollowingPresenter presenter) {
+        this.context = context;
+        this.presenter = presenter;
+        this.athleteModelList.clear();
+        this.athleteModelList = athleteModelList;
+        this.modelFiltered.clear();
+        this.modelFiltered.addAll(athleteModelList);
+        this.followingActivity = followingActivity;
+    }
+
 
     @Override
     public FollowingViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -41,26 +61,23 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.Foll
 
     @Override
     public void onBindViewHolder(@NonNull FollowingViewHolder holder, int position) {
-        AthleteModel currentItem = athleteModelList.get(position);
+        AthleteModel currentItem = modelFiltered.get(position);
 
-        Picasso.get().load(currentItem.getAvatar().getThumbnailUrl()).into(holder.ivIcon);
-        holder.tvName.setText(String.format("%s %s", currentItem.getFirstName(),currentItem.getLastName()));
-    }
+        Picasso.get().load(currentItem.getAvatar().getThumbnailUrl()).placeholder(R.drawable.ic_account).into(holder.ivIcon);
+        holder.tvName.setText(String.format("%s %s", currentItem.getFirstName(), currentItem.getLastName()));
 
-    public FollowingAdapter(Context context, List<AthleteModel> athleteModelList, FollowingActivity followingActivity) {
-        this.context = context;
-        this.athleteModelList = athleteModelList;
-
-        this.model.clear();
-        this.model.addAll(model);
-        this.modelFiltered.clear();
-        this.modelFiltered.addAll(model);
-        this.followingActivity = followingActivity;
+        if (currentItem.isFollowedByCurrentUser()) {
+            holder.ivFollow.setVisibility(View.VISIBLE);
+            holder.ivUnFollow.setVisibility(View.GONE);
+        } else {
+            holder.ivFollow.setVisibility(View.GONE);
+            holder.ivUnFollow.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return athleteModelList.size();
+        return modelFiltered.size();
     }
 
     @Override
@@ -71,12 +88,13 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.Foll
                 String searchString = charSequence.toString();
                 if (searchString.isEmpty()) {
                     modelFiltered.clear();
-                    modelFiltered.addAll(model);
+                    modelFiltered.addAll(athleteModelList);
                 } else {
                     modelFiltered.clear();
-                    for (int i = 0; i < model.size(); i++) {
-                        if (model.get(i).getFirstName().toLowerCase().startsWith(searchString.toLowerCase())) {
-                            modelFiltered.add(model.get(i));
+                    for (int i = 0; i < athleteModelList.size(); i++) {
+                        String name = String.format("%s %s", athleteModelList.get(i).getFirstName().toLowerCase(), athleteModelList.get(i).getLastName().toLowerCase());
+                        if (name.startsWith(searchString.toLowerCase())) {
+                            modelFiltered.add(athleteModelList.get(i));
                         }
                     }
                 }
@@ -99,17 +117,39 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.Foll
 
         @BindView(R.id.ivIcon)
         ImageView ivIcon;
+        @BindView(R.id.ivUnFollow)
+        ImageView ivUnFollow;
+        @BindView(R.id.ivFollow)
+        ImageView ivFollow;
         @BindView(R.id.tvName)
         TextView tvName;
 
         public FollowingViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
-            view.setOnClickListener(this);
+            tvName.setOnClickListener(this);
+            ivFollow.setOnClickListener(this);
+            ivUnFollow.setOnClickListener(this);
         }
 
         public void onClick(View v) {
-            //TODO:navigate to athlete profile page
+            switch (v.getId()) {
+                case R.id.tvName:
+                    Intent intent = new Intent(context, AthleteProfileActivity.class);
+                    intent.putExtra(PROFILE_ID, athleteModelList.get(getAdapterPosition()).getId());
+                    intent.putExtra(IMAGE_URL, athleteModelList.get(getAdapterPosition()).getAvatar().getMediumUrl());
+                    intent.putExtra(NAME, String.format("%s %s", athleteModelList.get(getAdapterPosition()).getFirstName(),athleteModelList.get(getAdapterPosition()).getLastName()));
+                    context.startActivity(intent);
+                    break;
+                case R.id.ivFollow:
+                    athleteModelList.get(getAdapterPosition()).setFollowedByCurrentUser(false);
+                    presenter.unFollowAthlete(athleteModelList.get(getAdapterPosition()).getId());
+                    break;
+                case R.id.ivUnFollow:
+                    athleteModelList.get(getAdapterPosition()).setFollowedByCurrentUser(true);
+                    presenter.followAthlete(athleteModelList.get(getAdapterPosition()).getId());
+                    break;
+            }
         }
     }
 }

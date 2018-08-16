@@ -31,6 +31,7 @@
         tools:text="Ryan Palmer" />
 
     <ImageView
+        android:id="@+id/ivFollow"
         android:layout_width="@dimen/dp_24"
         android:layout_height="@dimen/dp_24"
         android:background="@drawable/circle_green"
@@ -39,6 +40,19 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginRight="@dimen/dp_12"
         android:padding="6dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ivUnFollow"
+        android:layout_width="@dimen/dp_24"
+        android:layout_height="@dimen/dp_24"
+        android:background="@drawable/circle"
+        android:src="@drawable/ic_person_follow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="@dimen/dp_12"
+        android:padding="8dp"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View

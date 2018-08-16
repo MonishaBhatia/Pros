@@ -28,6 +28,10 @@ import pros.app.com.pros.launch_screen.LaunchActivity;
 import pros.app.com.pros.profile.views.SettingsView;
 import pros.app.com.pros.profile.presenter.SettingsPresenter;
 
+import static pros.app.com.pros.base.ProsConstants.FOLLOWING_LIST;
+import static pros.app.com.pros.base.ProsConstants.IS_FAN;
+import static pros.app.com.pros.base.ProsConstants.PROFILE_ID;
+
 public class SettingsActivity extends BaseActivity implements SettingsView, CustomDialogListener {
 
     @BindView(R.id.ivAvatar)
@@ -105,7 +109,11 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
 
     @OnClick({R.id.tvNumFollowing, R.id.labelFollowing})
     public void onCLickFollow() {
-        startActivity(new Intent(this, FollowingActivity.class));
+        Intent intent = new Intent(this, FollowingActivity.class);
+        intent.putExtra(PROFILE_ID, PrefUtils.getUser().getId());
+        intent.putExtra(FOLLOWING_LIST, true);
+        intent.putExtra(IS_FAN, true);
+        startActivity(intent);
     }
 
     @OnClick(R.id.ivAvatar)

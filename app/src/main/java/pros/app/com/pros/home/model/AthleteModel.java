@@ -24,6 +24,9 @@ public class AthleteModel {
     @JsonProperty("avatar")
     private UrlModel avatar;
 
+    @JsonProperty("followed_by_current_user")
+    private boolean followedByCurrentUser;
+
     public int getId() {
         return id;
     }
@@ -46,5 +49,13 @@ public class AthleteModel {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isFollowedByCurrentUser() {
+        return followedByCurrentUser;
+    }
+
+    public void setFollowedByCurrentUser(boolean followedByCurrentUser) {
+        this.followedByCurrentUser = followedByCurrentUser;
     }
 }

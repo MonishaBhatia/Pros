@@ -27,6 +27,9 @@ public class UrlModel {
     @JsonProperty("original_url")
     private String originalUrl;
 
+    @JsonProperty("medium_url")
+    private String mediumUrl;
+
 
     public String getMobileUrl() {
         return mobileUrl;
@@ -54,5 +57,9 @@ public class UrlModel {
 
     public String getOriginalUrl() {
         return originalUrl;
+    }
+
+    public String getMediumUrl() {
+        return mediumUrl;
     }
 }
