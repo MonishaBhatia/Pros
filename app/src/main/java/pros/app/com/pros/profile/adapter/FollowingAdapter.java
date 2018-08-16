@@ -39,17 +39,15 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.Foll
     private FollowingPresenter presenter;
     private List<AthleteModel> athleteModelList = new ArrayList<>();
     private Context context;
-    private FollowingActivity followingActivity;
     private List<AthleteModel> modelFiltered = new ArrayList<>();
 
-    public FollowingAdapter(Context context, List<AthleteModel> athleteModelList, FollowingActivity followingActivity, FollowingPresenter presenter) {
+    public FollowingAdapter(Context context, List<AthleteModel> athleteModelList, FollowingPresenter presenter) {
         this.context = context;
         this.presenter = presenter;
         this.athleteModelList.clear();
         this.athleteModelList = athleteModelList;
         this.modelFiltered.clear();
         this.modelFiltered.addAll(athleteModelList);
-        this.followingActivity = followingActivity;
     }
 
 
@@ -107,8 +105,6 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.Foll
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                 modelFiltered = (List<AthleteModel>) filterResults.values;
                 notifyDataSetChanged();
-                if (followingActivity != null)
-                    followingActivity.setScrollPositionToSearch();
             }
         };
     }

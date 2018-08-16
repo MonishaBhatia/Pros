@@ -110,22 +110,13 @@ public class FollowingActivity extends AppCompatActivity implements FollowingVie
         });
     }
 
-
-    public void setScrollPositionToSearch() {
-        try {
-            KeyboardAction.hideSoftKeyboard(this, edtSearch);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void bindData(FollowingModel followingModel) {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
         rvFollowList.setLayoutManager(layoutManager);
-        adapter = new FollowingAdapter(this, followingModel.getAthletes(), this, followingPresenter);
+        adapter = new FollowingAdapter(this, followingModel.getAthletes(), followingPresenter);
         rvFollowList.setAdapter(adapter);
     }
 
@@ -154,6 +145,7 @@ public class FollowingActivity extends AppCompatActivity implements FollowingVie
         ivClose.setVisibility(View.GONE);
         edtSearch.setText("");
         edtSearch.setHint(getString(R.string.label_search));
+        KeyboardAction.hideSoftKeyboard(this, edtSearch);
     }
 
     @OnClick(R.id.tvCancel)
