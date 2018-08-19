@@ -23,7 +23,7 @@ public class ProfilePresenter implements HttpServiceView {
 
     @Override
     public void response(String response, int tag) {
-        if (tag == ApiEndPoints.fans_profile_metadata.getTag()) {
+        if (tag == ApiEndPoints.fans_profile_metadata.getTag() || tag == ApiEndPoints.pros_profile_metadata.getTag()) {
             try {
                 profileMainModel = JsonUtils.from(response, ProfileMainModel.class);
                 view.onSuccessGetProfile(profileMainModel);
@@ -46,6 +46,16 @@ public class ProfilePresenter implements HttpServiceView {
                 ProsConstants.GET_METHOD,
                 null,
                 ApiEndPoints.fans_profile_metadata.getTag()
+        ).execute();
+    }
+
+    public void getAthleteProfile(int profileId) {
+        new HttpServiceUtil(
+                this,
+                String.format(ApiEndPoints.pros_profile_metadata.getApi(), profileId),
+                ProsConstants.GET_METHOD,
+                null,
+                ApiEndPoints.pros_profile_metadata.getTag()
         ).execute();
     }
 }
