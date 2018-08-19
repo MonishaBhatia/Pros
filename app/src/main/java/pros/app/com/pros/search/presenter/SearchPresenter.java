@@ -8,6 +8,7 @@ import pros.app.com.pros.base.HttpServiceView;
 import pros.app.com.pros.base.JsonUtils;
 import pros.app.com.pros.base.ProsConstants;
 import pros.app.com.pros.home.model.HomeMainModel;
+import pros.app.com.pros.profile.model.FollowingModel;
 import pros.app.com.pros.search.model.AthletesMainModel;
 import pros.app.com.pros.search.views.SearchView;
 
@@ -20,7 +21,7 @@ public class SearchPresenter implements HttpServiceView {
     }
 
 
-    public void getTopProsPostsData(){
+    public void getSearchData(){
         new HttpServiceUtil(
                 this,
                 ApiEndPoints.top_atheltes.getApi(),
@@ -34,6 +35,13 @@ public class SearchPresenter implements HttpServiceView {
                 ProsConstants.GET_METHOD,
                 null,
                 ApiEndPoints.top_posts.getTag()
+        ).execute();
+
+        new HttpServiceUtil(this,
+                ApiEndPoints.atheltes.getApi(),
+                ProsConstants.GET_METHOD,
+                null,
+                ApiEndPoints.atheltes.getTag()
         ).execute();
 
     }
@@ -56,6 +64,16 @@ public class SearchPresenter implements HttpServiceView {
 
                 HomeMainModel postsData = JsonUtils.from(response, HomeMainModel.class);
                 searchView.updateTopPosts(postsData.getPosts());
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        if(tag == ApiEndPoints.atheltes.getTag()){
+            try{
+                FollowingModel followingModel = JsonUtils.from(response, FollowingModel.class);
+                searchView.updateAllAthletes(followingModel.getAthletes());
 
             }catch (Exception e){
                 e.printStackTrace();
