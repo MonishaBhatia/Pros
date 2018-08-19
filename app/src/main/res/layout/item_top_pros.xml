@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginHorizontal="@dimen/dp_32"
+    android:layout_marginVertical="@dimen/dp_16"
+    android:gravity="center">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/pros_thumb"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:background="@drawable/circle"
+        android:gravity="center"
+        android:src="@drawable/ic_account" />
+
+    <TextView
+        android:id="@+id/pros_first_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Preeti"
+        android:layout_marginTop="@dimen/dp_8"
+        android:textSize="@dimen/sp_16"
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/pros_last_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wadhwani"
+        android:textSize="@dimen/sp_16"
+        android:textColor="@color/white"/>
+
+</LinearLayout>

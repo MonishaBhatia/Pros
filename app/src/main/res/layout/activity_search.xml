@@ -139,8 +139,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/topPros"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:itemCount="3" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:layout_width="match_parent"
