@@ -7,6 +7,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -26,6 +29,10 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
 
     @BindView(R.id.rvPosts)
     RecyclerView rvPosts;
+
+    @BindView(R.id.posts_progress_bar)
+    RelativeLayout postsPrgressBar;
+
     private HomePresenter homePresenter;
     private PostAdapter postAdapter;
 
@@ -51,7 +58,8 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
 
     @Override
     public void bindData(ArrayList<PostModel> postsList) {
-
+        postsPrgressBar.setVisibility(View.GONE);
+        rvPosts.setVisibility(View.VISIBLE);
         postAdapter = new PostAdapter(postsList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         rvPosts.setLayoutManager(mLayoutManager);

@@ -20,7 +20,7 @@ public class SearchPresenter implements HttpServiceView {
     }
 
 
-    public void getTopProsData(){
+    public void getTopProsPostsData(){
         new HttpServiceUtil(
                 this,
                 ApiEndPoints.top_atheltes.getApi(),
@@ -28,6 +28,14 @@ public class SearchPresenter implements HttpServiceView {
                 null,
                 ApiEndPoints.top_atheltes.getTag()
         ).execute();
+
+        new HttpServiceUtil(this,
+                ApiEndPoints.top_posts.getApi(),
+                ProsConstants.GET_METHOD,
+                null,
+                ApiEndPoints.top_posts.getTag()
+        ).execute();
+
     }
 
 
@@ -39,6 +47,17 @@ public class SearchPresenter implements HttpServiceView {
                 AthletesMainModel athletesMainModel = JsonUtils.from(response, AthletesMainModel.class);
                 searchView.updateTopPros(athletesMainModel.getAthletes());
             } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(tag == ApiEndPoints.top_posts.getTag()){
+            try{
+
+                HomeMainModel postsData = JsonUtils.from(response, HomeMainModel.class);
+                searchView.updateTopPosts(postsData.getPosts());
+
+            }catch (Exception e){
                 e.printStackTrace();
             }
         }
