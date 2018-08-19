@@ -1,6 +1,7 @@
 package pros.app.com.pros.home.activity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -40,6 +41,7 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         ButterKnife.bind(this);
         homePresenter = new HomePresenter(this);

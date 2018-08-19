@@ -3,6 +3,7 @@ package pros.app.com.pros.profile.activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -49,6 +50,7 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         ButterKnife.bind(this);
 

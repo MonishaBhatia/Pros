@@ -109,7 +109,7 @@ public class AllAthleteAdapter extends RecyclerView.Adapter<AllAthleteAdapter.Fo
         @BindView(R.id.tvName)
         TextView tvName;
         @BindView(R.id.athlete_row)
-        ConstraintLayout athleteRow;
+        RelativeLayout athleteRow;
 
         public FollowingViewHolder(View view) {
             super(view);

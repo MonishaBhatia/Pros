@@ -1,6 +1,7 @@
 package pros.app.com.pros.account.activity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -40,6 +41,7 @@ public class SignInActivity extends BaseActivity implements SignInView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ButterKnife.bind(this);
 
         toolbarTitle.setText(getString(R.string.sign_in));

@@ -2,6 +2,7 @@ package pros.app.com.pros.search.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -84,6 +85,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ButterKnife.bind(this);
         searchPresenter = new SearchPresenter(this);
         searchPresenter.getSearchData();
@@ -111,7 +113,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView{
 
     @Override
     public void updateTopPros(ArrayList<AthleteModel> topProsList) {
-        topProsAdapter = new TopProsAdapter(topProsList);
+        topProsAdapter = new TopProsAdapter(getApplicationContext(), topProsList);
 
         topProsRecyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         topProsRecyclerview.setAdapter(topProsAdapter);

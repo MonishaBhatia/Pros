@@ -1,6 +1,7 @@
 package pros.app.com.pros.profile.activity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -9,11 +10,14 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pros.app.com.pros.R;
 import pros.app.com.pros.base.PrefUtils;
+import pros.app.com.pros.home.model.PostModel;
 import pros.app.com.pros.profile.model.MetaDataModel;
 import pros.app.com.pros.profile.model.ProfileMainModel;
 import pros.app.com.pros.profile.presenter.ProfilePresenter;
@@ -62,6 +66,7 @@ public class AthleteProfileActivity extends AppCompatActivity implements Profile
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_athlete_profile);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         ButterKnife.bind(this);
         profilePresenter = new ProfilePresenter(this);
@@ -130,5 +135,10 @@ public class AthleteProfileActivity extends AppCompatActivity implements Profile
         tvNumFollowers.setText(String.valueOf(metaData.getFollowersCount()));
         tvLikedVideos.setText(String.format(getString(R.string.label_posts), metaData.getLikedPostsCount()));
         tvLikedQuestions.setText(String.format(getString(R.string.label_questions), metaData.getLikedQuestionsCount()));
+    }
+
+    @Override
+    public void updateLikedQuestions(ArrayList<PostModel> postsList) {
+
     }
 }
