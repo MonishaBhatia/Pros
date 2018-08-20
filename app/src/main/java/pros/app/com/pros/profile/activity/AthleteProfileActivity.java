@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,22 +16,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pros.app.com.pros.R;
-import pros.app.com.pros.base.BaseView;
 import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.home.model.PostModel;
-import pros.app.com.pros.profile.adapter.LikedQuestionsAdapter;
 import pros.app.com.pros.profile.model.MetaDataModel;
 import pros.app.com.pros.profile.model.ProfileMainModel;
 import pros.app.com.pros.profile.presenter.ProfilePresenter;
 import pros.app.com.pros.profile.views.ProfileView;
-import pros.app.com.pros.search.adapter.AllAthleteAdapter;
 
 import static pros.app.com.pros.base.ProsConstants.FOLLOWING_LIST;
-import static pros.app.com.pros.base.ProsConstants.IS_FAN;
+import static pros.app.com.pros.base.ProsConstants.IMAGE_URL;
+import static pros.app.com.pros.base.ProsConstants.NAME;
 import static pros.app.com.pros.base.ProsConstants.PROFILE_ID;
 
-
-public class ProfileActivity extends AppCompatActivity implements ProfileView {
+public class AthleteProfileActivity extends AppCompatActivity implements ProfileView {
 
     @BindView(R.id.ivAvatar)
     ImageView ivAvatar;
@@ -44,6 +39,9 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     @BindView(R.id.tvNumFollowing)
     TextView tvNumFollowing;
 
+    @BindView(R.id.tvNumFollowers)
+    TextView tvNumFollowers;
+
     @BindView(R.id.tvLikedVideos)
     TextView tvLikedVideos;
 
@@ -53,45 +51,47 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     @BindView(R.id.label_nothing)
     TextView labelNothing;
 
-    @BindView(R.id.liked_posts)
-    RecyclerView likedPosts;
-
-    @BindView(R.id.liked_questions)
-    RecyclerView likedQuestionsRecyclerview;
+    @BindView(R.id.rvPosts)
+    RecyclerView rvPosts;
 
     private ProfilePresenter profilePresenter;
-    private LikedQuestionsAdapter likedQuestionsAdapter;
     private MetaDataModel metaData;
 
-    private int followCount;
+    private String name;
+    private String imageUrl;
+    private int profileId;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_athlete_profile);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         ButterKnife.bind(this);
         profilePresenter = new ProfilePresenter(this);
-        likedQuestionsRecyclerview.setNestedScrollingEnabled(false);
 
-        tvName.setText(String.format("%s %s", PrefUtils.getUser().getFirstName(), PrefUtils.getUser().getLastName()));
+        tvNumFollowers.setText("-");
         tvNumFollowing.setText("-");
         tvLikedVideos.setText(String.format(getString(R.string.label_liked_posts), 0));
         tvLikedQuestions.setText(String.format(getString(R.string.label_liked_questions), 0));
 
-        profilePresenter.getProfileData();
-        profilePresenter.getLikedQuestionsData();
+        profileId = getIntent().getIntExtra(PROFILE_ID, 0);
+        imageUrl = getIntent().getStringExtra(IMAGE_URL);
+        name = getIntent().getStringExtra(NAME);
+
+        profilePresenter.getAthleteProfile(profileId);
 
     }
 
-    @OnClick(R.id.ivSettings)
-    public void onClickSettings() {
-        Intent intent = new Intent(ProfileActivity.this, SettingsActivity.class);
-        if(metaData != null)
-            intent.putExtra("Follow_Count", metaData.getFollowCount());
-        startActivity(intent);
+    @OnClick(R.id.ivBlock)
+    public void onClickBlock() {
+
+    }
+
+    @OnClick(R.id.tvFollowing)
+    public void onClickFollowing() {
+
     }
 
     @OnClick(R.id.ivGoBack)
@@ -110,11 +110,17 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     }
 
     @OnClick({R.id.tvNumFollowing, R.id.labelFollowing})
-    public void onCLickFollow() {
+    public void onCLickFollowing() {
         Intent intent = new Intent(this, FollowingActivity.class);
-        intent.putExtra(PROFILE_ID, PrefUtils.getUser().getId());
+        intent.putExtra(PROFILE_ID, profileId);
         intent.putExtra(FOLLOWING_LIST, true);
-        intent.putExtra(IS_FAN, true);
+        startActivity(intent);
+    }
+
+    @OnClick({R.id.tvNumFollowers, R.id.labelFollowers})
+    public void onCLickFollowers() {
+        Intent intent = new Intent(this, FollowingActivity.class);
+        intent.putExtra(PROFILE_ID, profileId);
         startActivity(intent);
     }
 
@@ -123,22 +129,16 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
 
         metaData = profileMainModel.getMetadata();
 
-        //Picasso.get().load()
-        tvName.setText(String.format("%s %s", PrefUtils.getUser().getFirstName(), PrefUtils.getUser().getLastName()));
-        if (profileMainModel.getMetadata().getFollowCount() != 0)
-            tvNumFollowing.setText(String.valueOf(metaData.getFollowCount()));
-        tvLikedVideos.setText(String.format(getString(R.string.label_liked_posts), metaData.getLikedPostsCount()));
-        tvLikedQuestions.setText(String.format(getString(R.string.label_liked_questions), metaData.getLikedQuestionsCount()));
+        Picasso.get().load(imageUrl).into(ivAvatar);
+        tvName.setText(name);
+        tvNumFollowing.setText(String.valueOf(metaData.getFollowCount()));
+        tvNumFollowers.setText(String.valueOf(metaData.getFollowersCount()));
+        tvLikedVideos.setText(String.format(getString(R.string.label_posts), metaData.getLikedPostsCount()));
+        tvLikedQuestions.setText(String.format(getString(R.string.label_questions), metaData.getLikedQuestionsCount()));
     }
 
     @Override
     public void updateLikedQuestions(ArrayList<PostModel> postsList) {
-        likedQuestionsRecyclerview.setVisibility(View.VISIBLE);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-
-        likedQuestionsRecyclerview.setLayoutManager(layoutManager);
-        likedQuestionsAdapter = new LikedQuestionsAdapter(postsList);
-        likedQuestionsRecyclerview.setAdapter(likedQuestionsAdapter);
 
     }
 }

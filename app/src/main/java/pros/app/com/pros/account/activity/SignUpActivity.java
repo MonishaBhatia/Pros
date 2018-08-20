@@ -1,6 +1,7 @@
 package pros.app.com.pros.account.activity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.widget.EditText;
@@ -43,6 +44,7 @@ public class SignUpActivity extends BaseActivity implements SignInView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         ButterKnife.bind(this);
 

@@ -1,119 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
-    tools:context=".profile.activity.ProfileActivity">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/ivSettings"
-        android:layout_width="@dimen/dp_32"
-        android:layout_height="@dimen/dp_32"
-        android:layout_marginLeft="@dimen/dp_8"
-        android:layout_marginTop="@dimen/dp_8"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_settings" />
-
-    <ImageView
-        android:id="@+id/ivGoBack"
-        android:layout_width="@dimen/dp_32"
-        android:layout_height="@dimen/dp_32"
-        android:layout_marginRight="@dimen/dp_8"
-        android:layout_marginTop="@dimen/dp_8"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_right_arrow" />
-
-    <ImageView
-        android:id="@+id/ivAvatar"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_200"
-        android:layout_marginTop="@dimen/dp_12"
-        android:src="@drawable/ic_account"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark"
+        tools:context=".profile.activity.ProfileActivity">
 
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        tools:text="Testing Test"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="@dimen/sp_24"
-        android:layout_marginTop="@dimen/dp_12"
-        app:layout_constraintTop_toBottomOf="@id/ivAvatar" />
+        <ImageView
+            android:id="@+id/ivSettings"
+            android:layout_width="@dimen/dp_32"
+            android:layout_height="@dimen/dp_32"
+            android:layout_marginLeft="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_8"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_settings" />
 
-    <TextView
-        android:id="@+id/tvNumFollowing"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_50"
-        android:gravity="center"
-        tools:text="31"
-        android:textColor="@color/white"
-        android:textSize="@dimen/sp_16"
-        app:layout_constraintTop_toBottomOf="@id/tvName"
-        android:textStyle="bold" />
+        <ImageView
+            android:id="@+id/ivGoBack"
+            android:layout_width="@dimen/dp_32"
+            android:layout_height="@dimen/dp_32"
+            android:layout_marginRight="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_8"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_right_arrow" />
 
-    <TextView
-        android:id="@+id/labelFollowing"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/label_following"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/tvNumFollowing"
-        android:textSize="@dimen/sp_14" />
+        <ImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_200"
+            android:layout_marginTop="@dimen/dp_12"
+            android:src="@drawable/ic_account"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvLikedVideos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_16"
-        android:gravity="center"
-        tools:text="0\nLiked Posts"
-        android:textColor="@color/white"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="@dimen/dp_32"
-        android:textAllCaps="true"
-        app:layout_constraintTop_toBottomOf="@id/labelFollowing" />
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_12"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_24"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/ivAvatar"
+            tools:text="Testing Test" />
 
-    <TextView
-        android:id="@+id/tvLikedQuestions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_16"
-        android:gravity="center"
-        tools:text="0\nLiked Questions"
-        android:textColor="@color/white"
-        android:layout_marginRight="@dimen/dp_32"
-        app:layout_constraintRight_toRightOf="parent"
-        android:textAllCaps="true"
-        app:layout_constraintTop_toBottomOf="@id/labelFollowing" />
+        <TextView
+            android:id="@+id/tvNumFollowing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_50"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/tvName"
+            tools:text="31" />
 
-    <TextView
-        android:id="@+id/label_nothing"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableTop="@drawable/ic_slideshow"
-        android:text="@string/no_liked_posts"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:layout_marginTop="@dimen/dp_50"
-        android:drawablePadding="@dimen/dp_16"
-        app:layout_constraintTop_toBottomOf="@id/tvLikedVideos"/>
+        <TextView
+            android:id="@+id/labelFollowing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/label_following"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_14"
+            app:layout_constraintTop_toBottomOf="@id/tvNumFollowing" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvPosts"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/tvLikedVideos"/>
+        <TextView
+            android:id="@+id/tvLikedVideos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_32"
+            android:layout_marginTop="@dimen/dp_16"
+            android:gravity="center"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_12"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/labelFollowing"
+            tools:text="0\nLiked Posts" />
 
-</android.support.constraint.ConstraintLayout>
+        <TextView
+            android:id="@+id/tvLikedQuestions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_32"
+            android:layout_marginTop="@dimen/dp_16"
+            android:gravity="center"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_12"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/labelFollowing"
+            tools:text="0\nLiked Questions" />
+
+        <TextView
+            android:id="@+id/label_nothing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_50"
+            android:drawablePadding="@dimen/dp_16"
+            android:drawableTop="@drawable/ic_slideshow"
+            android:gravity="center"
+            android:text="@string/no_liked_posts"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_12"
+            app:layout_constraintTop_toBottomOf="@id/tvLikedVideos" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/liked_posts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/tvLikedVideos" />
+
+        <android.support.v7.widget.RecyclerView
+            android:paddingTop="@dimen/dp_16"
+            android:id="@+id/liked_questions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:listitem="@layout/item_liked_question"
+            app:layout_constraintTop_toBottomOf="@id/tvLikedVideos" />
+
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

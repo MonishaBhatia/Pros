@@ -24,6 +24,7 @@
     <string name="deactivate_title">Deactivate Account</string>
     <string name="deactivate_account_content">None of your content will be accessible by you or any other users while your account is inactive.\n\nAre you sure you would like to deactivate your account?</string>
     <string name="label_following">Following</string>
+    <string name="label_followers">Followers</string>
     <string name="label_contact_admin">Contact Pros Admin</string>
     <string name="label_change_password">Change Password</string>
     <string name="label_log_out">Log Out</string>
@@ -33,11 +34,14 @@
     <string name="hint_new_pswd">NEW PASSWORD</string>
     <string name="hint_re_new_pswd">RE-ENTER PASSWORD</string>
     <string name="btn_save">SAVE</string>
+    <string name="label_posts">%d\nPosts</string>
     <string name="label_liked_posts">%d\nLiked Posts</string>
+    <string name="label_questions">%d\nQuestions</string>
     <string name="label_liked_questions">%d\nLiked Questions</string>
     <string name="no_liked_posts">No Liked Posts Yet</string>
     <string name="no_liked_questions">No Liked Questions Yet</string>
     <string name="label_search">Search</string>
+    <string name="label_explore">Explore</string>
     <string name="label_cancel">Cancel</string>
 
 </resources>

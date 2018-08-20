@@ -1,6 +1,7 @@
 package pros.app.com.pros.profile.activity;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +27,10 @@ import pros.app.com.pros.profile.adapter.FollowingAdapter;
 import pros.app.com.pros.profile.model.FollowingModel;
 import pros.app.com.pros.profile.presenter.FollowingPresenter;
 import pros.app.com.pros.profile.views.FollowingView;
+
+import static pros.app.com.pros.base.ProsConstants.FOLLOWING_LIST;
+import static pros.app.com.pros.base.ProsConstants.IS_FAN;
+import static pros.app.com.pros.base.ProsConstants.PROFILE_ID;
 
 public class FollowingActivity extends AppCompatActivity implements FollowingView {
 
@@ -40,6 +46,12 @@ public class FollowingActivity extends AppCompatActivity implements FollowingVie
     @BindView(R.id.tvCancel)
     TextView tvCancel;
 
+    @BindView(R.id.title)
+    TextView title;
+
+    @BindView(R.id.ivClose)
+    ImageView ivClose;
+
     private FollowingPresenter followingPresenter;
     private FollowingAdapter adapter;
 
@@ -51,7 +63,7 @@ public class FollowingActivity extends AppCompatActivity implements FollowingVie
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+            ivClose.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -64,11 +76,26 @@ public class FollowingActivity extends AppCompatActivity implements FollowingVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_following);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ButterKnife.bind(this);
 
         followingPresenter = new FollowingPresenter(this);
-        followingPresenter.getFollowingList();
 
+        int profileId = getIntent().getIntExtra(PROFILE_ID, 0);
+        boolean followingList = getIntent().getBooleanExtra(FOLLOWING_LIST, false);
+        boolean isFan = getIntent().getBooleanExtra(IS_FAN, false);
+
+        if (followingList) {
+            title.setText(getString(R.string.label_following));
+            if (isFan) {
+                followingPresenter.getFollowingList(profileId);
+            } else {
+                followingPresenter.getProsFollowingList(profileId);
+            }
+        } else {
+            title.setText(getString(R.string.label_followers));
+            followingPresenter.getFollowersList(profileId);
+        }
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
@@ -85,25 +112,24 @@ public class FollowingActivity extends AppCompatActivity implements FollowingVie
         });
     }
 
-
-    public void setScrollPositionToSearch() {
-        try {
-            ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(
-                    InputMethodManager.SHOW_FORCED,
-                    InputMethodManager.HIDE_IMPLICIT_ONLY);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void bindData(FollowingModel followingModel) {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
         rvFollowList.setLayoutManager(layoutManager);
-        adapter = new FollowingAdapter(this, followingModel.getAthletes(), this);
+        adapter = new FollowingAdapter(this, followingModel.getAthletes(), followingPresenter);
         rvFollowList.setAdapter(adapter);
+    }
+
+    @Override
+    public void onsucessUnfollow() {
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSuccessFollow() {
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -112,13 +138,22 @@ public class FollowingActivity extends AppCompatActivity implements FollowingVie
     }
 
     @OnClick(R.id.ivBack)
-    public void onClickBack(){
+    public void onClickBack() {
         finish();
     }
 
+    @OnClick(R.id.ivClose)
+    public void onClickClose() {
+        ivClose.setVisibility(View.GONE);
+        edtSearch.setText("");
+        edtSearch.setHint(getString(R.string.label_search));
+        KeyboardAction.hideSoftKeyboard(this, edtSearch);
+    }
+
     @OnClick(R.id.tvCancel)
-    public void onClickCancel(){
+    public void onClickCancel() {
         tvCancel.setVisibility(View.GONE);
+        ivClose.setVisibility(View.GONE);
         KeyboardAction.hideSoftKeyboard(this, edtSearch);
     }
 }
