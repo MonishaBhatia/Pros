@@ -50,7 +50,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     TextView labelNothing;
 
     @BindView(R.id.liked_posts)
-    RecyclerView likedPosts;
+    RecyclerView likedPostsRecyclerView;
 
     @BindView(R.id.liked_questions)
     RecyclerView likedQuestionsRecyclerview;
@@ -78,8 +78,6 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         tvLikedQuestions.setText(String.format(getString(R.string.label_liked_questions), 0));
 
         profilePresenter.getProfileData();
-        profilePresenter.getLikedQuestionsData();
-
     }
 
     @OnClick(R.id.ivSettings)
@@ -97,12 +95,17 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
 
     @OnClick(R.id.tvLikedVideos)
     public void onCLickLikedPosts(){
+        labelNothing.setVisibility(View.VISIBLE);
         labelNothing.setText(getString(R.string.no_liked_posts));
+        likedQuestionsRecyclerview.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.tvLikedQuestions)
     public void onCLickLikedQuestions(){
+        labelNothing.setVisibility(View.VISIBLE);
         labelNothing.setText(getString(R.string.no_liked_questions));
+        profilePresenter.getLikedQuestionsData();
+        likedPostsRecyclerView.setVisibility(View.GONE);
     }
 
     @OnClick({R.id.tvNumFollowing, R.id.labelFollowing})
@@ -129,6 +132,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
 
     @Override
     public void updateLikedQuestions(ArrayList<PostModel> postsList) {
+        labelNothing.setVisibility(View.GONE);
         likedQuestionsRecyclerview.setVisibility(View.VISIBLE);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
