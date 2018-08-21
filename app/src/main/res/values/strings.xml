@@ -43,5 +43,6 @@
     <string name="label_search">Search</string>
     <string name="label_explore">Explore</string>
     <string name="label_cancel">Cancel</string>
+    <string name="label_follow">Follow</string>
 
 </resources>

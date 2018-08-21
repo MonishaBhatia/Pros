@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,6 +36,12 @@ public class AthleteProfileActivity extends AppCompatActivity implements Profile
 
     @BindView(R.id.tvName)
     TextView tvName;
+
+    @BindView(R.id.tvFollow)
+    TextView tvFollow;
+
+    @BindView(R.id.tvFollowing)
+    TextView tvFollowing;
 
     @BindView(R.id.tvNumFollowing)
     TextView tvNumFollowing;
@@ -86,12 +93,17 @@ public class AthleteProfileActivity extends AppCompatActivity implements Profile
 
     @OnClick(R.id.ivBlock)
     public void onClickBlock() {
-
+        //TODO:bottomsheet
     }
 
     @OnClick(R.id.tvFollowing)
     public void onClickFollowing() {
+        profilePresenter.unFollowAthlete(profileId);
+    }
 
+    @OnClick(R.id.tvFollow)
+    public void onClickFollow() {
+        profilePresenter.followAthlete(profileId);
     }
 
     @OnClick(R.id.ivGoBack)
@@ -140,5 +152,17 @@ public class AthleteProfileActivity extends AppCompatActivity implements Profile
     @Override
     public void updateLikedQuestions(ArrayList<PostModel> postsList) {
 
+    }
+
+    @Override
+    public void onsucessUnfollow() {
+        tvFollowing.setVisibility(View.GONE);
+        tvFollow.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onSuccessFollow() {
+        tvFollowing.setVisibility(View.VISIBLE);
+        tvFollow.setVisibility(View.GONE);
     }
 }

@@ -31,8 +31,7 @@ public class ProfilePresenter implements HttpServiceView {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-        if (tag == ApiEndPoints.fans_liked_questions.getTag()){
+        } else if (tag == ApiEndPoints.fans_liked_questions.getTag()){
             try {
                 HomeMainModel homeMainModel = JsonUtils.from(response, HomeMainModel.class);
                 view.updateLikedQuestions(homeMainModel.getQuestions());
@@ -40,8 +39,11 @@ public class ProfilePresenter implements HttpServiceView {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else if (tag == ApiEndPoints.follow_atheltes.getTag()) {
+            view.onSuccessFollow();
+        } else if (tag == ApiEndPoints.unfollow_atheltes.getTag()) {
+            view.onsucessUnfollow();
         }
-
     }
 
     @Override
@@ -76,6 +78,26 @@ public class ProfilePresenter implements HttpServiceView {
                 ProsConstants.GET_METHOD,
                 null,
                 ApiEndPoints.fans_liked_questions.getTag()
+        ).execute();
+    }
+
+    public void followAthlete(int id) {
+        new HttpServiceUtil(
+                this,
+                String.format(ApiEndPoints.follow_atheltes.getApi(), id),
+                ProsConstants.POST_METHOD,
+                null,
+                ApiEndPoints.follow_atheltes.getTag()
+        ).execute();
+    }
+
+    public void unFollowAthlete(int id) {
+        new HttpServiceUtil(
+                this,
+                String.format(ApiEndPoints.unfollow_atheltes.getApi(), id),
+                ProsConstants.POST_METHOD,
+                null,
+                ApiEndPoints.unfollow_atheltes.getTag()
         ).execute();
     }
 }

@@ -10,4 +10,7 @@ public interface ProfileView {
     void onSuccessGetProfile(ProfileMainModel profileMainModel);
 
     void updateLikedQuestions(ArrayList<PostModel> postsList);
+
+    void onsucessUnfollow();
+    void onSuccessFollow();
 }
