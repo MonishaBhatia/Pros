@@ -93,6 +93,19 @@
         app:layout_constraintTop_toTopOf="@id/tvNumFollowers" />
 
     <TextView
+        android:id="@+id/tvFollow"
+        android:layout_width="@dimen/dp_150"
+        android:layout_height="@dimen/dp_40"
+        android:background="@drawable/bg_transparent"
+        android:gravity="center"
+        android:text="@string/label_follow"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@id/tvNumFollowers"
+        app:layout_constraintRight_toLeftOf="@id/tvNumFollowing"
+        app:layout_constraintTop_toTopOf="@id/tvNumFollowers" />
+
+    <TextView
         android:id="@+id/tvNumFollowing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:id="@+id/athlete_row"
+<LinearLayout android:id="@+id/athlete_row"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginHorizontal="@dimen/dp_32"
+    android:layout_marginHorizontal="@dimen/dp_16"
     android:layout_marginVertical="@dimen/dp_16"
-    android:gravity="center">
+    android:gravity="center"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/pros_thumb"
@@ -21,7 +21,7 @@
         android:id="@+id/pros_first_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Preeti"
+        tools:text="Abc"
         android:layout_marginTop="@dimen/dp_8"
         android:textSize="@dimen/sp_16"
         android:textColor="@color/white"/>
@@ -30,7 +30,7 @@
         android:id="@+id/pros_last_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Wadhwani"
+        tools:text="Xyz"
         android:textSize="@dimen/sp_16"
         android:textColor="@color/white"/>
 
