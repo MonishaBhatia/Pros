@@ -64,7 +64,7 @@ public enum ApiEndPoints {
 
     upload_url_to_db("upload_url_to_db", 49);
 
-    private static final String BASE_URL = "http://pros-staging.herokuapp.com/api/v1";
+    private static final String BASE_URL = "http://pros-production.herokuapp.com/api/v1";
     private final String api;
     private final int tag;
 
