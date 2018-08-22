@@ -155,6 +155,11 @@ public class AthleteProfileActivity extends AppCompatActivity implements Profile
     }
 
     @Override
+    public void updateLikedPosts(ArrayList<PostModel> postList) {
+
+    }
+
+    @Override
     public void onsucessUnfollow() {
         tvFollowing.setVisibility(View.GONE);
         tvFollow.setVisibility(View.VISIBLE);

@@ -39,6 +39,14 @@ public class ProfilePresenter implements HttpServiceView {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else if (tag == ApiEndPoints.fans_liked_posts.getTag()){
+            try {
+                HomeMainModel homeMainModel = JsonUtils.from(response, HomeMainModel.class);
+                view.updateLikedPosts(homeMainModel.getPosts());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else if (tag == ApiEndPoints.follow_atheltes.getTag()) {
             view.onSuccessFollow();
         } else if (tag == ApiEndPoints.unfollow_atheltes.getTag()) {
@@ -78,6 +86,16 @@ public class ProfilePresenter implements HttpServiceView {
                 ProsConstants.GET_METHOD,
                 null,
                 ApiEndPoints.fans_liked_questions.getTag()
+        ).execute();
+    }
+
+    public void getLikedPostsData(){
+        new HttpServiceUtil(
+                this,
+                String.format(ApiEndPoints.fans_liked_posts.getApi(), PrefUtils.getUser().getId()),
+                ProsConstants.GET_METHOD,
+                null,
+                ApiEndPoints.fans_liked_posts.getTag()
         ).execute();
     }
 
