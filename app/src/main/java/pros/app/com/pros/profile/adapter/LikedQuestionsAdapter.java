@@ -53,7 +53,7 @@ public class LikedQuestionsAdapter extends RecyclerView.Adapter<LikedQuestionsAd
             holder.questionAnswerCount.setText(answerCount);
 
             if(athleteThumbUrl != null){
-                Picasso.get().load(athleteThumbUrl).placeholder(R.drawable.ic_account).into(holder.profilePic);
+                Picasso.get().load(athleteThumbUrl).placeholder(R.drawable.profile).into(holder.profilePic);
             }
 
     }

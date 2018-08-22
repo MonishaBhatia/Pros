@@ -61,7 +61,7 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.Foll
     public void onBindViewHolder(@NonNull FollowingViewHolder holder, int position) {
         AthleteModel currentItem = modelFiltered.get(position);
 
-        Picasso.get().load(currentItem.getAvatar().getThumbnailUrl()).placeholder(R.drawable.ic_account).into(holder.ivIcon);
+        Picasso.get().load(currentItem.getAvatar().getThumbnailUrl()).placeholder(R.drawable.profile).into(holder.ivIcon);
         holder.tvName.setText(String.format("%s %s", currentItem.getFirstName(), currentItem.getLastName()));
 
         if (currentItem.isFollowedByCurrentUser()) {

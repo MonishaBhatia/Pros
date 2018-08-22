@@ -2,13 +2,13 @@ package pros.app.com.pros.account.activity;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,11 +29,11 @@ public class SignInActivity extends BaseActivity implements SignInView {
     @BindView(R.id.edtPassword)
     EditText edtPassword;
 
-    @BindView(R.id.ivBack)
-    ImageView ivBack;
-
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
+
+    @BindView(R.id.videoView)
+    VideoView videoView;
 
     private SignInPresenter signInPresenter;
 
@@ -46,11 +46,15 @@ public class SignInActivity extends BaseActivity implements SignInView {
 
         toolbarTitle.setText(getString(R.string.sign_in));
 
+        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.login);
+        videoView.setVideoURI(uri);
+        videoView.start();
+
         signInPresenter = new SignInPresenter(this);
     }
 
     @OnClick(R.id.ivBack)
-    public void onClickBack(){
+    public void onClickBack() {
         finish();
     }
 
