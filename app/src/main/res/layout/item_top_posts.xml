@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_300"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="@dimen/dp_300">
 
     <ImageView
         android:id="@+id/post_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/background"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        android:src="@drawable/background" />
 
 
     <LinearLayout
@@ -25,37 +25,43 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/post_start_gradient"/>
+                android:background="@drawable/post_start_gradient" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/dp_16">
 
+                <ImageView
+                    android:id="@+id/iv_reaction"
+                    android:layout_width="@dimen/dp_20"
+                    android:layout_height="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:layout_marginRight="@dimen/dp_8"
+                    android:layout_alignParentLeft="true"
+                    android:src="@drawable/reaction" />
+
                 <TextView
                     android:id="@+id/post_reaction_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_12"
+                    android:layout_toRightOf="@id/iv_reaction"
                     android:text="4"
-                    android:textSize="20sp"
                     android:textColor="@color/white"
-                    android:layout_marginTop="@dimen/dp_16"
-                    android:layout_alignParentLeft="true"
-                    android:drawableLeft="@drawable/ic_reaction_white_24dp"
-                    android:drawablePadding="@dimen/dp_8"/>
-
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/post_likes_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textSize="20sp"
-                    android:textColor="@color/white"
-                    android:layout_below="@+id/post_reaction_count"
+                    android:layout_below="@+id/iv_reaction"
+                    android:layout_marginTop="@dimen/dp_8"
                     android:drawableLeft="@drawable/ic_favorite_white_24dp"
                     android:drawablePadding="12dp"
-                    android:layout_marginTop="@dimen/dp_8" />
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
 
 
             </RelativeLayout>
@@ -66,7 +72,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
 
         <FrameLayout
@@ -89,20 +95,20 @@
                     android:layout_width="@dimen/dp_40"
                     android:layout_height="@dimen/dp_40"
                     android:layout_marginLeft="@dimen/dp_16"
+                    android:layout_marginTop="8dp"
                     android:background="@drawable/circle"
-                    android:src="@drawable/ic_account"
-                    android:layout_marginTop="8dp"/>
+                    android:src="@drawable/profile" />
 
                 <TextView
                     android:id="@+id/athlete_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Preeti"
-                    android:textSize="@dimen/sp_16"
-                    android:textColor="@color/white"
+                    android:layout_below="@+id/athlete_thumb"
                     android:layout_marginLeft="@dimen/dp_16"
                     android:layout_marginTop="@dimen/dp_8"
-                    android:layout_below="@+id/athlete_thumb"/>
+                    android:text="Preeti"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_16" />
 
             </RelativeLayout>
 
