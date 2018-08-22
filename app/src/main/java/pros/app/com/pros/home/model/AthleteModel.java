@@ -1,10 +1,13 @@
 package pros.app.com.pros.home.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AthleteModel {
+public class AthleteModel implements Parcelable {
 
     @JsonProperty("id")
     private int id;
@@ -58,4 +61,45 @@ public class AthleteModel {
     public void setFollowedByCurrentUser(boolean followedByCurrentUser) {
         this.followedByCurrentUser = followedByCurrentUser;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.name);
+        dest.writeString(this.firstName);
+        dest.writeString(this.lastName);
+        dest.writeString(this.userType);
+        dest.writeParcelable((Parcelable) this.avatar, flags);
+        dest.writeByte(this.followedByCurrentUser ? (byte) 1 : (byte) 0);
+    }
+
+    public AthleteModel() {
+    }
+
+    protected AthleteModel(Parcel in) {
+        this.id = in.readInt();
+        this.name = in.readString();
+        this.firstName = in.readString();
+        this.lastName = in.readString();
+        this.userType = in.readString();
+        this.avatar = in.readParcelable(UrlModel.class.getClassLoader());
+        this.followedByCurrentUser = in.readByte() != 0;
+    }
+
+    public static final Creator<AthleteModel> CREATOR = new Creator<AthleteModel>() {
+        @Override
+        public AthleteModel createFromParcel(Parcel source) {
+            return new AthleteModel(source);
+        }
+
+        @Override
+        public AthleteModel[] newArray(int size) {
+            return new AthleteModel[size];
+        }
+    };
 }

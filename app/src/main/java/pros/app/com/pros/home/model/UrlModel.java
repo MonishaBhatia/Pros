@@ -1,10 +1,13 @@
 package pros.app.com.pros.home.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UrlModel {
+public class UrlModel implements Parcelable {
 
     @JsonProperty("mobile_url")
     private String mobileUrl;
@@ -62,4 +65,47 @@ public class UrlModel {
     public String getMediumUrl() {
         return mediumUrl;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.mobileUrl);
+        dest.writeString(this.introUrl);
+        dest.writeString(this.shareUrl);
+        dest.writeString(this.thumbnailUrl);
+        dest.writeString(this.largeUrl);
+        dest.writeString(this.xLargeUrl);
+        dest.writeString(this.originalUrl);
+        dest.writeString(this.mediumUrl);
+    }
+
+    public UrlModel() {
+    }
+
+    protected UrlModel(Parcel in) {
+        this.mobileUrl = in.readString();
+        this.introUrl = in.readString();
+        this.shareUrl = in.readString();
+        this.thumbnailUrl = in.readString();
+        this.largeUrl = in.readString();
+        this.xLargeUrl = in.readString();
+        this.originalUrl = in.readString();
+        this.mediumUrl = in.readString();
+    }
+
+    public static final Parcelable.Creator<UrlModel> CREATOR = new Parcelable.Creator<UrlModel>() {
+        @Override
+        public UrlModel createFromParcel(Parcel source) {
+            return new UrlModel(source);
+        }
+
+        @Override
+        public UrlModel[] newArray(int size) {
+            return new UrlModel[size];
+        }
+    };
 }

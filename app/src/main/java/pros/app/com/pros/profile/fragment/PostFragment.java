@@ -134,7 +134,7 @@ public class PostFragment extends Fragment implements ProfileView {
             lableNothing.setVisibility(View.GONE);
             emptyStateiv.setVisibility(View.GONE);
             likedPostsRecyclerview.setVisibility(View.VISIBLE);
-            postAdapter = new PostAdapter(postList);
+            postAdapter = new PostAdapter(postList, getActivity());
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
             likedPostsRecyclerview.setLayoutManager(mLayoutManager);
             likedPostsRecyclerview.setItemAnimator(new DefaultItemAnimator());
