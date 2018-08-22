@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true"
     android:background="@color/colorPrimaryDark">
 
     <android.support.constraint.ConstraintLayout
@@ -77,60 +78,78 @@
 
         <TextView
             android:id="@+id/tvLikedVideos"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_32"
             android:layout_marginTop="@dimen/dp_16"
             android:gravity="center"
             android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp_12"
+            android:textSize="@dimen/sp_14"
             app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/tvLikedQuestions"
             app:layout_constraintTop_toBottomOf="@id/labelFollowing"
-            tools:text="0\nLiked Posts" />
+            tools:text="0" />
 
         <TextView
             android:id="@+id/tvLikedQuestions"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/dp_32"
             android:layout_marginTop="@dimen/dp_16"
             android:gravity="center"
             android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp_12"
+            android:textSize="@dimen/sp_14"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/tvLikedVideos"
             app:layout_constraintTop_toBottomOf="@id/labelFollowing"
-            tools:text="0\nLiked Questions" />
+            tools:text="0" />
 
-        <TextView
-            android:id="@+id/label_nothing"
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="6dp"
+            android:minHeight="?attr/actionBarSize"
+            app:tabIndicatorColor="@color/green"
+            app:tabIndicatorHeight="2dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:layout_constraintTop_toBottomOf="@+id/tvLikedQuestions" />
+
+        <pros.app.com.pros.custom.HeightWrappingViewPager
+            android:id="@+id/viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/dp_50"
-            android:drawablePadding="@dimen/dp_16"
-            android:drawableTop="@drawable/ic_slideshow"
-            android:gravity="center"
-            android:text="@string/no_liked_posts"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_12"
-            app:layout_constraintTop_toBottomOf="@id/tvLikedVideos" />
+            app:layout_constraintTop_toBottomOf="@+id/tab_layout" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/liked_posts"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/tvLikedVideos" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/liked_questions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/dp_16"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/tvLikedVideos"
-            tools:listitem="@layout/item_liked_question" />
+        <!--        <TextView
+                    android:id="@+id/label_nothing"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/dp_50"
+                    android:drawablePadding="@dimen/dp_16"
+                    android:drawableTop="@drawable/ic_slideshow"
+                    android:gravity="center"
+                    android:text="@string/no_liked_posts"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_12"
+                    app:layout_constraintTop_toBottomOf="@id/tvLikedVideos" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/liked_posts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/tvLikedVideos" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/liked_questions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/dp_16"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/tvLikedVideos"
+                    tools:listitem="@layout/item_liked_question" />-->
 
     </android.support.constraint.ConstraintLayout>
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>
