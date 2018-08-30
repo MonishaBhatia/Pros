@@ -1,15 +1,18 @@
 package pros.app.com.pros.detail.fragment;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.squareup.picasso.Picasso;
 
@@ -30,7 +33,7 @@ import pros.app.com.pros.home.model.PostModel;
  * Use the {@link DetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DetailFragment extends Fragment {
+public class DetailFragment extends Fragment  {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_POST_MODEL = "post_model";
@@ -66,6 +69,14 @@ public class DetailFragment extends Fragment {
 
     @BindView(R.id.question_text)
     TextView questionText;
+
+    @BindView(R.id.question_athlete_name)
+    TextView questionAthleteName;
+
+    @BindView(R.id.videoView)
+    VideoView videoView;
+
+    boolean videoVisibleToUser = false;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -127,8 +138,10 @@ public class DetailFragment extends Fragment {
             athleteThumbnailUrl = receivedPostModel.getQuestioner().getAvatar().getThumbnailUrl();
             questionContainer.setVisibility(View.VISIBLE);
             questionText.setText(receivedPostModel.getText());
+            questionAthleteName.setText(receivedPostModel.getQuestioner().getName());
 
         }
+
         String dateDifference = DateUtils.getDateDifference(receivedPostModel.getCreatedAt(), true);
 
         athleteName.setText(athleteFullName);
@@ -136,6 +149,19 @@ public class DetailFragment extends Fragment {
         Picasso.get().load(athleteThumbnailUrl).into(athleteThumb);
         createdAt.setText(dateDifference);
         likesCount.setText("" + receivedPostModel.getLikes().getCount());
+
+        if(contentType != null && contentType.equalsIgnoreCase("video")){
+            videoView.setVideoPath(receivedPostModel.getUrls().getMobileUrl());
+            if(videoVisibleToUser){
+                videoView.start();
+            }
+            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    thumbnailBackground.setVisibility(View.GONE);
+                }
+            });
+        }
 
     }
 
@@ -158,9 +184,43 @@ public class DetailFragment extends Fragment {
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+            if (!isVisibleToUser)   // If we are becoming invisible, then...
+            {
+                //pause or stop vide
+                if(videoView != null) {
+                    videoView.stopPlayback();
+                }
+                videoVisibleToUser = false;
+            }
+
+            if (isVisibleToUser) // If we are becoming visible, then...
+            {
+                videoVisibleToUser = true;
+                if(receivedPostModel !=null) {
+                    String contentType = receivedPostModel.getContentType();
+
+                    //play your video
+                    if (contentType != null && contentType.equalsIgnoreCase("video") && videoView != null) {
+                        videoView.setVideoPath(receivedPostModel.getUrls().getMobileUrl());
+                        videoView.start();
+                    }
+                }
+
+            }
     }
 
     /**

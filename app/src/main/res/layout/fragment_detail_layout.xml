@@ -8,6 +8,12 @@
     android:background="@color/dark_gray">
 
     <!-- TODO: Update blank fragment layout -->
+
+
+        <VideoView
+            android:id="@+id/videoView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     
         <ImageView
             android:id="@+id/thumbnail_background"
@@ -15,6 +21,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/background"
             android:scaleType="centerCrop"/>
+
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -188,6 +195,7 @@
                     android:textSize="40sp" />
 
                 <TextView
+                    android:id="@+id/question_athlete_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="MMA"
