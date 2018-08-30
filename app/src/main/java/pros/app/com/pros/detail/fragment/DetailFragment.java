@@ -1,11 +1,14 @@
 package pros.app.com.pros.detail.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,13 +20,19 @@ import android.widget.VideoView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import pros.app.com.pros.R;
 import pros.app.com.pros.base.DateUtils;
+import pros.app.com.pros.detail.adapter.MentionsAdapter;
+import pros.app.com.pros.detail.adapter.ReactionAthlete;
+import pros.app.com.pros.home.model.AthleteModel;
 import pros.app.com.pros.home.model.PostModel;
+import pros.app.com.pros.search.adapter.TopProsAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -76,7 +85,20 @@ public class DetailFragment extends Fragment  {
     @BindView(R.id.videoView)
     VideoView videoView;
 
+    @BindView(R.id.athlete_list)
+    RecyclerView athleteRecyclerview;
+
+    @BindView(R.id.mentions_list)
+    RecyclerView mentionsListRecyclerview;
+
+    @BindView(R.id.tags_iv)
+    ImageView mentionsIcon;
+
     boolean videoVisibleToUser = false;
+
+    private int reactionVideoIndex = 0;
+    private ArrayList<String> totalReactionsVideos = new ArrayList<>();
+    private boolean toggleMentions = false;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -140,6 +162,17 @@ public class DetailFragment extends Fragment  {
             questionText.setText(receivedPostModel.getText());
             questionAthleteName.setText(receivedPostModel.getQuestioner().getName());
 
+            List<PostModel> reactionsList = receivedPostModel.getReactions();
+            if(reactionsList.size() >0){
+                for(int i=0; i< reactionsList.size(); i++) {
+                    totalReactionsVideos.add(reactionsList.get(i).getUrls().getMobileUrl());
+                }
+
+               playAllVideos();
+
+
+            }
+
         }
 
         String dateDifference = DateUtils.getDateDifference(receivedPostModel.getCreatedAt(), true);
@@ -149,6 +182,32 @@ public class DetailFragment extends Fragment  {
         Picasso.get().load(athleteThumbnailUrl).into(athleteThumb);
         createdAt.setText(dateDifference);
         likesCount.setText("" + receivedPostModel.getLikes().getCount());
+
+        List<PostModel> reactionsList = receivedPostModel.getReactions();
+        List<AthleteModel> mentionsList = receivedPostModel.getMentions();
+
+        if(reactionsList.size() >0){
+
+            ArrayList<AthleteModel> athleteModels = new ArrayList<>();
+
+            for(int i=0; i<reactionsList.size(); i++){
+                athleteModels.add(reactionsList.get(i).getAthlete());
+            }
+
+            ReactionAthlete reactionAthleteAdapter = new ReactionAthlete(getActivity(), athleteModels);
+
+            athleteRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+            athleteRecyclerview.setAdapter(reactionAthleteAdapter);
+        }
+
+
+        if(mentionsList.size() >0){
+            mentionsIcon.setVisibility(View.VISIBLE);
+            MentionsAdapter mentionsAdapter = new MentionsAdapter(mentionsList);
+
+            mentionsListRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+            mentionsListRecyclerview.setAdapter(mentionsAdapter);
+        }
 
         if(contentType != null && contentType.equalsIgnoreCase("video")){
             videoView.setVideoPath(receivedPostModel.getUrls().getMobileUrl());
@@ -163,6 +222,31 @@ public class DetailFragment extends Fragment  {
             });
         }
 
+    }
+
+    private void playAllVideos() {
+        if(reactionVideoIndex < totalReactionsVideos.size()) {
+            videoView.setVideoPath(totalReactionsVideos.get(reactionVideoIndex));
+            reactionVideoIndex++;
+            if(videoVisibleToUser){
+                videoView.start();
+            }
+            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    thumbnailBackground.setVisibility(View.GONE);
+                    questionContainer.setVisibility(View.GONE);
+                }
+            });
+                videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        videoView.stopPlayback();
+                        videoView.suspend();
+                        playAllVideos();
+                    }
+                });
+            }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -218,9 +302,46 @@ public class DetailFragment extends Fragment  {
                         videoView.setVideoPath(receivedPostModel.getUrls().getMobileUrl());
                         videoView.start();
                     }
+                    else if(receivedPostModel.getQuestioner() != null){
+                        List<PostModel> reactionsList = receivedPostModel.getReactions();
+                        if(reactionsList.size() >0){
+                            for(int i=0; i< reactionsList.size(); i++) {
+                                totalReactionsVideos.add(reactionsList.get(i).getUrls().getMobileUrl());
+                            }
+
+                            playAllVideos();
+
+                        }
+
+                    }
+
                 }
 
             }
+    }
+
+    @OnClick(R.id.tags_iv)
+    void onMentionIconClick(){
+        toggleMentions = !toggleMentions;
+        if(toggleMentions) {
+            mentionsListRecyclerview.setVisibility(View.VISIBLE);
+        }else {
+            mentionsListRecyclerview.setVisibility(View.GONE);
+        }
+    }
+
+    @OnClick(R.id.share_iv)
+    void shareDetails(){
+        if(receivedPostModel != null) {
+
+            String shareText = receivedPostModel.getShareText()+ " " + receivedPostModel.getShareUrl();
+
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+            sendIntent.setType("text/plain");
+            getActivity().startActivity(Intent.createChooser(sendIntent, "Send To"));
+        }
     }
 
     /**
