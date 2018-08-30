@@ -50,7 +50,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         PostModel postModel =  postsArrayList.get(position);
         String contentType = postModel.getContentType();
-        String dateDifference = DateUtils.getDateDifference(postModel.getCreatedAt());
+        String dateDifference = DateUtils.getDateDifference(postModel.getCreatedAt(), false);
 
         if(postModel.getQuestioner() != null ||
                 (contentType != null &&
@@ -141,6 +141,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                     Intent intent = new Intent(context, DetailActivity.class);
                     intent.putExtra("postArray", postsArrayList);
                     intent.putExtra("selectedPosition", this.getLayoutPosition());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                     break;
             }

@@ -89,6 +89,7 @@ public class TopProsAdapter extends RecyclerView.Adapter<TopProsAdapter.ViewHold
                     intent.putExtra(PROFILE_ID, athleteModelArrayList.get(getAdapterPosition()).getId());
                     intent.putExtra(IMAGE_URL, athleteModelArrayList.get(getAdapterPosition()).getAvatar().getMediumUrl());
                     intent.putExtra(NAME, String.format("%s %s", athleteModelArrayList.get(getAdapterPosition()).getFirstName(), athleteModelArrayList.get(getAdapterPosition()).getLastName()));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                     break;
             }

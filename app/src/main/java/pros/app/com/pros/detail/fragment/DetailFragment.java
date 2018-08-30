@@ -3,6 +3,7 @@ package pros.app.com.pros.detail.fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,9 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import pros.app.com.pros.R;
+import pros.app.com.pros.base.DateUtils;
 import pros.app.com.pros.home.model.PostModel;
 
 /**
@@ -45,6 +48,24 @@ public class DetailFragment extends Fragment {
 
     @BindView(R.id.thumbnail_background)
     ImageView thumbnailBackground;
+
+    @BindView(R.id.athlete_thumb)
+    CircleImageView athleteThumb;
+
+    @BindView(R.id.likes_count)
+    TextView likesCount;
+
+    @BindView(R.id.comment_count)
+    TextView commentsCount;
+
+    @BindView(R.id.comments_iv)
+    ImageView commentsIcon;
+
+    @BindView(R.id.question_container)
+    ConstraintLayout questionContainer;
+
+    @BindView(R.id.question_text)
+    TextView questionText;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -96,15 +117,25 @@ public class DetailFragment extends Fragment {
             thumbnailUrl= receivedPostModel.getUrls().getThumbnailUrl();
             athleteThumbnailUrl =  receivedPostModel.getAthlete().getAvatar().getThumbnailUrl();
             athleteFullName = receivedPostModel.getAthlete().getFirstName() + " " + receivedPostModel.getAthlete().getLastName();
+            commentsCount.setVisibility(View.VISIBLE);
+            commentsIcon.setVisibility(View.VISIBLE);
+            commentsCount.setText(""+receivedPostModel.getComments().size());
+
         } else if(receivedPostModel.getQuestioner() != null){
             athleteFullName = receivedPostModel.getQuestioner().getName();
             thumbnailUrl = receivedPostModel.getQuestioner().getAvatar().getThumbnailUrl();
             athleteThumbnailUrl = receivedPostModel.getQuestioner().getAvatar().getThumbnailUrl();
+            questionContainer.setVisibility(View.VISIBLE);
+            questionText.setText(receivedPostModel.getText());
+
         }
+        String dateDifference = DateUtils.getDateDifference(receivedPostModel.getCreatedAt(), true);
 
         athleteName.setText(athleteFullName);
         Picasso.get().load(thumbnailUrl).into(thumbnailBackground);
-
+        Picasso.get().load(athleteThumbnailUrl).into(athleteThumb);
+        createdAt.setText(dateDifference);
+        likesCount.setText("" + receivedPostModel.getLikes().getCount());
 
     }
 
