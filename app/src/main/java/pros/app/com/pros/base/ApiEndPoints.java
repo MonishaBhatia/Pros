@@ -56,7 +56,7 @@ public enum ApiEndPoints {
     pros_profile_metadata("/athletes/%s/metadata", 44),
     fans_profile_metadata("/fans/%s/metadata", 45),
 
-    post_invite("/users/end-invite", 46),
+    post_invite("/users/send_invite", 46),
 
     flag_post("/posts/%s/flag", 47),
 

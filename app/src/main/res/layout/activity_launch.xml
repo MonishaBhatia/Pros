@@ -29,7 +29,6 @@
         android:layout_height="@dimen/dp_48"
         android:layout_marginLeft="@dimen/dp_32"
         android:layout_marginRight="@dimen/dp_32"
-        android:layout_marginTop="@dimen/dp_50"
         android:background="@drawable/bg_oval"
         android:gravity="center"
         android:text="Sign In"
@@ -40,10 +39,9 @@
         android:id="@+id/tvFbSignIn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48"
-        android:layout_marginTop="@dimen/dp_12"
-        android:layout_marginBottom="@dimen/dp_24"
         android:layout_marginLeft="@dimen/dp_32"
         android:layout_marginRight="@dimen/dp_32"
+        android:layout_marginTop="@dimen/dp_12"
         android:background="@drawable/bg_fb_blue_oval"
         android:gravity="center"
         android:text="Sign In With Facebook"
@@ -58,9 +56,11 @@
         android:layout_marginBottom="@dimen/dp_32"
         android:layout_marginLeft="@dimen/dp_32"
         android:layout_marginRight="@dimen/dp_32"
+        android:layout_marginTop="@dimen/dp_16"
         android:gravity="center_horizontal"
         android:text="Don't have an account? Sign Up"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvFbSignIn" />
 
 </android.support.constraint.ConstraintLayout>

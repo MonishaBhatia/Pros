@@ -141,9 +141,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                     Intent intent = new Intent(context, DetailActivity.class);
                     intent.putExtra("postArray", postsArrayList);
                     intent.putExtra("selectedPosition", this.getLayoutPosition());
-/*                    intent.putExtra(PROFILE_ID, athleteModelList.get(getAdapterPosition()).getId());
-                    intent.putExtra(IMAGE_URL, athleteModelList.get(getAdapterPosition()).getAvatar().getMediumUrl());
-                    intent.putExtra(NAME, String.format("%s %s", athleteModelList.get(getAdapterPosition()).getFirstName(),athleteModelList.get(getAdapterPosition()).getLastName()));*/
                     context.startActivity(intent);
                     break;
             }

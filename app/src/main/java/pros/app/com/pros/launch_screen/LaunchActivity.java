@@ -2,6 +2,7 @@ package pros.app.com.pros.launch_screen;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,8 +27,28 @@ public class LaunchActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ButterKnife.bind(this);
 
+        playVideo();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        playVideo();
+    }
+
+    private void playVideo(){
+
         Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+ R.raw.login);
         videoView.setVideoURI(uri);
+
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setVolume(0f, 0f);
+                mp.setLooping(true);
+            }
+        });
+
         videoView.start();
     }
 
@@ -44,5 +65,15 @@ public class LaunchActivity extends AppCompatActivity {
     @OnClick(R.id.tvSignUp)
     public void onClickSignUp() {
         startActivity(new Intent(this, SignUpActivity.class));
+    }
+
+    private void releasePlayer() {
+        videoView.stopPlayback();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        releasePlayer();
     }
 }

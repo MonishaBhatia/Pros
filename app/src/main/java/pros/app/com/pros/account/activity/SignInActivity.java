@@ -2,6 +2,7 @@ package pros.app.com.pros.account.activity;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -46,11 +47,35 @@ public class SignInActivity extends BaseActivity implements SignInView {
 
         toolbarTitle.setText(getString(R.string.sign_in));
 
-        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.login);
-        videoView.setVideoURI(uri);
-        videoView.start();
-
         signInPresenter = new SignInPresenter(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        playVideo();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        playVideo();
+    }
+
+    private void playVideo(){
+
+        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+ R.raw.login);
+        videoView.setVideoURI(uri);
+
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setVolume(0f, 0f);
+                mp.setLooping(true);
+            }
+        });
+
+        videoView.start();
     }
 
     @OnClick(R.id.ivBack)
@@ -79,7 +104,12 @@ public class SignInActivity extends BaseActivity implements SignInView {
 
     @Override
     public void onSucess(SignInModel signInModel) {
-        PrefUtils.saveUser(signInModel.getFan());
+
+        if(signInModel.getFan() != null) {
+            PrefUtils.saveUser(signInModel.getFan());
+        } else {
+            PrefUtils.saveUser(signInModel.getAthlete());
+        }
         Intent intent = new Intent(this, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
@@ -98,5 +128,15 @@ public class SignInActivity extends BaseActivity implements SignInView {
     @Override
     public void onSucessforgotPswd() {
         openDialog(getString(R.string.password_reset), getString(R.string.password_reset_text), "OK");
+    }
+
+    private void releasePlayer() {
+        videoView.stopPlayback();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        releasePlayer();
     }
 }

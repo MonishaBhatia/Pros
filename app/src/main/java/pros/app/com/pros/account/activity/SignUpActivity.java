@@ -2,12 +2,14 @@ package pros.app.com.pros.account.activity;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,6 +38,8 @@ public class SignUpActivity extends BaseActivity implements SignInView {
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
 
+    @BindView(R.id.videoView)
+    VideoView videoView;
 
     private SignUpPresenter signUpPresenter;
 
@@ -52,6 +56,36 @@ public class SignUpActivity extends BaseActivity implements SignInView {
 
         signUpPresenter = new SignUpPresenter(this);
     }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        playVideo();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        playVideo();
+    }
+
+    private void playVideo(){
+
+        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+ R.raw.login);
+        videoView.setVideoURI(uri);
+
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setVolume(0f, 0f);
+                mp.setLooping(true);
+            }
+        });
+
+        videoView.start();
+    }
+
 
     @OnClick(R.id.ivBack)
     public void onClickBack(){
@@ -93,5 +127,15 @@ public class SignUpActivity extends BaseActivity implements SignInView {
     @Override
     public void onSucessforgotPswd() {
 
+    }
+
+    private void releasePlayer() {
+        videoView.stopPlayback();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        releasePlayer();
     }
 }
