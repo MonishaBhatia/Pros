@@ -32,7 +32,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation 'com.facebook.android:facebook-login:4.31.0'
     implementation 'com.android.support:multidex:1.0.3'
-    implementation 'com.google.code.gson:gson:2.8.0'
+    implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.8.5'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.8.5'
@@ -45,4 +45,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.facebook.android:facebook-android-sdk:4.31.0'
 }

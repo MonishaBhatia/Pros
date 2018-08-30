@@ -4,17 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -24,11 +20,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pros.app.com.pros.R;
-import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.home.model.AthleteModel;
 import pros.app.com.pros.profile.activity.AthleteProfileActivity;
-import pros.app.com.pros.profile.activity.FollowingActivity;
-import pros.app.com.pros.profile.activity.ProfileActivity;
 import pros.app.com.pros.profile.presenter.FollowingPresenter;
 
 import static pros.app.com.pros.base.ProsConstants.IMAGE_URL;

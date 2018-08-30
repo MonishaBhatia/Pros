@@ -8,17 +8,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.VideoView;
 
+import com.facebook.CallbackManager;
+import com.facebook.login.LoginManager;
+import java.util.Arrays;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pros.app.com.pros.R;
 import pros.app.com.pros.account.activity.SignUpActivity;
 import pros.app.com.pros.account.activity.SignInActivity;
+import pros.app.com.pros.base.BaseView;
 
-public class LaunchActivity extends AppCompatActivity {
+public class LaunchActivity extends AppCompatActivity implements BaseView{
 
     @BindView(R.id.videoView)
     VideoView videoView;
+    private CallbackManager callbackManager;
+    private static final String EMAIL = "email";
+    private LaunchPresenter launchPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +36,8 @@ public class LaunchActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         playVideo();
+
+        launchPresenter = new LaunchPresenter(this);
     }
 
     @Override
@@ -60,6 +70,9 @@ public class LaunchActivity extends AppCompatActivity {
     @OnClick(R.id.tvFbSignIn)
     public void onClickFbSignIn() {
 
+        callbackManager = CallbackManager.Factory.create();
+        launchPresenter.fbCallback(callbackManager);
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList(EMAIL));
     }
 
     @OnClick(R.id.tvSignUp)
@@ -75,5 +88,21 @@ public class LaunchActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         releasePlayer();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onSuccess() {
+
+    }
+
+    @Override
+    public void onFailure(int message) {
+
     }
 }
