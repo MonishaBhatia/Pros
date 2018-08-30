@@ -16,32 +16,25 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".launch_screen.LaunchActivity" />
-        <activity
-            android:name=".account.activity.SignInActivity" />
-        <activity
-            android:name=".account.activity.SignUpActivity" />
-        <activity
-            android:name=".home.activity.HomeActivity" />
+        <activity android:name=".launch_screen.LaunchActivity" />
+        <activity android:name=".account.activity.SignInActivity" />
+        <activity android:name=".account.activity.SignUpActivity" />
+        <activity android:name=".home.activity.HomeActivity" />
         <activity
             android:name=".home.activity.SplashActivity"
             android:theme="@style/Theme.Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".profile.activity.ProfileActivity" />
-        <activity
-            android:name=".search.activity.SearchActivity" />
-        <activity
-            android:name=".profile.activity.SettingsActivity" />
-        <activity
-            android:name=".profile.activity.FollowingActivity" />
-        <activity
-            android:name=".profile.activity.AthleteProfileActivity"></activity>
+        <activity android:name=".profile.activity.ProfileActivity" />
+        <activity android:name=".search.activity.SearchActivity" />
+        <activity android:name=".profile.activity.SettingsActivity" />
+        <activity android:name=".profile.activity.FollowingActivity" />
+        <activity android:name=".profile.activity.AthleteProfileActivity" />
+        <activity android:name=".detail.activity.DetailActivity"></activity>
     </application>
 
 </manifest>

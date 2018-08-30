@@ -62,7 +62,7 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     public void bindData(ArrayList<PostModel> postsList) {
         postsPrgressBar.setVisibility(View.GONE);
         rvPosts.setVisibility(View.VISIBLE);
-        postAdapter = new PostAdapter(postsList);
+        postAdapter = new PostAdapter(postsList, getApplicationContext());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         rvPosts.setLayoutManager(mLayoutManager);
         rvPosts.setItemAnimator(new DefaultItemAnimator());

@@ -1,12 +1,17 @@
 package pros.app.com.pros.home.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PostModel {
+public class PostModel implements Parcelable {
 
     @JsonProperty("id")
     private int id;
@@ -113,4 +118,65 @@ public class PostModel {
     public AthleteModel getQuestioner() {
         return questioner;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.text);
+        dest.writeString(this.contentType);
+        dest.writeString(this.createdAt);
+        dest.writeString(this.shareUrl);
+        dest.writeString(this.shareText);
+        dest.writeParcelable(this.urls, flags);
+        dest.writeInt(this.shareCount);
+        dest.writeParcelable(this.athlete, flags);
+        dest.writeParcelable(this.questioner, flags);
+        dest.writeParcelable(this.likes, flags);
+        dest.writeList(this.hashtags);
+        dest.writeList(this.mentions);
+        dest.writeList(this.reactions);
+        dest.writeList(this.comments);
+    }
+
+    public PostModel() {
+    }
+
+    protected PostModel(Parcel in) {
+        this.id = in.readInt();
+        this.text = in.readString();
+        this.contentType = in.readString();
+        this.createdAt = in.readString();
+        this.shareUrl = in.readString();
+        this.shareText = in.readString();
+        this.urls = in.readParcelable(UrlModel.class.getClassLoader());
+        this.shareCount = in.readInt();
+        this.athlete = in.readParcelable(AthleteModel.class.getClassLoader());
+        this.questioner = in.readParcelable(AthleteModel.class.getClassLoader());
+        this.likes = in.readParcelable(LikeModel.class.getClassLoader());
+        this.hashtags = new ArrayList<HashtagModel>();
+        in.readList(this.hashtags, HashtagModel.class.getClassLoader());
+        this.mentions = new ArrayList<AthleteModel>();
+        in.readList(this.mentions, AthleteModel.class.getClassLoader());
+        this.reactions = new ArrayList<PostModel>();
+        in.readList(this.reactions, PostModel.class.getClassLoader());
+        this.comments = new ArrayList<PostModel>();
+        in.readList(this.comments, PostModel.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<PostModel> CREATOR = new Parcelable.Creator<PostModel>() {
+        @Override
+        public PostModel createFromParcel(Parcel source) {
+            return new PostModel(source);
+        }
+
+        @Override
+        public PostModel[] newArray(int size) {
+            return new PostModel[size];
+        }
+    };
 }
