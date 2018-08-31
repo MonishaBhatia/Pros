@@ -1,11 +1,14 @@
 package pros.app.com.pros.profile.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -18,14 +21,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import pros.app.com.pros.R;
+import pros.app.com.pros.detail.activity.DetailActivity;
 import pros.app.com.pros.home.model.PostModel;
 
 public class LikedQuestionsAdapter extends RecyclerView.Adapter<LikedQuestionsAdapter.ViewHolder> {
 
     ArrayList<PostModel> likedQuestionsList;
+    private Context context;
 
-    public LikedQuestionsAdapter(ArrayList<PostModel> likedQuestionsList){
+    public LikedQuestionsAdapter(Context context, ArrayList<PostModel> likedQuestionsList){
         this.likedQuestionsList = likedQuestionsList;
+        this.context = context;
     }
 
 
@@ -83,14 +89,26 @@ public class LikedQuestionsAdapter extends RecyclerView.Adapter<LikedQuestionsAd
         @BindView(R.id.question_answer_count)
         TextView questionAnswerCount;
 
+        @BindView(R.id.question_container)
+        RelativeLayout questionContainer;
+
         public ViewHolder(View view){
             super(view);
             ButterKnife.bind(this, view);
+            questionContainer.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-
+            switch (v.getId()) {
+                case R.id.question_container:
+                    Intent intent = new Intent(context, DetailActivity.class);
+                    intent.putExtra("postArray", likedQuestionsList);
+                    intent.putExtra("selectedPosition", this.getLayoutPosition());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                    break;
+            }
         }
     }
 }
