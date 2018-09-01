@@ -10,7 +10,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.ProgressBar;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.allattentionhere.autoplayvideos.AAH_CustomRecyclerView;
@@ -22,8 +23,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pros.app.com.pros.R;
+import pros.app.com.pros.base.PrefUtils;
+import pros.app.com.pros.create_post.activity.CreatePost;
 import pros.app.com.pros.home.adapter.PostAdapter;
-import pros.app.com.pros.home.model.HomeMainModel;
 import pros.app.com.pros.home.model.PostModel;
 import pros.app.com.pros.home.presenter.HomePresenter;
 import pros.app.com.pros.home.view.HomeView;
@@ -38,8 +40,20 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     @BindView(R.id.posts_progress_bar)
     RelativeLayout postsPrgressBar;
 
+    @BindView(R.id.upload_post_button)
+    ImageView uploadPostButton;
+
+    @BindView(R.id.create_post_container)
+    LinearLayout createPostContainer;
+
+    @BindView(R.id.create_post_options)
+    LinearLayout createPostOptions;
+
     private HomePresenter homePresenter;
     private PostAdapter postAdapter;
+    private boolean togglePostListOptions;
+    private static final int CAPTURE_MEDIA = 368;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +79,11 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     @Override
     public void bindData(ArrayList<PostModel> postsList) {
         postsPrgressBar.setVisibility(View.GONE);
+        if(PrefUtils.isAthlete()){
+            createPostContainer.setVisibility(View.VISIBLE);
+
+
+        }
         rvPosts.setVisibility(View.VISIBLE);
         rvPosts.setActivity(this);
         rvPosts.setDownloadPath(Environment.getExternalStorageDirectory() + "/MyVideo"); //optional
@@ -90,5 +109,20 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     protected void onStop() {
         super.onStop();
         rvPosts.stopVideos();
+    }
+
+    @OnClick(R.id.upload_post_button)
+    void onCreatePostButtonClick(){
+        togglePostListOptions = !togglePostListOptions;
+        if(togglePostListOptions) {
+            createPostOptions.setVisibility(View.VISIBLE);
+        }else {
+            createPostOptions.setVisibility(View.GONE);
+        }
+    }
+
+    @OnClick(R.id.create_post)
+    void createPost(){
+        startActivity(new Intent(getApplicationContext(), CreatePost.class));
     }
 }
