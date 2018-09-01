@@ -44,6 +44,10 @@
     <string name="label_explore">Explore</string>
     <string name="label_cancel">Cancel</string>
     <string name="label_follow">Follow</string>
+    <string name="confirm_unfollow">Are you sure you want to unfollow %s?</string>
+    <string name="block_title">Block User</string>
+    <string name="confirm_block">Are you sure you want to block this user?\n\nYou will no longer be able to see their content.</string>
+    <string name="blocked_user">This user has been blocked.\n\nYou will no longer be able to see their content</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

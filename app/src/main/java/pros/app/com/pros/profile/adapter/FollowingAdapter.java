@@ -132,7 +132,9 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.Foll
                     break;
                 case R.id.ivFollow:
                     athleteModelList.get(getAdapterPosition()).setFollowedByCurrentUser(false);
-                    presenter.unFollowAthlete(athleteModelList.get(getAdapterPosition()).getId());
+                    String name = String.format("%s %s", athleteModelList.get(getAdapterPosition()).getFirstName(),
+                            athleteModelList.get(getAdapterPosition()).getLastName());
+                    presenter.unFollowAthlete(athleteModelList.get(getAdapterPosition()).getId(), name);
                     break;
                 case R.id.ivUnFollow:
                     athleteModelList.get(getAdapterPosition()).setFollowedByCurrentUser(true);

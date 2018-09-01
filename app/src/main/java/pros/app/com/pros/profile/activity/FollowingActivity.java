@@ -3,6 +3,9 @@ package pros.app.com.pros.profile.activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -52,6 +55,19 @@ public class FollowingActivity extends AppCompatActivity implements FollowingVie
     @BindView(R.id.ivClose)
     ImageView ivClose;
 
+    @BindView(R.id.bsConfirm)
+    View bsConfirm;
+
+    @BindView(R.id.tvHeading)
+    TextView tvHeading;
+
+    @BindView(R.id.tvAction1)
+    TextView tvAction1;
+
+    @BindView(R.id.tvAction2)
+    TextView tvAction2;
+
+    private BottomSheetBehavior behavior;
     private FollowingPresenter followingPresenter;
     private FollowingAdapter adapter;
 
@@ -137,9 +153,47 @@ public class FollowingActivity extends AppCompatActivity implements FollowingVie
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void confirmToUnfollow(final String name) {
+
+        behavior = BottomSheetBehavior.from(bsConfirm);
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        tvHeading.setText(getString(R.string.confirm_unfollow, name));
+                        break;
+
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+
+    }
+
     @OnClick(R.id.ivBack)
     public void onClickBack() {
         finish();
+    }
+
+    @OnClick(R.id.tvAction1)
+    public void onClickAction1() {
+        behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        followingPresenter.confirmedUnfollow();
+    }
+
+    @OnClick(R.id.tvAction2)
+    public void onClickAction2() {
+        behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
     @OnClick(R.id.ivClose)

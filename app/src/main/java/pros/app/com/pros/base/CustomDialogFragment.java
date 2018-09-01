@@ -77,6 +77,7 @@ public class CustomDialogFragment extends BaseDialogFragment {
     public void onClickActionOne() {
         if (null != handleInterface)
             handleInterface.handleYes();
+        dismiss();
     }
 
     @OnClick(R.id.tvAction2)

@@ -1,5 +1,10 @@
 package pros.app.com.pros.profile.presenter;
 
+import com.google.gson.JsonObject;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import pros.app.com.pros.base.ApiEndPoints;
@@ -51,6 +56,8 @@ public class ProfilePresenter implements HttpServiceView {
             view.onSuccessFollow();
         } else if (tag == ApiEndPoints.unfollow_atheltes.getTag()) {
             view.onsucessUnfollow();
+        } else if (tag == ApiEndPoints.block_user.getTag()) {
+            view.onSuccessBlock();
         }
     }
 
@@ -116,6 +123,25 @@ public class ProfilePresenter implements HttpServiceView {
                 ProsConstants.POST_METHOD,
                 null,
                 ApiEndPoints.unfollow_atheltes.getTag()
+        ).execute();
+    }
+
+    public void blockAthlete(int id) {
+
+        JSONObject jsonRequest = new JSONObject();
+        try {
+            jsonRequest.put("user_id", id);
+            jsonRequest.put("user_type", "Athlete");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        new HttpServiceUtil(
+                this,
+                ApiEndPoints.block_user.getApi(),
+                ProsConstants.POST_METHOD,
+                jsonRequest.toString(),
+                ApiEndPoints.block_user.getTag()
         ).execute();
     }
 }
