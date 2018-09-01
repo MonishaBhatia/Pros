@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/post_container"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_400">
 
-    <ImageView
+    <com.allattentionhere.autoplayvideos.AAH_VideoImage
         android:id="@+id/post_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/background" />
+        android:scaleType="centerCrop" />
 
 
     <LinearLayout

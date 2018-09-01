@@ -134,7 +134,7 @@ public class QuestionFragment extends Fragment implements ProfileView {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
             likedQuestionsRecyclerview.setLayoutManager(layoutManager);
-            likedQuestionsAdapter = new LikedQuestionsAdapter(postsList);
+            likedQuestionsAdapter = new LikedQuestionsAdapter(getActivity(), postsList);
             likedQuestionsRecyclerview.setAdapter(likedQuestionsAdapter);
         }
     }

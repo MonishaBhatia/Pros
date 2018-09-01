@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -16,6 +17,25 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".launch_screen.LaunchActivity" />
         <activity android:name=".account.activity.SignInActivity" />
         <activity android:name=".account.activity.SignUpActivity" />
@@ -34,7 +54,7 @@
         <activity android:name=".profile.activity.SettingsActivity" />
         <activity android:name=".profile.activity.FollowingActivity" />
         <activity android:name=".profile.activity.AthleteProfileActivity" />
-        <activity android:name=".detail.activity.DetailActivity"></activity>
+        <activity android:name=".detail.activity.DetailActivity"/>
     </application>
 
 </manifest>

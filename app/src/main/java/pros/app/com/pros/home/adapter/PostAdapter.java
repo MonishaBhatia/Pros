@@ -13,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.allattentionhere.autoplayvideos.AAH_CustomViewHolder;
+import com.allattentionhere.autoplayvideos.AAH_VideoImage;
+import com.allattentionhere.autoplayvideos.AAH_VideosAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -20,37 +23,43 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import pros.app.com.pros.ProsApplication;
 import pros.app.com.pros.R;
 import pros.app.com.pros.base.DateUtils;
+import pros.app.com.pros.base.LogUtils;
 import pros.app.com.pros.detail.activity.DetailActivity;
 import pros.app.com.pros.home.model.PostModel;
 
-public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
+public class PostAdapter extends AAH_VideosAdapter {
 
     private ArrayList<PostModel> postsArrayList;
     private Context context;
 
-    public  PostAdapter(ArrayList<PostModel> postsArrayList, Context context){
+    public PostAdapter(ArrayList<PostModel> postsArrayList, Context context){
         this.postsArrayList = postsArrayList;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AAH_CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_home_posts, parent, false);
 
-        return new ViewHolder(itemView);
+        return new PostsViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        //Main logic of updating UI
+    public int getItemViewType(int position) {
+        return 0;
+    }
 
+    @Override
+    public void onBindViewHolder(@NonNull AAH_CustomViewHolder holder, int position) {
+        //Main logic of updating UI
         PostModel postModel =  postsArrayList.get(position);
         String contentType = postModel.getContentType();
-        String dateDifference = DateUtils.getDateDifference(postModel.getCreatedAt());
+        String dateDifference = DateUtils.getDateDifference(postModel.getCreatedAt(), false);
 
         if(postModel.getQuestioner() != null ||
                 (contentType != null &&
@@ -60,31 +69,37 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             String thumbnailUrl = "";
             String athleteThumbnailUrl = "";
 
-            holder.postLike.setText("" + postModel.getLikes().getCount());
+            ((PostsViewHolder) holder).postLike.setText("" + postModel.getLikes().getCount());
 
             if(postModel.getQuestioner() != null){
                 athleteFullName = postModel.getQuestioner().getName();
                 thumbnailUrl = postModel.getQuestioner().getAvatar().getThumbnailUrl();
                 athleteThumbnailUrl = postModel.getQuestioner().getAvatar().getThumbnailUrl();
-                holder.questionContainer.setVisibility(View.VISIBLE);
-                holder.questionContainer.setVisibility(View.VISIBLE);
-                holder.questionText.setText(postModel.getText());
-                holder.athleteName.setTextColor(Color.parseColor("#50e3c2"));
+                ((PostsViewHolder) holder).questionContainer.setVisibility(View.VISIBLE);
+                ((PostsViewHolder) holder).questionContainer.setVisibility(View.VISIBLE);
+                ((PostsViewHolder) holder).questionText.setText(postModel.getText());
+                ((PostsViewHolder) holder).athleteName.setTextColor(Color.parseColor("#50e3c2"));
+
+                holder.setImageUrl(thumbnailUrl);
+                Picasso.get().load(holder.getImageUrl()).into(holder.getAAH_ImageView());
+
             } else {
                 thumbnailUrl= postModel.getUrls().getThumbnailUrl();
                 athleteThumbnailUrl =  postModel.getAthlete().getAvatar().getThumbnailUrl();
                 athleteFullName = postModel.getAthlete().getFirstName() + " " + postModel.getAthlete().getLastName();
-                holder.questionContainer.setVisibility(View.GONE);
-                holder.questionContainer.setVisibility(View.GONE);
-                holder.athleteName.setTextColor(Color.parseColor("#ffffff"));
+                ((PostsViewHolder) holder).questionContainer.setVisibility(View.GONE);
+                ((PostsViewHolder) holder).questionContainer.setVisibility(View.GONE);
+                ((PostsViewHolder) holder).athleteName.setTextColor(Color.parseColor("#ffffff"));
+
+                holder.setVideoUrl(postModel.getUrls().getIntroUrl());
+                holder.setVideoUrl(ProsApplication.getProxy().getProxyUrl(postModel.getUrls().getIntroUrl()+"")); // url should not be null
+                holder.setImageUrl(thumbnailUrl);
+                Picasso.get().load(holder.getImageUrl()).into(holder.getAAH_ImageView());
             }
 
-
-            Picasso.get().load(thumbnailUrl).into(holder.postImage);
-            Picasso.get().load(athleteThumbnailUrl).into(holder.athleteThumb);
-            holder.athleteName.setText(athleteFullName);
-            holder.createdAt.setText(dateDifference);
-
+            Picasso.get().load(athleteThumbnailUrl).into(((PostsViewHolder) holder).athleteThumb);
+            ((PostsViewHolder) holder).athleteName.setText(athleteFullName);
+            ((PostsViewHolder) holder).createdAt.setText(dateDifference);
 
         }
 
@@ -95,11 +110,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         return postsArrayList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class PostsViewHolder extends AAH_CustomViewHolder implements View.OnClickListener{
 
         //Bind the view
         @BindView(R.id.post_image)
-        ImageView postImage;
+        AAH_VideoImage postImage;
 
         @BindView(R.id.created_at)
         TextView createdAt;
@@ -128,7 +143,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         @BindView(R.id.post_container)
         FrameLayout postContainer;
 
-        public ViewHolder(View view){
+        public PostsViewHolder(View view){
             super(view);
             ButterKnife.bind(this, view);
             postContainer.setOnClickListener(this);
@@ -141,9 +156,23 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                     Intent intent = new Intent(context, DetailActivity.class);
                     intent.putExtra("postArray", postsArrayList);
                     intent.putExtra("selectedPosition", this.getLayoutPosition());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                     break;
             }
+        }
+        
+        @Override
+        public void videoStarted() {
+            super.videoStarted();
+            muteVideo();
+            LogUtils.LOGD("PlayPlay", "Video started : " + getAdapterPosition());
+        }
+        @Override
+        public void pauseVideo() {
+            super.pauseVideo();
+            muteVideo();
+            LogUtils.LOGD("PlayPlay", "Video paused : " + getAdapterPosition());
         }
     }
 

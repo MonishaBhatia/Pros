@@ -4,19 +4,24 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
-import com.facebook.FacebookSdk;
-
-import pros.app.com.pros.account.model.SignInModel;
+import com.danikula.videocache.HttpProxyCacheServer;
 import pros.app.com.pros.base.PrefUtils;
 
 public class ProsApplication extends MultiDexApplication {
 
     private static ProsApplication application;
 
+    private static HttpProxyCacheServer proxy;
+
+    public static HttpProxyCacheServer getProxy() {
+        return proxy;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
         application = this;
+        proxy = new HttpProxyCacheServer(this);
     }
 
     public static ProsApplication getInstance() {
