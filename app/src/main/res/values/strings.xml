@@ -48,6 +48,10 @@
     <string name="block_title">Block User</string>
     <string name="confirm_block">Are you sure you want to block this user?\n\nYou will no longer be able to see their content.</string>
     <string name="blocked_user">This user has been blocked.\n\nYou will no longer be able to see their content</string>
+    <string name="report_title">Report Offensive Content</string>
+    <string name="report_content">Are you sure you want to report content in this post as abusive and/or offensive?</string>
+    <string name="reported_content">Thank you for keeping our content user friendly.\n\nWe will review this post and take the appropriate action within the next 24 hours.</string>
+    <string name="write_comment">Write A Comment</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

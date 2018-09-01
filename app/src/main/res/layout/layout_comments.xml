@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimary">
+
+    <EditText
+        android:id="@+id/edtComments"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/dp_8"
+        android:layout_marginRight="@dimen/dp_8"
+        android:background="@drawable/bg_round"
+        android:hint="@string/write_comment"
+        android:imeOptions="actionGo"
+        android:inputType="textNoSuggestions"
+        android:paddingLeft="@dimen/dp_12"
+        android:singleLine="true"
+        android:textColorHint="@color/light_gray"
+        android:textSize="@dimen/sp_12"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/view_top"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_70"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/dp_16"
+        android:layout_marginRight="@dimen/dp_16"
+        android:background="@color/colorPrimaryDark" />
+
+    <ImageView
+        android:id="@+id/ivDownArrow"
+        android:layout_width="@dimen/dp_24"
+        android:layout_height="@dimen/dp_24"
+        android:layout_alignBottom="@+id/view_top"
+        android:layout_alignTop="@+id/view_top"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/down_arrows" />
+
+    <TextView
+        android:id="@+id/tvNumOfComments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/view_top"
+        android:layout_marginTop="@dimen/dp_24"
+        android:gravity="center"
+        android:textColor="@color/white"
+        tools:text="1 Comment" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_comments"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_above="@id/edtComments"
+        android:layout_below="@id/tvNumOfComments"
+        android:layout_marginTop="@dimen/dp_24" />
+
+</RelativeLayout>
