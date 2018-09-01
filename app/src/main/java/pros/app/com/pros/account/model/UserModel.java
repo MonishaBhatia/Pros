@@ -27,10 +27,14 @@ public class UserModel {
     @JsonProperty("avatar")
     private AvatarModel avatar;
 
-    public UserModel(String firstName, String lastName, String email, String apiKey, String userType) {
+    public UserModel() {
+    }
+
+    public UserModel(int id, String email, String firstName, String lastName, String apiKey, String userType) {
+        this.id = id;
+        this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
         this.apiKey = apiKey;
         this.userType = userType;
     }

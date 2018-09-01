@@ -1,6 +1,8 @@
 package pros.app.com.pros.home.activity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -14,12 +16,20 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-       if(ProsApplication.getInstance().isUserLoggedIn()){
-            startActivity(new Intent(this, HomeActivity.class));
-        } else {
-            startActivity(new Intent(this, LaunchActivity.class));
-        }
-        finish();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (ProsApplication.getInstance().isUserLoggedIn()) {
+                    startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+                } else {
+                    startActivity(new Intent(SplashActivity.this, LaunchActivity.class));
+                }
+                finish();
+            }
+        }, 4000);
+
     }
 }

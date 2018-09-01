@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray"
+    tools:context=".profile.activity.ProfileActivity">
+
+<android.support.constraint.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <ImageView
+        android:id="@+id/ivAvatar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_400"
+        android:scaleType="centerCrop" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_150"
+        app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
+        android:background="@drawable/post_end_gradient" />
+
+    <ImageView
+        android:id="@+id/ivGoBack"
+        android:layout_width="@dimen/dp_32"
+        android:layout_height="@dimen/dp_32"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_8"
+        app:layout_constraintLeft_toLeftOf="@id/ivAvatar"
+        app:layout_constraintTop_toTopOf="@id/ivAvatar"
+        app:srcCompat="@drawable/ic_left_arrow" />
+
+    <ImageView
+        android:id="@+id/ivBlock"
+        android:layout_width="@dimen/dp_32"
+        android:layout_height="@dimen/dp_32"
+        android:layout_marginRight="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_8"
+        app:layout_constraintRight_toRightOf="@id/ivAvatar"
+        app:layout_constraintTop_toTopOf="@id/ivAvatar"
+        app:srcCompat="@drawable/ic_more" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_24"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
+        app:layout_constraintTop_toTopOf="@id/ivAvatar"
+        tools:text="Testing Test" />
+
+    <TextView
+        android:id="@+id/tvNumFollowers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_90"
+        android:layout_marginLeft="@dimen/dp_48"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_16"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvName"
+        tools:text="31" />
+
+    <TextView
+        android:id="@+id/labelFollowers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_100"
+        android:layout_marginLeft="@dimen/dp_32"
+        android:gravity="center"
+        android:text="@string/label_followers"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_12"
+        app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvNumFollowing" />
+
+    <TextView
+        android:id="@+id/tvFollowing"
+        android:layout_width="@dimen/dp_150"
+        android:layout_height="@dimen/dp_40"
+        android:background="@drawable/bg_green"
+        android:gravity="center"
+        android:text="@string/label_following"
+        android:textColor="@color/white"
+        app:layout_constraintLeft_toRightOf="@id/tvNumFollowers"
+        app:layout_constraintRight_toLeftOf="@id/tvNumFollowing"
+        app:layout_constraintTop_toTopOf="@id/tvNumFollowers" />
+
+    <TextView
+        android:id="@+id/tvFollow"
+        android:layout_width="@dimen/dp_150"
+        android:layout_height="@dimen/dp_40"
+        android:background="@drawable/bg_transparent"
+        android:gravity="center"
+        android:text="@string/label_follow"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@id/tvNumFollowers"
+        app:layout_constraintRight_toLeftOf="@id/tvNumFollowing"
+        app:layout_constraintTop_toTopOf="@id/tvNumFollowers" />
+
+    <TextView
+        android:id="@+id/tvNumFollowing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_90"
+        android:layout_marginRight="@dimen/dp_48"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_16"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvName"
+        tools:text="31" />
+
+    <TextView
+        android:id="@+id/labelFollowing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_100"
+        android:layout_marginRight="@dimen/dp_32"
+        android:gravity="center"
+        android:text="@string/label_following"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_12"
+        app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvNumFollowing" />
+
+    <TextView
+        android:id="@+id/tvLikedVideos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_64"
+        android:layout_marginTop="@dimen/dp_16"
+        android:gravity="center"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_12"
+        app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/labelFollowing"
+        tools:text="0\nPosts" />
+
+    <TextView
+        android:id="@+id/tvLikedQuestions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp_64"
+        android:layout_marginTop="@dimen/dp_16"
+        android:gravity="center"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_12"
+        app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/labelFollowing"
+        tools:text="0\nQuestions" />
+
+    <TextView
+        android:id="@+id/label_nothing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_50"
+        android:drawablePadding="@dimen/dp_16"
+        android:drawableTop="@drawable/ic_slideshow"
+        android:gravity="center"
+        android:text="@string/no_liked_posts"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_12"
+        app:layout_constraintTop_toBottomOf="@id/ivAvatar" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvPosts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/tvLikedVideos" />
+
+</android.support.constraint.ConstraintLayout>
+
+    <include
+        android:id="@+id/bsConfirm"
+        layout="@layout/custom_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_12"
+        android:layout_marginBottom="@dimen/dp_12"
+        android:background="@color/white"
+        app:behavior_peekHeight="0dp"
+        app:elevation="5dp"
+        app:layout_behavior="@string/bottom_sheet_behavior" />
+
+    <include
+        android:id="@+id/bsButtons"
+        layout="@layout/bottom_sheet_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_12"
+        android:layout_marginBottom="@dimen/dp_12"
+        app:behavior_peekHeight="0dp"
+        app:elevation="5dp"
+        app:layout_behavior="@string/bottom_sheet_behavior" />
+
+</android.support.design.widget.CoordinatorLayout>

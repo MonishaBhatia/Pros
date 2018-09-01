@@ -7,6 +7,8 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 import pros.app.com.pros.ProsApplication;
 import pros.app.com.pros.R;
 import pros.app.com.pros.account.model.SignInModel;
@@ -69,7 +71,11 @@ public class SignUpPresenter implements HttpServiceView {
 
     @Override
     public void response(String response, int tag) {
-        signInModel = gson.fromJson(response, SignInModel.class);
+        try {
+            signInModel = JsonUtils.from(response, SignInModel.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         signInView.onSucess(signInModel);
     }
 
