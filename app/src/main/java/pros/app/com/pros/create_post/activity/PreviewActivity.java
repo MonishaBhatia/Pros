@@ -43,9 +43,15 @@ public class PreviewActivity extends AppCompatActivity {
 
         if(getIntent().getBooleanExtra("fromPicker", false)){
 
-            String fileUri = getIntent().getStringExtra("imageFileUri");
-            imageView.setVisibility(View.VISIBLE);
-            imageView.setImageURI(Uri.parse(fileUri));
+            if(getIntent().hasExtra("videoFileUri")){
+                String fileUri = getIntent().getStringExtra("videoFileUri");
+                playVideo(fileUri);
+            } else if(getIntent().hasExtra("imageFileUri")){
+                String fileUri = getIntent().getStringExtra("imageFileUri");
+                imageView.setVisibility(View.VISIBLE);
+                imageView.setImageURI(Uri.parse(fileUri));
+            }
+
 
         } else if(getIntent().getBooleanExtra("fromCamera", false)) {
 
@@ -63,38 +69,37 @@ public class PreviewActivity extends AppCompatActivity {
                     finish();
                     return;
                 }
-
                 imageView.setImageBitmap(bitmap);
 
             }
-
             else if (video != null) {
                 Log.e("Vode Path:", video.getPath());
-                videoView.setVisibility(View.VISIBLE);
-                videoView.setVideoURI(Uri.parse(video.getAbsolutePath()));
-                MediaController mediaController = new MediaController(this);
-                mediaController.setVisibility(View.GONE);
-                videoView.setMediaController(mediaController);
-                videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                    @Override
-                    public void onPrepared(MediaPlayer mp) {
-                        mp.setLooping(false);
-                        mp.start();
-
-                        float multiplier = (float) videoView.getWidth() / (float) mp.getVideoWidth();
-                        videoView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (mp.getVideoHeight() * multiplier)));
-                    }
-                });
-                //videoView.start();
+                playVideo(video.getAbsolutePath());
             }
 
         }
-
-
         else {
             finish();
             return;
         }
+    }
+
+    void playVideo(String uri){
+        videoView.setVisibility(View.VISIBLE);
+        videoView.setVideoURI(Uri.parse(uri));
+        MediaController mediaController = new MediaController(this);
+        mediaController.setVisibility(View.GONE);
+        videoView.setMediaController(mediaController);
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setLooping(false);
+                mp.start();
+
+                float multiplier = (float) videoView.getWidth() / (float) mp.getVideoWidth();
+                videoView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (mp.getVideoHeight() * multiplier)));
+            }
+        });
     }
 
     private void setupToolbar() {

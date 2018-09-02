@@ -129,6 +129,7 @@ public class CameraControls extends LinearLayout {
         ResultHolder.setNativeCaptureSize(cameraView.getCaptureSize());
         ResultHolder.setTimeToCallback(callbackTime - captureStartTime);
         Intent intent = new Intent(getContext(), PreviewActivity.class);
+        intent.putExtra("fromCamera", true);
         getContext().startActivity(intent);
     }
 
@@ -140,6 +141,7 @@ public class CameraControls extends LinearLayout {
             ResultHolder.setVideo(videoFile);
             ResultHolder.setNativeCaptureSize(cameraView.getCaptureSize());
             Intent intent = new Intent(getContext(), PreviewActivity.class);
+            intent.putExtra("fromCamera", true);
             getContext().startActivity(intent);
         }
     }
