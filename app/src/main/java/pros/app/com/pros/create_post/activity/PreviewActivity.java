@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -45,6 +46,13 @@ public class PreviewActivity extends AppCompatActivity {
 
     private CreatePostPresenter createPostPresenter;
 
+    public static final String APP_DIR = "VideoCompressor";
+
+    public static final String COMPRESSED_VIDEOS_DIR = "/Compressed Videos/";
+
+    public static final String TEMP_DIR = "/Temp/";
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,9 +83,7 @@ public class PreviewActivity extends AppCompatActivity {
             actualResolution.setText(bitmap.getWidth() + " x " + bitmap.getHeight());
             approxUncompressedSize.setText(getApproximateFileMegabytes(bitmap) + "MB");
             captureLatency.setText(ResultHolder.getTimeToCallback() + " milliseconds");
-        }
-
-        else if (video != null) {
+        } else if (video != null) {
             Log.e("Vode Path:", video.getPath());
             videoView.setVisibility(View.VISIBLE);
             videoView.setVideoURI(Uri.parse(video.getAbsolutePath()));
@@ -96,18 +102,36 @@ public class PreviewActivity extends AppCompatActivity {
             });
             //videoView.start();
 
-            String filepath = video.getPath();
-            File file = new File(filepath);
-            long length = file.length();
-            length = length/1024;
-            createPostPresenter.getuploadPath(ApiEndPoints.upload_video.getApi() + "?file_name=movie.m4v&file_size=" + length, filepath);
-        }
+            /*try2CreateCompressDir();
+            String outPath = Environment.getExternalStorageDirectory()
+                    + File.separator
+                    + APP_DIR
+                    + COMPRESSED_VIDEOS_DIR;
 
-        else {
+            String filePath = "";
+            try {
+                filePath = SiliCompressor.with(this).compressVideo(video.getPath(), outPath);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }*/
+
+            File file = new File(video.getPath());
+            long length = file.length();
+            length = length / 1024;
+
+            createPostPresenter.getuploadPath(ApiEndPoints.upload_video.getApi() + "?file_name=movie.m4v&file_size=" + length, video.getPath());
+        } else {
             finish();
             return;
         }
     }
+
+
+    public static void try2CreateCompressDir() {
+        File f = new File(Environment.getExternalStorageDirectory(), File.separator + APP_DIR + COMPRESSED_VIDEOS_DIR);
+        f.mkdirs();
+    }
+
 
     private void setupToolbar() {
         if (getSupportActionBar() != null) {

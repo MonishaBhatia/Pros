@@ -1,8 +1,6 @@
 package pros.app.com.pros.base;
 
 import android.os.AsyncTask;
-import android.text.TextUtils;
-import android.widget.Switch;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -169,8 +167,8 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
 
                     }catch (IOException e) {
                         e.printStackTrace();
+                        return null;
                     }
-
 
                     mediaType = MediaType.parse("application/octet-stream");
                     body = RequestBody.create(mediaType, bytes);
