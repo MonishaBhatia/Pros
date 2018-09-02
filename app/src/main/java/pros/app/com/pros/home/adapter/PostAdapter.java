@@ -102,7 +102,7 @@ public class PostAdapter extends AAH_VideosAdapter {
                 Picasso.get().load(holder.getImageUrl()).into(holder.getAAH_ImageView());
 
             } else {
-                thumbnailUrl= postModel.getUrls().getThumbnailUrl();
+                thumbnailUrl= postModel.getUrls().getMediumUrl();
                 athleteThumbnailUrl =  postModel.getAthlete().getAvatar().getThumbnailUrl();
                 athleteFullName = postModel.getAthlete().getFirstName() + " " + postModel.getAthlete().getLastName();
                 ((PostsViewHolder) holder).questionContainer.setVisibility(View.GONE);

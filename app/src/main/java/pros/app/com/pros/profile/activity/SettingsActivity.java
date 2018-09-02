@@ -9,8 +9,12 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -35,12 +39,24 @@ import static pros.app.com.pros.base.ProsConstants.PROFILE_ID;
 
 public class SettingsActivity extends BaseActivity implements SettingsView, CustomDialogListener {
 
+    @BindView(R.id.ivPic)
+    ImageView ivPic;
     @BindView(R.id.ivAvatar)
     ImageView ivAvatar;
     @BindView(R.id.tvName)
     TextView tvName;
     @BindView(R.id.tvNumFollowing)
     TextView tvNumFollowing;
+    @BindView(R.id.tvContact)
+    TextView tvContact;
+    @BindView(R.id.tvNumFollower)
+    TextView tvNumFollower;
+    @BindView(R.id.viewFollower)
+    View viewFollower;
+    @BindView(R.id.viewFollowing)
+    View viewFollowing;
+    @BindView(R.id.separator)
+    View separator;
 
     private SettingsPresenter settingsPresenter;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -60,7 +76,18 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
 
     private void initializeViews() {
 
-//        Picasso.get().load(PrefUtils.getUser().getAvatar().getMediumUrl()).error(R.drawable.ic_account).into(ivAvatar);
+        if(PrefUtils.isAthlete()){
+            viewFollower.setVisibility(View.VISIBLE);
+            separator.setVisibility(View.VISIBLE);
+            tvNumFollower.setText(String.valueOf(getIntent().getIntExtra("Follower_Count", 0)));
+            tvContact.setText(getString(R.string.invite_a_pro));
+        } else {
+            viewFollower.setVisibility(View.GONE);
+            separator.setVisibility(View.GONE);
+        }
+
+        if (!TextUtils.isEmpty(PrefUtils.getUser().getMediumUrl()))
+            Picasso.get().load(PrefUtils.getUser().getMediumUrl()).into(ivPic);
 
         tvName.setText(String.format("%s %s", PrefUtils.getUser().getFirstName(), PrefUtils.getUser().getLastName()));
         tvNumFollowing.setText(String.valueOf(getIntent().getIntExtra("Follow_Count", 0)));
@@ -69,14 +96,18 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
     @OnClick(R.id.tvContact)
     public void onClickContactAdmin() {
 
-        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-        emailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        emailIntent.setType("message/rfc822");
-        emailIntent.setData(Uri.parse("mailto:hello@theprosapp.com"));
-        try {
-            startActivity(Intent.createChooser(emailIntent, "Send mail using..."));
-        } catch (ActivityNotFoundException e) {
-            openDialog(getString(R.string.email_error_title), getString(R.string.email_error_content), "Close");
+        if(PrefUtils.isAthlete()){
+            InviteAProFragment.newInstance().show(this.getSupportFragmentManager(), InviteAProFragment.TAG);
+        } else {
+            Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+            emailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            emailIntent.setType("message/rfc822");
+            emailIntent.setData(Uri.parse("mailto:hello@theprosapp.com"));
+            try {
+                startActivity(Intent.createChooser(emailIntent, "Send mail using..."));
+            } catch (ActivityNotFoundException e) {
+                openDialog(getString(R.string.email_error_title), getString(R.string.email_error_content), "Close");
+            }
         }
     }
 
@@ -115,6 +146,13 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
         intent.putExtra(PROFILE_ID, PrefUtils.getUser().getId());
         intent.putExtra(FOLLOWING_LIST, true);
         intent.putExtra(IS_FAN, true);
+        startActivity(intent);
+    }
+
+    @OnClick({R.id.tvNumFollower, R.id.labelFollower})
+    public void onCLickFollower() {
+        Intent intent = new Intent(this, FollowingActivity.class);
+        intent.putExtra(PROFILE_ID, PrefUtils.getUser().getId());
         startActivity(intent);
     }
 

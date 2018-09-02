@@ -55,4 +55,14 @@ public class ChangePasswordPresenter implements HttpServiceView {
         }
 
     }
+
+    public void sendInvite(String request) {
+        new HttpServiceUtil(
+                this,
+                ApiEndPoints.post_invite.getApi(),
+                ProsConstants.POST_METHOD,
+                request,
+                ApiEndPoints.post_invite.getTag()
+        ).execute();
+    }
 }
