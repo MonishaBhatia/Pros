@@ -52,5 +52,10 @@ public class CreatePost extends AppCompatActivity {
         super.onPause();
     }
 
+    @OnClick(R.id.close_button)
+    void closeActivity(){
+        this.finish();
+    }
+
 
 }

@@ -22,6 +22,7 @@ import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import pros.app.com.pros.R;
 
 public class PreviewActivity extends AppCompatActivity {
@@ -31,15 +32,6 @@ public class PreviewActivity extends AppCompatActivity {
 
     @BindView(R.id.video)
     VideoView videoView;
-
-    @BindView(R.id.actualResolution)
-    TextView actualResolution;
-
-    @BindView(R.id.approxUncompressedSize)
-    TextView approxUncompressedSize;
-
-    @BindView(R.id.captureLatency)
-    TextView captureLatency;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,9 +58,6 @@ public class PreviewActivity extends AppCompatActivity {
 
             imageView.setImageBitmap(bitmap);
 
-            actualResolution.setText(bitmap.getWidth() + " x " + bitmap.getHeight());
-            approxUncompressedSize.setText(getApproximateFileMegabytes(bitmap) + "MB");
-            captureLatency.setText(ResultHolder.getTimeToCallback() + " milliseconds");
         }
 
         else if (video != null) {
@@ -111,6 +100,11 @@ public class PreviewActivity extends AppCompatActivity {
 
     private static float getApproximateFileMegabytes(Bitmap bitmap) {
         return (bitmap.getRowBytes() * bitmap.getHeight()) / 1024 / 1024;
+    }
+
+    @OnClick(R.id.close_button)
+    void closeActivity(){
+        this.finish();
     }
 
 }
