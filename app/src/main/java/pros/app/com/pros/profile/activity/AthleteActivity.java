@@ -2,14 +2,9 @@ package pros.app.com.pros.profile.activity;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
+import android.support.design.widget.BottomSheetBehavior;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,8 +17,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pros.app.com.pros.R;
 import pros.app.com.pros.base.BaseActivity;
-import pros.app.com.pros.base.CustomDialogFragment;
-import pros.app.com.pros.base.CustomDialogListener;
 import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.home.model.PostModel;
 import pros.app.com.pros.profile.model.MetaDataModel;
@@ -32,8 +25,6 @@ import pros.app.com.pros.profile.presenter.ProfilePresenter;
 import pros.app.com.pros.profile.views.ProfileView;
 
 import static pros.app.com.pros.base.ProsConstants.FOLLOWING_LIST;
-import static pros.app.com.pros.base.ProsConstants.IMAGE_URL;
-import static pros.app.com.pros.base.ProsConstants.NAME;
 import static pros.app.com.pros.base.ProsConstants.PROFILE_ID;
 
 public class AthleteActivity extends BaseActivity implements ProfileView {
@@ -89,7 +80,7 @@ public class AthleteActivity extends BaseActivity implements ProfileView {
         tvQuestions.setText(String.format(getString(R.string.label_questions), 0));
 
         profileId = PrefUtils.getUser().getId();
-        imageUrl = PrefUtils.getUser().getOriginalUrl();
+        imageUrl = PrefUtils.getUser().getMediumUrl();
         name = PrefUtils.getUser().getFirstName() + PrefUtils.getUser().getLastName();
 
         profilePresenter.getAthleteProfile(profileId);
