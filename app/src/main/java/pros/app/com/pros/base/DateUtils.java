@@ -60,16 +60,6 @@ public class DateUtils {
             return getFullText ? secondsAgo+ (secondsAgo > 1 ? " SECONDS AGO" : "SECOND AGO") : secondsAgo+"S";
         }
 
-
-       /* Log.e("Joda", Days.daysBetween(dt1, dt2).getDays() + " days, ");
-        Log.e("Joda", Hours.hoursBetween(dt1, dt2).getHours() % 24 + " hours, ");
-        Log.e("Joda", Minutes.minutesBetween(dt1, dt2).getMinutes() % 60 + " minutes, ");
-        Log.e("Joda", Seconds.secondsBetween(dt1, dt2).getSeconds() % 60 + " seconds.");
-
-        Log.e("Joda", Weeks.weeksBetween(dt1,dt2).getWeeks() + " weeks");
-        Log.e("Joda", Months.monthsBetween(dt1, dt2).getMonths() + " months");
-        Log.e("Joda", Years.yearsBetween(dt1, dt2).getYears() + " Years");*/
-
         return null;
     }
 }

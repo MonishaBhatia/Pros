@@ -16,6 +16,7 @@ import pros.app.com.pros.profile.views.FollowingView;
 public class FollowingPresenter implements HttpServiceView {
 
     private final FollowingView view;
+    private int unfollowId;
 
     public FollowingPresenter(FollowingView view) {
         this.view = view;
@@ -63,10 +64,15 @@ public class FollowingPresenter implements HttpServiceView {
         ).execute();
     }
 
-    public void unFollowAthlete(int id) {
+    public void unFollowAthlete(int id, String name) {
+        unfollowId = id;
+        view.confirmToUnfollow(name);
+    }
+
+    public void confirmedUnfollow() {
         new HttpServiceUtil(
                 this,
-                String.format(ApiEndPoints.unfollow_atheltes.getApi(), id),
+                String.format(ApiEndPoints.unfollow_atheltes.getApi(), unfollowId),
                 ProsConstants.POST_METHOD,
                 null,
                 ApiEndPoints.unfollow_atheltes.getTag()

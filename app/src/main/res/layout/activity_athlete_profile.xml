@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_gray"
     tools:context=".profile.activity.ProfileActivity">
+
+<android.support.constraint.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <ImageView
         android:id="@+id/ivAvatar"
@@ -185,3 +192,30 @@
         app:layout_constraintTop_toBottomOf="@id/tvLikedVideos" />
 
 </android.support.constraint.ConstraintLayout>
+
+    <include
+        android:id="@+id/bsConfirm"
+        layout="@layout/custom_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_12"
+        android:layout_marginBottom="@dimen/dp_12"
+        android:background="@color/white"
+        app:behavior_peekHeight="0dp"
+        app:elevation="5dp"
+        app:layout_behavior="@string/bottom_sheet_behavior" />
+
+    <include
+        android:id="@+id/bsButtons"
+        layout="@layout/bottom_sheet_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_12"
+        android:layout_marginBottom="@dimen/dp_12"
+        app:behavior_peekHeight="0dp"
+        app:elevation="5dp"
+        app:layout_behavior="@string/bottom_sheet_behavior" />
+
+</android.support.design.widget.CoordinatorLayout>

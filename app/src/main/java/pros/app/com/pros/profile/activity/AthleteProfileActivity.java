@@ -2,10 +2,12 @@ package pros.app.com.pros.profile.activity;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,7 +19,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pros.app.com.pros.R;
-import pros.app.com.pros.base.PrefUtils;
+import pros.app.com.pros.base.BaseActivity;
+import pros.app.com.pros.base.CustomDialogFragment;
+import pros.app.com.pros.base.CustomDialogListener;
 import pros.app.com.pros.home.model.PostModel;
 import pros.app.com.pros.profile.model.MetaDataModel;
 import pros.app.com.pros.profile.model.ProfileMainModel;
@@ -29,7 +33,7 @@ import static pros.app.com.pros.base.ProsConstants.IMAGE_URL;
 import static pros.app.com.pros.base.ProsConstants.NAME;
 import static pros.app.com.pros.base.ProsConstants.PROFILE_ID;
 
-public class AthleteProfileActivity extends AppCompatActivity implements ProfileView {
+public class AthleteProfileActivity extends BaseActivity implements ProfileView, CustomDialogListener {
 
     @BindView(R.id.ivAvatar)
     ImageView ivAvatar;
@@ -61,6 +65,28 @@ public class AthleteProfileActivity extends AppCompatActivity implements Profile
     @BindView(R.id.rvPosts)
     RecyclerView rvPosts;
 
+    @BindView(R.id.bsConfirm)
+    View bsConfirm;
+
+    @BindView(R.id.bsButtons)
+    View bsButtons;
+
+    @BindView(R.id.tvHeading)
+    TextView tvHeading;
+
+    @BindView(R.id.tvAction1)
+    TextView tvAction1;
+
+    @BindView(R.id.tvAction2)
+    TextView tvAction2;
+
+    @BindView(R.id.btn1)
+    Button btn1;
+
+    @BindView(R.id.btn2)
+    Button btn2;
+
+    private BottomSheetBehavior behavior;
     private ProfilePresenter profilePresenter;
     private MetaDataModel metaData;
 
@@ -93,12 +119,73 @@ public class AthleteProfileActivity extends AppCompatActivity implements Profile
 
     @OnClick(R.id.ivBlock)
     public void onClickBlock() {
-        //TODO:bottomsheet
+        behavior = BottomSheetBehavior.from(bsButtons);
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        break;
+
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
     }
 
     @OnClick(R.id.tvFollowing)
     public void onClickFollowing() {
+        behavior = BottomSheetBehavior.from(bsConfirm);
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        tvHeading.setText(getString(R.string.confirm_unfollow, name));
+                        break;
+
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+    }
+
+    @OnClick(R.id.tvAction1)
+    public void onClickAction1() {
+        behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         profilePresenter.unFollowAthlete(profileId);
+    }
+
+    @OnClick(R.id.tvAction2)
+    public void onClickAction2() {
+        behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
+    @OnClick(R.id.btn1)
+    public void onClickbtn1() {
+        behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        confirmationDialog();
+    }
+
+    @OnClick(R.id.btn2)
+    public void onClickbtn2() {
+        behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
     @OnClick(R.id.tvFollow)
@@ -112,12 +199,12 @@ public class AthleteProfileActivity extends AppCompatActivity implements Profile
     }
 
     @OnClick(R.id.tvLikedVideos)
-    public void onCLickLikedPosts(){
+    public void onCLickLikedPosts() {
         labelNothing.setText(getString(R.string.no_liked_posts));
     }
 
     @OnClick(R.id.tvLikedQuestions)
-    public void onCLickLikedQuestions(){
+    public void onCLickLikedQuestions() {
         labelNothing.setText(getString(R.string.no_liked_questions));
     }
 
@@ -169,5 +256,31 @@ public class AthleteProfileActivity extends AppCompatActivity implements Profile
     public void onSuccessFollow() {
         tvFollowing.setVisibility(View.VISIBLE);
         tvFollow.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onSuccessBlock() {
+        openDialog("Success", getString(R.string.blocked_user), "Close");
+    }
+
+    private void confirmationDialog() {
+        CustomDialogFragment customDialogFragment = new CustomDialogFragment();
+        customDialogFragment.registerCallbackListener(this);
+        Bundle bundle = new Bundle();
+        bundle.putString("Title", getString(R.string.block_title));
+        bundle.putString("Content", getString(R.string.confirm_block));
+        bundle.putString("Action1", "Block");
+        bundle.putString("Action2", "Cancel");
+        customDialogFragment.setArguments(bundle);
+        customDialogFragment.show(this.getSupportFragmentManager(), CustomDialogFragment.TAG);
+    }
+
+    @Override
+    public void handleYes() {
+        profilePresenter.blockAthlete(profileId);
+    }
+
+    @Override
+    public void handleNo() {
     }
 }

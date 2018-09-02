@@ -51,7 +51,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="@dimen/dp_32"
                     android:layout_marginTop="@dimen/dp_16"
-                    android:drawableLeft="@drawable/ic_favorite_white_24dp"
+                    android:drawableLeft="@drawable/ic_unlike"
                     android:drawablePadding="@dimen/dp_8"
                     android:text="0"
                     android:textColor="@color/white"

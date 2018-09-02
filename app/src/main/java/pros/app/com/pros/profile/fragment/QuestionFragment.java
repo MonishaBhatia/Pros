@@ -146,12 +146,17 @@ public class QuestionFragment extends Fragment implements ProfileView {
 
     @Override
     public void onsucessUnfollow() {
-
+        //Nothing to do here.
     }
 
     @Override
     public void onSuccessFollow() {
+        //Nothing to do here.
+    }
 
+    @Override
+    public void onSuccessBlock() {
+        //Nothing to do here.
     }
 
     /**
