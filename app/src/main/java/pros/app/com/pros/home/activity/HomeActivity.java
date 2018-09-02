@@ -84,7 +84,7 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
                 // Your code to refresh the list here.
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
-                homePresenter.getPostData(true);
+               homePresenter.getPostData(true);
             }
         });
         // Configure the refreshing colors
@@ -137,6 +137,12 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     @Override
     public void updateHomeScreen(ArrayList<PostModel> postsList) {
         postAdapter.clear();
+        List<String> urls = new ArrayList<>();
+     /*   for (PostModel object : postsList) {
+            if (null != object.getUrls() && object.getUrls().getIntroUrl() != null && object.getUrls().getIntroUrl().endsWith(".mp4"))
+                urls.add(object.getUrls().getIntroUrl());
+        }
+        rvPosts.preDownload(urls);*/
         // ...the data has come back, add new items to your adapter...
         postAdapter.addAll(postsList);
         // Now we call setRefreshing(false) to signal refresh has finished
