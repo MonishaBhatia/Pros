@@ -41,44 +41,55 @@ public class PreviewActivity extends AppCompatActivity {
 
         setupToolbar();
 
-        byte[] jpeg = ResultHolder.getImage();
-        //File image = ResultHolder.getImage();
-        File video = ResultHolder.getVideo();
+        if(getIntent().getBooleanExtra("fromPicker", false)){
 
-        if (jpeg != null) {
-            Log.e("Image Path:", "Yes");
+            String fileUri = getIntent().getStringExtra("imageFileUri");
             imageView.setVisibility(View.VISIBLE);
+            imageView.setImageURI(Uri.parse(fileUri));
 
-            Bitmap bitmap = BitmapFactory.decodeByteArray(jpeg, 0, jpeg.length);
+        } else if(getIntent().getBooleanExtra("fromCamera", false)) {
 
-            if (bitmap == null) {
-                finish();
-                return;
+            byte[] jpeg = ResultHolder.getImage();
+            //File image = ResultHolder.getImage();
+            File video = ResultHolder.getVideo();
+
+            if (jpeg != null) {
+                Log.e("Image Path:", "Yes");
+                imageView.setVisibility(View.VISIBLE);
+
+                Bitmap bitmap = BitmapFactory.decodeByteArray(jpeg, 0, jpeg.length);
+
+                if (bitmap == null) {
+                    finish();
+                    return;
+                }
+
+                imageView.setImageBitmap(bitmap);
+
             }
 
-            imageView.setImageBitmap(bitmap);
+            else if (video != null) {
+                Log.e("Vode Path:", video.getPath());
+                videoView.setVisibility(View.VISIBLE);
+                videoView.setVideoURI(Uri.parse(video.getAbsolutePath()));
+                MediaController mediaController = new MediaController(this);
+                mediaController.setVisibility(View.GONE);
+                videoView.setMediaController(mediaController);
+                videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        mp.setLooping(false);
+                        mp.start();
+
+                        float multiplier = (float) videoView.getWidth() / (float) mp.getVideoWidth();
+                        videoView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (mp.getVideoHeight() * multiplier)));
+                    }
+                });
+                //videoView.start();
+            }
 
         }
 
-        else if (video != null) {
-            Log.e("Vode Path:", video.getPath());
-            videoView.setVisibility(View.VISIBLE);
-            videoView.setVideoURI(Uri.parse(video.getAbsolutePath()));
-            MediaController mediaController = new MediaController(this);
-            mediaController.setVisibility(View.GONE);
-            videoView.setMediaController(mediaController);
-            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    mp.setLooping(false);
-                    mp.start();
-
-                    float multiplier = (float) videoView.getWidth() / (float) mp.getVideoWidth();
-                    videoView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (mp.getVideoHeight() * multiplier)));
-                }
-            });
-            //videoView.start();
-        }
 
         else {
             finish();

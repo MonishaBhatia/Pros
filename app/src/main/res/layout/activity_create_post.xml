@@ -30,6 +30,7 @@
         android:layout_gravity="top">
 
         <ImageView
+            android:id="@+id/close_button"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_margin="@dimen/dp_16"
@@ -39,7 +40,7 @@
             android:clickable="true"/>
 
         <ImageView
-            android:id="@+id/close_button"
+            android:id="@+id/gallery_picker_button"
             android:layout_width="@dimen/dp_56"
             android:layout_height="@dimen/dp_56"
             android:layout_margin="@dimen/dp_16"
