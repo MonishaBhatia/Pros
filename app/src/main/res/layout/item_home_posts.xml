@@ -144,6 +144,15 @@
                     android:background="@drawable/circle"
                     android:src="@drawable/profile" />
 
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/athlete_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@id/athlete_thumb"
+                    android:layout_below="@+id/athlete_name"
+                    />
+
             </RelativeLayout>
 
 

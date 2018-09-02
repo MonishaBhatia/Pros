@@ -3,6 +3,7 @@ package pros.app.com.pros.home.activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Environment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.allattentionhere.autoplayvideos.AAH_CustomRecyclerView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 import pros.app.com.pros.R;
 import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.create_post.activity.CreatePost;
@@ -50,6 +53,12 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     @BindView(R.id.create_post_options)
     LinearLayout createPostOptions;
 
+    @BindView(R.id.ivProfile)
+    CircleImageView ivProfile;
+
+    @BindView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
+
     private HomePresenter homePresenter;
     private PostAdapter postAdapter;
     private boolean togglePostListOptions;
@@ -64,7 +73,26 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
 
         ButterKnife.bind(this);
         homePresenter = new HomePresenter(this);
-        homePresenter.getPostData();
+        if(PrefUtils.getUser().getThumbUrl() != null) {
+            Picasso.get().load(PrefUtils.getUser().getThumbUrl()).placeholder(R.drawable.profile).into(ivProfile);
+        }
+        homePresenter.getPostData(false);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+               homePresenter.getPostData(true);
+            }
+        });
+        // Configure the refreshing colors
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
     }
 
     @OnClick(R.id.ivProfile)
@@ -83,8 +111,8 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
         if(PrefUtils.isAthlete()){
             createPostContainer.setVisibility(View.VISIBLE);
 
-
         }
+        swipeRefreshLayout.setVisibility(View.VISIBLE);
         rvPosts.setVisibility(View.VISIBLE);
         rvPosts.setActivity(this);
         rvPosts.setDownloadPath(Environment.getExternalStorageDirectory() + "/MyVideo"); //optional
@@ -107,6 +135,21 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     }
 
     @Override
+    public void updateHomeScreen(ArrayList<PostModel> postsList) {
+        postAdapter.clear();
+        List<String> urls = new ArrayList<>();
+     /*   for (PostModel object : postsList) {
+            if (null != object.getUrls() && object.getUrls().getIntroUrl() != null && object.getUrls().getIntroUrl().endsWith(".mp4"))
+                urls.add(object.getUrls().getIntroUrl());
+        }
+        rvPosts.preDownload(urls);*/
+        // ...the data has come back, add new items to your adapter...
+        postAdapter.addAll(postsList);
+        // Now we call setRefreshing(false) to signal refresh has finished
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         rvPosts.stopVideos();
@@ -124,11 +167,15 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
 
     @OnClick(R.id.create_post)
     void createPost(){
+        togglePostListOptions = false;
+        createPostOptions.setVisibility(View.GONE);
         startActivity(new Intent(getApplicationContext(), CreatePost.class));
     }
 
     @OnClick(R.id.ask_question)
     void createQuestion(){
+        togglePostListOptions = false;
+        createPostOptions.setVisibility(View.GONE);
         startActivity(new Intent(getApplicationContext(), AskQuestionActivity.class));
     }
 }

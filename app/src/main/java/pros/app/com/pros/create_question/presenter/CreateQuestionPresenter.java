@@ -31,21 +31,25 @@ public class CreateQuestionPresenter implements HttpServiceView {
     }
 
     public void postQuestion(String question, String[] tags){
-        JSONObject jsonRequest = new JSONObject();
-        try {
-            jsonRequest.put("text", question);
-            jsonRequest.put("tags", tags);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        if(countWords(question)>1) {
+            JSONObject jsonRequest = new JSONObject();
+            try {
+                jsonRequest.put("text", question);
+                jsonRequest.put("tags", tags);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-        new HttpServiceUtil(
-                this,
-                ApiEndPoints.post_question.getApi(),
-                ProsConstants.POST_METHOD,
-                jsonRequest.toString(),
-                ApiEndPoints.post_question.getTag()
-        ).execute();
+            new HttpServiceUtil(
+                    this,
+                    ApiEndPoints.post_question.getApi(),
+                    ProsConstants.POST_METHOD,
+                    jsonRequest.toString(),
+                    ApiEndPoints.post_question.getTag()
+            ).execute();
+        } else {
+            createQuestionView.showPostErrorMessage();
+        }
     }
 
     @Override
@@ -64,6 +68,9 @@ public class CreateQuestionPresenter implements HttpServiceView {
         if(tag == ApiEndPoints.post_question.getTag()){
             try{
                 Log.e("Response", response);
+                if(response.isEmpty()){
+                    createQuestionView.closeActivity();
+                }
 
             }catch (Exception e){
                 e.printStackTrace();
@@ -75,5 +82,14 @@ public class CreateQuestionPresenter implements HttpServiceView {
     @Override
     public void onError(int tag) {
 
+    }
+
+    public static int countWords(String sentence) {
+        if (sentence == null || sentence.isEmpty())
+        {
+            return 0;
+        }
+        String[] words = sentence.split("\\s+");
+        return words.length;
     }
 }

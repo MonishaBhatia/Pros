@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".create_question.activity.AskQuestionActivity">
 
 
@@ -69,6 +71,7 @@
 
 
     <EditText
+        android:id="@+id/question_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/seperator_top"
@@ -87,6 +90,8 @@
         android:layout_marginLeft="@dimen/dp_24"
         android:layout_marginBottom="32dp"
         android:src="@drawable/com_facebook_profile_picture_blank_square"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
         />
 
     <TextView
@@ -99,6 +104,8 @@
         android:layout_marginLeft="@dimen/dp_8"
         app:layout_constraintLeft_toRightOf="@id/tags_iv"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
         android:layout_marginBottom="32dp"/>
 
 
@@ -106,7 +113,7 @@
         android:id="@+id/athletes_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="200"
+        android:text="0"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginLeft="@dimen/dp_8"
@@ -121,6 +128,7 @@
         android:layout_height="0.75dp"
         android:background="@color/gray"
         app:layout_constraintBottom_toTopOf="@id/tags_iv"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginLeft="@dimen/dp_16"
         android:layout_marginRight="@dimen/dp_16"
         />

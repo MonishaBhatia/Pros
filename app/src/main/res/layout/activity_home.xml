@@ -27,14 +27,20 @@
                 android:minHeight="50dp"
                 android:minWidth="50dp" />
         </RelativeLayout>
-
-
-
-        <com.allattentionhere.autoplayvideos.AAH_CustomRecyclerView
-            android:id="@+id/rvPosts"
+        
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <com.allattentionhere.autoplayvideos.AAH_CustomRecyclerView
+                android:id="@+id/rvPosts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
         <LinearLayout
             android:id="@+id/create_post_container"
