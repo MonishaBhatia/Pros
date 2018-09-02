@@ -17,14 +17,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 import pros.app.com.pros.R;
 import pros.app.com.pros.base.KeyboardAction;
+import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.home.model.AthleteModel;
 import pros.app.com.pros.home.model.PostModel;
 import pros.app.com.pros.profile.activity.ProfileActivity;
@@ -59,6 +63,10 @@ public class SearchActivity extends AppCompatActivity implements SearchView{
     @BindView(R.id.ivClose)
     ImageView ivClose;
 
+    @BindView(R.id.ivProfile)
+    CircleImageView ivProfile;
+
+
     private SearchPresenter searchPresenter;
     private TopProsAdapter topProsAdapter;
     private TopPostsAdapter topPostsAdapter;
@@ -87,6 +95,9 @@ public class SearchActivity extends AppCompatActivity implements SearchView{
         setContentView(R.layout.activity_search);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ButterKnife.bind(this);
+        if(PrefUtils.getUser().getThumbUrl() != null) {
+            Picasso.get().load(PrefUtils.getUser().getThumbUrl()).placeholder(R.drawable.profile).into(ivProfile);
+        }
         searchPresenter = new SearchPresenter(this);
         searchPresenter.getSearchData();
         topPostsRecyclerview.setNestedScrollingEnabled(false);

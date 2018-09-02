@@ -33,6 +33,7 @@ public final class PrefUtils {
         String LAST_NAME = USER + ".last_name";
         String API_KEY = USER + ".api_key";
         String USER_TYPE = USER + ".user_type";
+        String USER_THUMB_URL = USER + ".user_thumb_url";
     }
 
     private static SharedPreferences getSharedPreferences() {
@@ -107,6 +108,7 @@ public final class PrefUtils {
         editor.putString(UserKeys.LAST_NAME, user.getLastName());
         editor.putString(UserKeys.API_KEY, user.getApiKey());
         editor.putString(UserKeys.USER_TYPE, user.getUserType());
+        editor.putString(UserKeys.USER_THUMB_URL, user.getAvatar().getThumbnailUrl());
         editor.apply();
 
         LogUtils.LOGI(PrefUtils.class.getSimpleName(), "saveUser() -> " + user.toString());
@@ -124,7 +126,9 @@ public final class PrefUtils {
                 getUserPreferences().getString(UserKeys.FIRST_NAME, ""),
                 getUserPreferences().getString(UserKeys.LAST_NAME, ""),
                 getUserPreferences().getString(UserKeys.API_KEY, ""),
-                getUserPreferences().getString(UserKeys.USER_TYPE, ""));
+                getUserPreferences().getString(UserKeys.USER_TYPE, ""),
+                getUserPreferences().getString(UserKeys.USER_THUMB_URL, ""));
+
     }
 
     public static void deleteUser() {

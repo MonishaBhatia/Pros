@@ -29,13 +29,15 @@ public class HomePresenter implements HttpServiceView {
     private HomeMainModel homePostModel;
     private boolean postsAPIHit = false, questionsAPIHit = false;
     private ArrayList<PostModel> postsList;
+    private boolean pullToRefresh;
 
     public HomePresenter(HomeView view) {
         this.view = view;
         homePostModel = new HomeMainModel();
     }
 
-    public void getPostData() {
+    public void getPostData(boolean pullToRefresh) {
+        this.pullToRefresh =pullToRefresh;
         new HttpServiceUtil(
                 this,
                 ApiEndPoints.post_content.getApi(),
@@ -102,7 +104,11 @@ public class HomePresenter implements HttpServiceView {
             });
             Log.d("Sorted List:",""+postsList);
 
-            view.bindData(postsList);
+            if(pullToRefresh){
+                view.updateHomeScreen(postsList);
+            }else {
+                view.bindData(postsList);
+            }
         }
     }
 

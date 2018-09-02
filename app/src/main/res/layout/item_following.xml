@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    android:id="@+id/athlete_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -48,6 +50,20 @@
         android:layout_height="@dimen/dp_24"
         android:background="@drawable/circle"
         android:src="@drawable/ic_person_follow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="@dimen/dp_12"
+        android:padding="@dimen/dp_8"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/ivTags"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@drawable/circle"
+        android:src="@drawable/tag_plus_3x"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginRight="@dimen/dp_12"

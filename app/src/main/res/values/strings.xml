@@ -46,6 +46,8 @@
     <string name="label_follow">Follow</string>
     <string name="ask_question">Ask Question</string>
     <string name="create_post">Create Post</string>
+    <string name="tag_your_friends">Tag Your Friends</string>
+    <string name="create_question_error">Nice try, but this isn\'t a question!</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

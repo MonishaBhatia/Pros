@@ -176,5 +176,17 @@ public class PostAdapter extends AAH_VideosAdapter {
         }
     }
 
+    // Clean all elements of the recycler
+    public void clear() {
+        postsArrayList.clear();
+        notifyDataSetChanged();
+    }
+
+    // Add a list of items -- change to type used
+    public void addAll(ArrayList<PostModel> postsArrayListt) {
+        postsArrayList.addAll(postsArrayListt);
+        notifyDataSetChanged();
+    }
+
 
 }
