@@ -81,6 +81,16 @@ public class AthleteModel implements Parcelable {
     public AthleteModel() {
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (obj == this) return true; //if both pointing towards same object on heap
+
+        AthleteModel a = (AthleteModel) obj;
+        return this.id == a.id;
+
+    }
+
     protected AthleteModel(Parcel in) {
         this.id = in.readInt();
         this.name = in.readString();

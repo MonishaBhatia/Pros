@@ -27,16 +27,19 @@ public class UserModel {
     @JsonProperty("avatar")
     private AvatarModel avatar;
 
+    private String thumbUrl;
+
     public UserModel() {
     }
 
-    public UserModel(int id, String email, String firstName, String lastName, String apiKey, String userType) {
+    public UserModel(int id, String email, String firstName, String lastName, String apiKey, String userType, String thumbUrl) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.apiKey = apiKey;
         this.userType = userType;
+        this.thumbUrl = thumbUrl;
     }
 
     public int getId() {
@@ -77,5 +80,13 @@ public class UserModel {
 
     public AvatarModel getAvatar() {
         return avatar;
+    }
+
+    public String getThumbUrl() {
+        return thumbUrl;
+    }
+
+    public void setThumbUrl(String thumbUrl) {
+        this.thumbUrl = thumbUrl;
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.allattentionhere.autoplayvideos.AAH_VideosAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +30,8 @@ import pros.app.com.pros.R;
 import pros.app.com.pros.base.DateUtils;
 import pros.app.com.pros.base.LogUtils;
 import pros.app.com.pros.detail.activity.DetailActivity;
+import pros.app.com.pros.detail.adapter.ReactionAthlete;
+import pros.app.com.pros.home.model.AthleteModel;
 import pros.app.com.pros.home.model.PostModel;
 
 public class PostAdapter extends AAH_VideosAdapter {
@@ -70,6 +74,20 @@ public class PostAdapter extends AAH_VideosAdapter {
             String athleteThumbnailUrl = "";
 
             ((PostsViewHolder) holder).postLike.setText("" + postModel.getLikes().getCount());
+            List<PostModel> reactionsList = postModel.getReactions();
+
+            if(reactionsList.size() >0){
+
+                ArrayList<AthleteModel> athleteModels = new ArrayList<>();
+
+                for(int i=0; i<reactionsList.size(); i++){
+                    athleteModels.add(reactionsList.get(i).getAthlete());
+                }
+
+                ReactionAthlete reactionAthleteAdapter = new ReactionAthlete(context, athleteModels);
+                ((PostsViewHolder) holder).athleteRecyclerview.setAdapter(reactionAthleteAdapter);
+            }
+
 
             if(postModel.getQuestioner() != null){
                 athleteFullName = postModel.getQuestioner().getName();
@@ -92,7 +110,7 @@ public class PostAdapter extends AAH_VideosAdapter {
                 ((PostsViewHolder) holder).athleteName.setTextColor(Color.parseColor("#ffffff"));
 
                 holder.setVideoUrl(postModel.getUrls().getIntroUrl());
-                holder.setVideoUrl(ProsApplication.getProxy().getProxyUrl(postModel.getUrls().getIntroUrl()+"")); // url should not be null
+               // holder.setVideoUrl(ProsApplication.getProxy().getProxyUrl(postModel.getUrls().getIntroUrl()+"")); // url should not be null
                 holder.setImageUrl(thumbnailUrl);
                 Picasso.get().load(holder.getImageUrl()).into(holder.getAAH_ImageView());
             }
@@ -143,10 +161,14 @@ public class PostAdapter extends AAH_VideosAdapter {
         @BindView(R.id.post_container)
         FrameLayout postContainer;
 
+        @BindView(R.id.athlete_list)
+        RecyclerView athleteRecyclerview;
+
         public PostsViewHolder(View view){
             super(view);
             ButterKnife.bind(this, view);
             postContainer.setOnClickListener(this);
+            athleteRecyclerview.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         }
 
         @Override
@@ -174,6 +196,18 @@ public class PostAdapter extends AAH_VideosAdapter {
             muteVideo();
             LogUtils.LOGD("PlayPlay", "Video paused : " + getAdapterPosition());
         }
+    }
+
+    // Clean all elements of the recycler
+    public void clear() {
+        postsArrayList.clear();
+        notifyDataSetChanged();
+    }
+
+    // Add a list of items -- change to type used
+    public void addAll(ArrayList<PostModel> postsArrayListt) {
+        postsArrayList.addAll(postsArrayListt);
+        notifyDataSetChanged();
     }
 
 
