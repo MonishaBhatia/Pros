@@ -56,12 +56,13 @@
         <activity android:name=".profile.activity.FollowingActivity" />
         <activity android:name=".profile.activity.AthleteProfileActivity" />
         <activity android:name=".detail.activity.DetailActivity" />
-        <activity android:name=".create_post.activity.PreviewActivity"/>
+        <activity android:name=".create_post.activity.PreviewActivity" />
         <activity
             android:name=".create_post.activity.CreatePost"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_create_post"
-            android:theme="@style/FullscreenTheme"></activity>
+            android:theme="@style/FullscreenTheme" />
+        <activity android:name=".create_question.activity.AskQuestionActivity"></activity>
     </application>
 
 </manifest>

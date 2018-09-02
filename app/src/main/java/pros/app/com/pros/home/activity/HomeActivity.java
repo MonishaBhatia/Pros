@@ -25,6 +25,7 @@ import butterknife.OnClick;
 import pros.app.com.pros.R;
 import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.create_post.activity.CreatePost;
+import pros.app.com.pros.create_question.activity.AskQuestionActivity;
 import pros.app.com.pros.home.adapter.PostAdapter;
 import pros.app.com.pros.home.model.PostModel;
 import pros.app.com.pros.home.presenter.HomePresenter;
@@ -124,5 +125,10 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     @OnClick(R.id.create_post)
     void createPost(){
         startActivity(new Intent(getApplicationContext(), CreatePost.class));
+    }
+
+    @OnClick(R.id.ask_question)
+    void createQuestion(){
+        startActivity(new Intent(getApplicationContext(), AskQuestionActivity.class));
     }
 }
