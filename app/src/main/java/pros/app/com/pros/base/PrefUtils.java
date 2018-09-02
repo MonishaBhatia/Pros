@@ -135,4 +135,8 @@ public final class PrefUtils {
         getUserPreferences().edit().clear().apply();
         getNewSharedPreferences().edit().clear().apply();
     }
+
+    public static boolean isAthlete(){
+        return PrefUtils.getUser().getUserType().equalsIgnoreCase("Athlete");
+    }
 }

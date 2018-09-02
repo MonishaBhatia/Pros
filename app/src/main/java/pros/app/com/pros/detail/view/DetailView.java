@@ -1,5 +1,12 @@
 package pros.app.com.pros.detail.view;
 
 public interface DetailView {
-    void playVideo();
+
+    void onLikeSuccess();
+
+    void onUnLikeSuccess();
+
+    void onflagPostSuccess();
+
+    void onFailure(int message);
 }

@@ -9,4 +9,5 @@ public interface FollowingView {
     void onsucessUnfollow();
     void onSuccessFollow();
     void showToast(String message);
+    void confirmToUnfollow(String name);
 }

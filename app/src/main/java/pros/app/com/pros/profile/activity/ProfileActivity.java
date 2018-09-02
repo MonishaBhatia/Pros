@@ -49,17 +49,17 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView,
     @BindView(R.id.tvNumFollowing)
     TextView tvNumFollowing;
 
-   @BindView(R.id.viewpager)
-   HeightWrappingViewPager viewPager;
+    @BindView(R.id.viewpager)
+    HeightWrappingViewPager viewPager;
 
-   @BindView(R.id.tab_layout)
+    @BindView(R.id.tab_layout)
     TabLayout tabLayout;
 
-   @BindView(R.id.tvLikedVideos)
-   TextView tvLikedVideos;
+    @BindView(R.id.tvLikedVideos)
+    TextView tvLikedVideos;
 
-   @BindView(R.id.tvLikedQuestions)
-   TextView tvLikedQuestions;
+    @BindView(R.id.tvLikedQuestions)
+    TextView tvLikedQuestions;
 
     private ProfilePresenter profilePresenter;
     private LikedQuestionsAdapter likedQuestionsAdapter;
@@ -80,8 +80,8 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView,
 
         tvName.setText(String.format("%s %s", PrefUtils.getUser().getFirstName(), PrefUtils.getUser().getLastName()));
         tvNumFollowing.setText("-");
-        tvLikedVideos.setText(""+ 0);
-        tvLikedQuestions.setText(""+0);
+        tvLikedVideos.setText("" + 0);
+        tvLikedQuestions.setText("" + 0);
 
         profilePresenter.getProfileData();
 
@@ -97,7 +97,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView,
     @OnClick(R.id.ivSettings)
     public void onClickSettings() {
         Intent intent = new Intent(ProfileActivity.this, SettingsActivity.class);
-        if(metaData != null)
+        if (metaData != null)
             intent.putExtra("Follow_Count", metaData.getFollowCount());
         startActivity(intent);
     }
@@ -129,8 +129,8 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView,
 
         adapter.notifyDataSetChanged();
 
-        tvLikedVideos.setText(""+ metaData.getLikedPostsCount());
-        tvLikedQuestions.setText(""+metaData.getLikedQuestionsCount());
+        tvLikedVideos.setText("" + metaData.getLikedPostsCount());
+        tvLikedQuestions.setText("" + metaData.getLikedQuestionsCount());
     }
 
     @Override
@@ -145,12 +145,17 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView,
 
     @Override
     public void onsucessUnfollow() {
-
+        //Nothing to do here.
     }
 
     @Override
     public void onSuccessFollow() {
+        //Nothing to do here.
+    }
 
+    @Override
+    public void onSuccessBlock() {
+        //Nothing to do here.
     }
 
     @Override

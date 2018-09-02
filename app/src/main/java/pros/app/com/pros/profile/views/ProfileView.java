@@ -14,4 +14,6 @@ public interface ProfileView {
 
     void onsucessUnfollow();
     void onSuccessFollow();
+
+    void onSuccessBlock();
 }

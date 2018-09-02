@@ -22,6 +22,14 @@ public class LikeModel implements Parcelable {
         return likedByCurrentUser;
     }
 
+    public void setLikedByCurrentUser(boolean likedByCurrentUser) {
+        this.likedByCurrentUser = likedByCurrentUser;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
     @Override
     public int describeContents() {
         return 0;
