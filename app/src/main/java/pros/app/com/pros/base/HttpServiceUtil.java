@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.widget.Switch;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -34,8 +36,9 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
     private String url;
     private String method;
     private String jsonRequest;
-    private final int tag;
+    private int tag;
     private RequestBody body;
+    private byte[] bytes;
 
     private String getTokenHeader() {
         if (PrefUtils.getUser() != null) {
@@ -62,6 +65,11 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
         this.tag = tag;
     }
 
+    public HttpServiceUtil(HttpServiceView mListener, String url) {
+        this.mListener = mListener;
+        this.url = url;
+    }
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -78,20 +86,28 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
                 .writeTimeout(LOW_WRITE_TIME_OUT, TimeUnit.MILLISECONDS);
 
         client = clientBuilder.build();
-        MediaType mediaType = MediaType.parse("application/json");
-
-
         Request request = null;
+        MediaType mediaType = MediaType.parse("application/json");
 
         switch (method) {
             case GET_METHOD:
-                request = new Request.Builder()
-                        .url(url)
-                        .get()
-                        .addHeader("content-type", "application/json")
-                        .addHeader(getTokenHeader(), getTokenValue())
-                        .addHeader("Accept", "application/json")
-                        .build();
+                if(url.contains("video")){
+                    request = new Request.Builder()
+                            .url(url)
+                            .get()
+                            .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                            .addHeader("Accept", "application/json")
+                            .addHeader(getTokenHeader(), getTokenValue())
+                            .build();
+                } else {
+                    request = new Request.Builder()
+                            .url(url)
+                            .get()
+                            .addHeader("content-type", "application/json")
+                            .addHeader(getTokenHeader(), getTokenValue())
+                            .addHeader("Accept", "application/json")
+                            .build();
+                }
                 break;
             case POST_METHOD:
                 if(jsonRequest == null) {
@@ -138,13 +154,43 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
                 break;
 
             case PUT_METHOD:
-                mediaType = MediaType.parse("image/jpg");
-                RequestBody body = RequestBody.create(mediaType, "file:///storage/emulated/0/Pictures/1532864791381.jpg");
-                request = new Request.Builder()
-                        .url(url)
-                        .put(body)
-                        .addHeader("Content-Type", "image/jpg")
-                        .build();
+                if(jsonRequest.contains("video")) {
+
+                    try {
+                        FileInputStream fis = new FileInputStream(jsonRequest);
+                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                        byte[] b = new byte[1024];
+
+                        for (int readNum; (readNum = fis.read(b)) != -1; ) {
+                            bos.write(b, 0, readNum);
+                        }
+
+                        bytes = bos.toByteArray();
+
+                    }catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    mediaType = MediaType.parse("application/octet-stream");
+                    body = RequestBody.create(mediaType, bytes);
+                    request = new Request.Builder()
+                            .url(url)
+                            .put(body)
+                            .addHeader("Content-Type", "application/octet-stream")
+                            .addHeader("Content-Range", "bytes 0 - 10000")
+                            .addHeader(getTokenHeader(), getTokenValue())
+                            .addHeader("Accept", "application/json")
+                            .build();
+                } else {
+                    mediaType = MediaType.parse("image/jpg");
+                    body = RequestBody.create(mediaType, "file:///storage/emulated/0/Pictures/1532864791381.jpg");
+                    request = new Request.Builder()
+                            .url(url)
+                            .put(body)
+                            .addHeader("Content-Type", "image/jpg")
+                            .build();
+                }
         }
 
         try {

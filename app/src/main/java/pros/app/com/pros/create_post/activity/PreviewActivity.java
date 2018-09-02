@@ -23,6 +23,8 @@ import java.io.File;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pros.app.com.pros.R;
+import pros.app.com.pros.base.ApiEndPoints;
+import pros.app.com.pros.create_post.presenter.CreatePostPresenter;
 
 public class PreviewActivity extends AppCompatActivity {
 
@@ -41,6 +43,8 @@ public class PreviewActivity extends AppCompatActivity {
     @BindView(R.id.captureLatency)
     TextView captureLatency;
 
+    private CreatePostPresenter createPostPresenter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +52,8 @@ public class PreviewActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setupToolbar();
+
+        createPostPresenter = new CreatePostPresenter();
 
         byte[] jpeg = ResultHolder.getImage();
         //File image = ResultHolder.getImage();
@@ -89,6 +95,12 @@ public class PreviewActivity extends AppCompatActivity {
                 }
             });
             //videoView.start();
+
+            String filepath = video.getPath();
+            File file = new File(filepath);
+            long length = file.length();
+            length = length/1024;
+            createPostPresenter.getuploadPath(ApiEndPoints.upload_video.getApi() + "?file_name=movie.m4v&file_size=" + length, filepath);
         }
 
         else {
