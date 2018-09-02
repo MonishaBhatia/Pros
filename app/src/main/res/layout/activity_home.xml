@@ -11,23 +11,85 @@
     <include
         layout="@layout/layout_toolbar_home" />
 
-    <RelativeLayout
-        android:id="@+id/posts_progress_bar"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center">
-        <ProgressBar
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/posts_progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center">
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp"
+                android:minWidth="50dp" />
+        </RelativeLayout>
+
+
+
+        <com.allattentionhere.autoplayvideos.AAH_CustomRecyclerView
+            android:id="@+id/rvPosts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:id="@+id/create_post_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="50dp"
-            android:minWidth="50dp" />
-    </RelativeLayout>
+            android:orientation="vertical"
+            android:layout_gravity="bottom|center"
+            android:visibility="gone"
+            android:animateLayoutChanges="true">
 
-    <com.allattentionhere.autoplayvideos.AAH_CustomRecyclerView
-        android:id="@+id/rvPosts"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"/>
+            <LinearLayout
+                android:id="@+id/create_post_options"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/ask_question"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ask_question"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_16"
+                    android:paddingBottom="@dimen/dp_16"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"/>
+
+                <TextView
+                    android:id="@+id/create_post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/create_post"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_16"
+                    android:paddingBottom="@dimen/dp_16"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"/>
+
+            </LinearLayout>
+
+
+
+            <ImageView
+                android:id="@+id/upload_post_button"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:src="@drawable/capture"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+
 
 </LinearLayout>

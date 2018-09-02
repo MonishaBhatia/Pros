@@ -44,6 +44,8 @@
     <string name="label_explore">Explore</string>
     <string name="label_cancel">Cancel</string>
     <string name="label_follow">Follow</string>
+    <string name="ask_question">Ask Question</string>
+    <string name="create_post">Create Post</string>
     <string name="confirm_unfollow">Are you sure you want to unfollow %s?</string>
     <string name="block_title">Block User</string>
     <string name="confirm_block">Are you sure you want to block this user?\n\nYou will no longer be able to see their content.</string>
@@ -59,6 +61,11 @@
     <!-- Fb credentials -->
     <string name="facebook_app_id">285428862194908</string>
     <string name="fb_login_protocol_scheme">fb285428862194908</string>
+
+    <string name="title_activity_create_post">CreatePost</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
 
 
 </resources>
