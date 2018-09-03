@@ -97,7 +97,15 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
                             .addHeader("Accept", "application/json")
                             .addHeader(getTokenHeader(), getTokenValue())
                             .build();
-                } else {
+                } else if (tag == ApiEndPoints.fb_sign_in.getTag()) {
+                    request = new Request.Builder()
+                            .url(url)
+                            .get()
+                            .addHeader("content-type", "application/json")
+                            .addHeader("Accept", "application/json")
+                            .build();
+
+                } else{
                     request = new Request.Builder()
                             .url(url)
                             .get()

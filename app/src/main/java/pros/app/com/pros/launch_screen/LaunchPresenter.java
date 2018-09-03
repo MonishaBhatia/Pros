@@ -56,15 +56,7 @@ public class LaunchPresenter implements HttpServiceView {
                     public void onCompleted(
                             JSONObject object,
                             GraphResponse response) {
-
-                        JSONObject jsonRequest = new JSONObject();
-                        try {
-                            jsonRequest.put("code", loginResult.getAccessToken());
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        callSignUp(jsonRequest);
+                        callSignUp(ApiEndPoints.fb_sign_in.getApi() + "code=" + loginResult.getAccessToken());
                     }
                 });
         Bundle parameters = new Bundle();
@@ -73,13 +65,13 @@ public class LaunchPresenter implements HttpServiceView {
         request.executeAsync();
     }
 
-    private void callSignUp(JSONObject jsonRequest) {
+    private void callSignUp(String url) {
 
         new HttpServiceUtil(
                 this,
-                ApiEndPoints.fb_sign_in.getApi(),
+                url,
                 ProsConstants.GET_METHOD,
-                jsonRequest.toString(),
+                null,
                 ApiEndPoints.fb_sign_in.getTag()
         ).execute();
     }
