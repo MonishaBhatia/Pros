@@ -36,6 +36,7 @@ import pros.app.com.pros.R;
 import pros.app.com.pros.base.CustomDialogFragment;
 import pros.app.com.pros.base.CustomDialogListener;
 import pros.app.com.pros.base.DateUtils;
+import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.detail.adapter.CommentsAdapter;
 import pros.app.com.pros.detail.adapter.MentionsAdapter;
 import pros.app.com.pros.detail.adapter.ReactionAthlete;
@@ -389,6 +390,9 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
 
     @Override
     public void onUnLikeSuccess() {
+        if(receivedPostModel.getLikes().getCount() <= 0){
+            return;
+        }
         likesCount.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_unlike, 0, 0 , 0);
         likesCount.setText(String.valueOf(receivedPostModel.getLikes().getCount() - 1));
         receivedPostModel.getLikes().setLikedByCurrentUser(false);
@@ -506,7 +510,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
     @OnClick({R.id.comments_iv, R.id.comment_count})
     public void onclickComment(){
 
-        if(receivedPostModel.getComments() == null || receivedPostModel.getComments().size() == 0)
+        if(!PrefUtils.isAthlete() && receivedPostModel.getComments() == null || receivedPostModel.getComments().size() == 0)
             return;
 
         tvNumOfComments.setText(receivedPostModel.getComments().size() + " Comments");

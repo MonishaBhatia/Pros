@@ -160,7 +160,7 @@
                     android:textColor="@color/white"
                     android:padding="@dimen/dp_16"/>
 
-                <android.support.v7.widget.RecyclerView
+                <com.allattentionhere.autoplayvideos.AAH_CustomRecyclerView
                     android:id="@+id/topPosts"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

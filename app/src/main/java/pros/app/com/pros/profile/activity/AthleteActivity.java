@@ -56,7 +56,6 @@ public class AthleteActivity extends BaseActivity implements ProfileView {
     @BindView(R.id.tvReactions)
     TextView tvReactions;
 
-    private BottomSheetBehavior behavior;
     private ProfilePresenter profilePresenter;
     private MetaDataModel metaData;
 
@@ -72,6 +71,7 @@ public class AthleteActivity extends BaseActivity implements ProfileView {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         ButterKnife.bind(this);
+
         profilePresenter = new ProfilePresenter(this);
 
         tvNumFollowers.setText("-");
@@ -87,17 +87,18 @@ public class AthleteActivity extends BaseActivity implements ProfileView {
 
     }
 
-    @OnClick(R.id.ivSettings)
-    public void onClickSettings() {
+    @OnClick(R.id.ivSetting)
+    public void onClickSetting() {
         Intent intent = new Intent(AthleteActivity.this, SettingsActivity.class);
-        if (metaData != null)
+        if (metaData != null) {
             intent.putExtra("Follow_Count", metaData.getFollowCount());
             intent.putExtra("Follower_Count", metaData.getFollowersCount());
+        }
         startActivity(intent);
     }
 
 
-    @OnClick(R.id.ivGoBack)
+    @OnClick(R.id.ivBack)
     public void onClickBack() {
         finish();
     }
@@ -118,7 +119,7 @@ public class AthleteActivity extends BaseActivity implements ProfileView {
     }
 
     @OnClick(R.id.tvInvite)
-    public void onCLickInvite(){
+    public void onCLickInvite() {
         InviteAProFragment.newInstance().show(this.getSupportFragmentManager(), InviteAProFragment.TAG);
     }
 
@@ -127,7 +128,7 @@ public class AthleteActivity extends BaseActivity implements ProfileView {
 
         metaData = profileMainModel.getMetadata();
 
-        if(!TextUtils.isEmpty(imageUrl)){
+        if (!TextUtils.isEmpty(imageUrl)) {
             Picasso.get().load(imageUrl).into(ivAvatar);
         }
         tvName.setText(name);

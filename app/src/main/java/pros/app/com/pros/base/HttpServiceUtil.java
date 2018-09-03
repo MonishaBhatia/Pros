@@ -1,8 +1,10 @@
 package pros.app.com.pros.base;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Objects;
@@ -154,32 +156,13 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
             case PUT_METHOD:
                 if(jsonRequest.contains("video")) {
 
-                    try {
-                        FileInputStream fis = new FileInputStream(jsonRequest);
-                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                        byte[] b = new byte[1024];
-
-                        for (int readNum; (readNum = fis.read(b)) != -1; ) {
-                            bos.write(b, 0, readNum);
-                        }
-
-                        bytes = bos.toByteArray();
-
-                    }catch (IOException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
-
-                    mediaType = MediaType.parse("application/octet-stream");
-                    body = RequestBody.create(mediaType, bytes);
+                    mediaType = MediaType.parse("text/x-markdown; charset=utf-8");
+                    File file = new File(jsonRequest);
                     request = new Request.Builder()
-                            .url(url)
-                            .put(body)
-                            .addHeader("Content-Type", "application/octet-stream")
-                            .addHeader("Content-Range", "bytes 0 - 10000")
-                            .addHeader(getTokenHeader(), getTokenValue())
-                            .addHeader("Accept", "application/json")
-                            .build();
+                                .url(url)
+                                .put(RequestBody.create(mediaType, file))
+                                .build();
+
                 } else {
                     mediaType = MediaType.parse("image/jpg");
                     body = RequestBody.create(mediaType, "file:///storage/emulated/0/Pictures/1532864791381.jpg");
@@ -193,6 +176,7 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
 
         try {
             Response response = client.newCall(request).execute();
+            Log.d("Response", response.toString());
             if (!response.isSuccessful())
                 return null;
 
