@@ -19,12 +19,16 @@ import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.vincent.videocompressor.VideoCompress;
+
 import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import pros.app.com.pros.R;
 import pros.app.com.pros.base.ApiEndPoints;
+import pros.app.com.pros.base.LogUtils;
 import pros.app.com.pros.create_post.presenter.CreatePostPresenter;
 
 public class PreviewActivity extends AppCompatActivity {
@@ -34,15 +38,6 @@ public class PreviewActivity extends AppCompatActivity {
 
     @BindView(R.id.video)
     VideoView videoView;
-
-    @BindView(R.id.actualResolution)
-    TextView actualResolution;
-
-    @BindView(R.id.approxUncompressedSize)
-    TextView approxUncompressedSize;
-
-    @BindView(R.id.captureLatency)
-    TextView captureLatency;
 
     private CreatePostPresenter createPostPresenter;
 
@@ -61,70 +56,102 @@ public class PreviewActivity extends AppCompatActivity {
 
         setupToolbar();
 
-        createPostPresenter = new CreatePostPresenter();
+        if (getIntent().getBooleanExtra("fromPicker", false)) {
 
-        byte[] jpeg = ResultHolder.getImage();
-        //File image = ResultHolder.getImage();
-        File video = ResultHolder.getVideo();
-
-        if (jpeg != null) {
-            Log.e("Image Path:", "Yes");
-            imageView.setVisibility(View.VISIBLE);
-
-            Bitmap bitmap = BitmapFactory.decodeByteArray(jpeg, 0, jpeg.length);
-
-            if (bitmap == null) {
-                finish();
-                return;
+            if (getIntent().hasExtra("videoFileUri")) {
+                String fileUri = getIntent().getStringExtra("videoFileUri");
+                playVideo(fileUri);
+            } else if (getIntent().hasExtra("imageFileUri")) {
+                String fileUri = getIntent().getStringExtra("imageFileUri");
+                imageView.setVisibility(View.VISIBLE);
+                imageView.setImageURI(Uri.parse(fileUri));
             }
 
-            imageView.setImageBitmap(bitmap);
 
-            actualResolution.setText(bitmap.getWidth() + " x " + bitmap.getHeight());
-            approxUncompressedSize.setText(getApproximateFileMegabytes(bitmap) + "MB");
-            captureLatency.setText(ResultHolder.getTimeToCallback() + " milliseconds");
-        } else if (video != null) {
-            Log.e("Vode Path:", video.getPath());
-            videoView.setVisibility(View.VISIBLE);
-            videoView.setVideoURI(Uri.parse(video.getAbsolutePath()));
-            MediaController mediaController = new MediaController(this);
-            mediaController.setVisibility(View.GONE);
-            videoView.setMediaController(mediaController);
-            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    mp.setLooping(false);
-                    mp.start();
+        } else if (getIntent().getBooleanExtra("fromCamera", false)) {
 
-                    float multiplier = (float) videoView.getWidth() / (float) mp.getVideoWidth();
-                    videoView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (mp.getVideoHeight() * multiplier)));
+            byte[] jpeg = ResultHolder.getImage();
+            File video = ResultHolder.getVideo();
+            createPostPresenter = new CreatePostPresenter();
+
+            if (jpeg != null) {
+                Log.e("Image Path:", "Yes");
+                imageView.setVisibility(View.VISIBLE);
+
+                Bitmap bitmap = BitmapFactory.decodeByteArray(jpeg, 0, jpeg.length);
+
+                if (bitmap == null) {
+                    finish();
+                    return;
                 }
-            });
-            //videoView.start();
+                imageView.setImageBitmap(bitmap);
 
-            /*try2CreateCompressDir();
-            String outPath = Environment.getExternalStorageDirectory()
-                    + File.separator
-                    + APP_DIR
-                    + COMPRESSED_VIDEOS_DIR;
+            } else if (video != null) {
+                Log.e("Vode Path:", video.getPath());
+                playVideo(video.getAbsolutePath());
+            }
 
-            String filePath = "";
-            try {
-                filePath = SiliCompressor.with(this).compressVideo(video.getPath(), outPath);
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }*/
-
-            File file = new File(video.getPath());
-            long length = file.length();
-            length = length / 1024;
-
-            createPostPresenter.getuploadPath(ApiEndPoints.upload_video.getApi() + "?file_name=movie.m4v&file_size=" + length, video.getPath());
         } else {
             finish();
             return;
         }
     }
+
+    void playVideo(final String uri) {
+        videoView.setVisibility(View.VISIBLE);
+        videoView.setVideoURI(Uri.parse(uri));
+        MediaController mediaController = new MediaController(this);
+        mediaController.setVisibility(View.GONE);
+        videoView.setMediaController(mediaController);
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setLooping(false);
+                mp.start();
+                float multiplier = (float) videoView.getWidth() / (float) mp.getVideoWidth();
+                videoView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (mp.getVideoHeight() * multiplier)));
+
+            try2CreateCompressDir();
+            final String outPath = Environment.getExternalStorageDirectory()
+                    + File.separator
+                    + APP_DIR
+                    + COMPRESSED_VIDEOS_DIR;
+
+                VideoCompress.compressVideoLow(uri, outPath, new VideoCompress.CompressListener() {
+                    @Override
+                    public void onStart() {
+                        //Start Compress
+                        LogUtils.LOGD("Compress", "its started");
+                    }
+
+                    @Override
+                    public void onSuccess() {
+                        LogUtils.LOGD("Compress", "its done");
+                        File file = new File(outPath);
+                        long length = file.length();
+                        length = length / 1024;
+
+                        createPostPresenter.getuploadPath(ApiEndPoints.upload_video.getApi() + "?file_name=movie.m4v&file_size=" + length, uri);
+                    }
+
+                    @Override
+                    public void onFail() {
+                        //Failed
+                        LogUtils.LOGD("Compress", "its failed");
+                    }
+
+                    @Override
+                    public void onProgress(float percent) {
+                        //Progress
+                        LogUtils.LOGD("Compress", "in progress");
+                    }
+                });
+
+
+            }
+
+        });
+}
 
 
     public static void try2CreateCompressDir() {
@@ -147,6 +174,11 @@ public class PreviewActivity extends AppCompatActivity {
 
     private static float getApproximateFileMegabytes(Bitmap bitmap) {
         return (bitmap.getRowBytes() * bitmap.getHeight()) / 1024 / 1024;
+    }
+
+    @OnClick(R.id.close_button)
+    void closeActivity() {
+        this.finish();
     }
 
 }

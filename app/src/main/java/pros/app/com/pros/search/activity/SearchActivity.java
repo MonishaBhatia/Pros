@@ -3,8 +3,10 @@ package pros.app.com.pros.search.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -17,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.allattentionhere.autoplayvideos.AAH_CustomRecyclerView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -29,6 +32,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import pros.app.com.pros.R;
 import pros.app.com.pros.base.KeyboardAction;
 import pros.app.com.pros.base.PrefUtils;
+import pros.app.com.pros.home.adapter.PostAdapter;
 import pros.app.com.pros.home.model.AthleteModel;
 import pros.app.com.pros.home.model.PostModel;
 import pros.app.com.pros.profile.activity.ProfileActivity;
@@ -45,7 +49,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView{
     RecyclerView topProsRecyclerview;
 
     @BindView(R.id.topPosts)
-    RecyclerView topPostsRecyclerview;
+    AAH_CustomRecyclerView topPostsRecyclerview;
 
     @BindView(R.id.all_athletes_list)
     RecyclerView allAthletesListRecyclerview;
@@ -133,7 +137,21 @@ public class SearchActivity extends AppCompatActivity implements SearchView{
 
     @Override
     public void updateTopPosts(ArrayList<PostModel> topPostsList) {
+
         topPostsAdapter = new TopPostsAdapter(topPostsList);
+
+        topPostsRecyclerview.setActivity(this);
+        topPostsRecyclerview.setDownloadPath(Environment.getExternalStorageDirectory() + "/MyVideo"); //optional
+        topPostsRecyclerview.setDownloadVideos(true);
+
+        List<String> urls = new ArrayList<>();
+        for (PostModel object : topPostsList) {
+            if (null != object.getUrls() && object.getUrls().getIntroUrl() != null && object.getUrls().getIntroUrl().endsWith(".mp4"))
+                urls.add(object.getUrls().getIntroUrl());
+        }
+        topPostsRecyclerview.preDownload(urls);
+        topPostsRecyclerview.setItemAnimator(new DefaultItemAnimator());
+        topPostsRecyclerview.setVisiblePercent(50);
 
         topPostsRecyclerview.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         topPostsRecyclerview.setAdapter(topPostsAdapter);

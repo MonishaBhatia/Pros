@@ -188,13 +188,11 @@ public class PostAdapter extends AAH_VideosAdapter {
         public void videoStarted() {
             super.videoStarted();
             muteVideo();
-            LogUtils.LOGD("PlayPlay", "Video started : " + getAdapterPosition());
         }
         @Override
         public void pauseVideo() {
             super.pauseVideo();
             muteVideo();
-            LogUtils.LOGD("PlayPlay", "Video paused : " + getAdapterPosition());
         }
     }
 
