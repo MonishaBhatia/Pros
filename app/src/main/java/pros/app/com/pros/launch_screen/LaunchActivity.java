@@ -20,12 +20,13 @@ import pros.app.com.pros.account.activity.SignUpActivity;
 import pros.app.com.pros.account.activity.SignInActivity;
 import pros.app.com.pros.base.BaseView;
 
-public class LaunchActivity extends AppCompatActivity implements BaseView{
+public class LaunchActivity extends AppCompatActivity {
 
     @BindView(R.id.videoView)
     VideoView videoView;
     private CallbackManager callbackManager;
     private static final String EMAIL = "email";
+    private static final String PUBLIC_PROFILE = "public_profile";
     private LaunchPresenter launchPresenter;
 
     @Override
@@ -37,7 +38,7 @@ public class LaunchActivity extends AppCompatActivity implements BaseView{
 
         playVideo();
 
-        launchPresenter = new LaunchPresenter(this);
+        launchPresenter = new LaunchPresenter();
     }
 
     @Override
@@ -72,7 +73,7 @@ public class LaunchActivity extends AppCompatActivity implements BaseView{
 
         callbackManager = CallbackManager.Factory.create();
         launchPresenter.fbCallback(callbackManager);
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList(EMAIL));
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList(EMAIL,PUBLIC_PROFILE));
     }
 
     @OnClick(R.id.tvSignUp)
@@ -94,15 +95,5 @@ public class LaunchActivity extends AppCompatActivity implements BaseView{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onSuccess() {
-
-    }
-
-    @Override
-    public void onFailure(int message) {
-
     }
 }

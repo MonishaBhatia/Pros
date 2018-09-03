@@ -1,12 +1,8 @@
 package pros.app.com.pros.base;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -184,7 +180,7 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
 
         try {
             Response response = client.newCall(request).execute();
-            Log.d("Response", response.toString());
+            LogUtils.LOGD("Response", response.toString());
             if (!response.isSuccessful())
                 return null;
 
