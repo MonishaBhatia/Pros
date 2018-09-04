@@ -214,10 +214,10 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
         Picasso.get().load(athleteThumbnailUrl).into(athleteThumb);
         createdAt.setText(dateDifference);
         likesCount.setText(String.valueOf(receivedPostModel.getLikes().getCount()));
-        if(receivedPostModel.getLikes().isLikedByCurrentUser()){
-            likesCount.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_liked, 0, 0 , 0);
-        } else{
-            likesCount.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_unlike, 0, 0 , 0);
+        if (receivedPostModel.getLikes().isLikedByCurrentUser()) {
+            likesCount.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_liked, 0, 0, 0);
+        } else {
+            likesCount.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_unlike, 0, 0, 0);
         }
 
         List<PostModel> reactionsList = receivedPostModel.getReactions();
@@ -382,7 +382,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
 
     @Override
     public void onLikeSuccess() {
-        likesCount.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_liked, 0, 0 , 0);
+        likesCount.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_liked, 0, 0, 0);
         likesCount.setText(String.valueOf(receivedPostModel.getLikes().getCount() + 1));
         receivedPostModel.getLikes().setLikedByCurrentUser(true);
         receivedPostModel.getLikes().setCount(receivedPostModel.getLikes().getCount() + 1);
@@ -390,10 +390,10 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
 
     @Override
     public void onUnLikeSuccess() {
-        if(receivedPostModel.getLikes().getCount() <= 0){
+        if (receivedPostModel.getLikes().getCount() <= 0) {
             return;
         }
-        likesCount.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_unlike, 0, 0 , 0);
+        likesCount.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_unlike, 0, 0, 0);
         likesCount.setText(String.valueOf(receivedPostModel.getLikes().getCount() - 1));
         receivedPostModel.getLikes().setLikedByCurrentUser(false);
         receivedPostModel.getLikes().setCount(receivedPostModel.getLikes().getCount() - 1);
@@ -422,15 +422,15 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
     @OnClick(R.id.likes_count)
     public void onclickLike() {
 
-        if(TextUtils.isEmpty(receivedPostModel.getContentType())) {
-            if(receivedPostModel.getLikes().isLikedByCurrentUser()) {
+        if (TextUtils.isEmpty(receivedPostModel.getContentType())) {
+            if (receivedPostModel.getLikes().isLikedByCurrentUser()) {
                 detailPresenter.unlikeQuestion(receivedPostModel.getId());
             } else {
                 detailPresenter.likeQuestion(receivedPostModel.getId());
             }
-        } else{
+        } else {
 
-            if(receivedPostModel.getLikes().isLikedByCurrentUser()) {
+            if (receivedPostModel.getLikes().isLikedByCurrentUser()) {
                 detailPresenter.unlikePost(receivedPostModel.getId());
             } else {
                 detailPresenter.likePost(receivedPostModel.getId());
@@ -439,7 +439,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
     }
 
     @OnClick(R.id.report_iv)
-    public void onclickReport(){
+    public void onclickReport() {
 
         btn1.setText("Report");
 
@@ -508,12 +508,13 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
     }
 
     @OnClick({R.id.comments_iv, R.id.comment_count})
-    public void onclickComment(){
+    public void onclickComment() {
 
-        if(!PrefUtils.isAthlete() && receivedPostModel.getComments() == null || receivedPostModel.getComments().size() == 0)
-            return;
-
-        tvNumOfComments.setText(receivedPostModel.getComments().size() + " Comments");
+        if (!PrefUtils.isAthlete() && receivedPostModel.getComments() == null || receivedPostModel.getComments().size() == 0) {
+            tvNumOfComments.setText("Beat everyone to the punch!\nBe the first to comment...");
+        } else {
+            tvNumOfComments.setText(receivedPostModel.getComments().size() + " Comments");
+        }
 
         behavior = BottomSheetBehavior.from(bsComments);
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -538,7 +539,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
     }
 
     @OnClick(R.id.ivDownArrow)
-    public void onClickDownArrow(){
+    public void onClickDownArrow() {
         behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
