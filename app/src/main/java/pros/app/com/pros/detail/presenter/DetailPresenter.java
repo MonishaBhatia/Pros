@@ -66,6 +66,26 @@ public class DetailPresenter implements HttpServiceView {
         ).execute();
     }
 
+    public void deletePost(int id) {
+        new HttpServiceUtil(
+                this,
+                String.format(ApiEndPoints.delete_post.getApi(), id),
+                ProsConstants.DELETE_METHOD,
+                null,
+                ApiEndPoints.delete_post.getTag()
+        ).execute();
+    }
+
+    public void deleteQuestion(int id) {
+        new HttpServiceUtil(
+                this,
+                String.format(ApiEndPoints.delete_question.getApi(), id),
+                ProsConstants.DELETE_METHOD,
+                null,
+                ApiEndPoints.delete_question.getTag()
+        ).execute();
+    }
+
 
     @Override
     public void response(String response, int tag) {

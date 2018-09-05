@@ -10,12 +10,17 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -105,6 +110,8 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
     EditText edtComments;
     @BindView(R.id.tvNumOfComments)
     TextView tvNumOfComments;
+    @BindView(R.id.tvPost)
+    TextView tvPost;
     @BindView(R.id.rv_comments)
     RecyclerView rvComments;
 
@@ -117,6 +124,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
     private boolean toggleMentions = false;
     private DetailPresenter detailPresenter;
     private CommentsAdapter adapter;
+    private int id;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -441,7 +449,18 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
     @OnClick(R.id.report_iv)
     public void onclickReport() {
 
-        btn1.setText("Report");
+        if (TextUtils.isEmpty(receivedPostModel.getContentType()))
+            id = receivedPostModel.getQuestioner().getId();
+        else
+            id = receivedPostModel.getAthlete().getId();
+
+        if (PrefUtils.getUser().getId() == id) {
+            btn1.setText("Delete Post");
+            btn1.setTextColor(ContextCompat.getColor(requireContext(), R.color.slection_blue));
+        } else {
+            btn1.setText("Report");
+        }
+
 
         behavior = BottomSheetBehavior.from(bsButtons);
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -480,17 +499,32 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
         CustomDialogFragment customDialogFragment = new CustomDialogFragment();
         customDialogFragment.registerCallbackListener(this);
         Bundle bundle = new Bundle();
-        bundle.putString("Title", getString(R.string.report_title));
-        bundle.putString("Content", getString(R.string.report_content));
-        bundle.putString("Action1", "Report");
-        bundle.putString("Action2", "Cancel");
+        if (PrefUtils.getUser().getId() == id) {
+            bundle.putString("Title", "Delete Post");
+            bundle.putString("Content", "Are you sure you want to delete this post?");
+            bundle.putString("Action1", "Yes");
+            bundle.putString("Action2", "Cancel");
+        } else {
+            bundle.putString("Title", getString(R.string.report_title));
+            bundle.putString("Content", getString(R.string.report_content));
+            bundle.putString("Action1", "Report");
+            bundle.putString("Action2", "Cancel");
+        }
         customDialogFragment.setArguments(bundle);
         customDialogFragment.show(getActivity().getSupportFragmentManager(), CustomDialogFragment.TAG);
     }
 
     @Override
     public void handleYes() {
-        detailPresenter.flagPost(receivedPostModel.getId());
+        if (PrefUtils.getUser().getId() == id) {
+            if (TextUtils.isEmpty(receivedPostModel.getContentType())) {
+                detailPresenter.deleteQuestion(receivedPostModel.getId());
+            } else {
+                detailPresenter.deletePost(receivedPostModel.getId());
+            }
+        } else {
+            detailPresenter.flagPost(receivedPostModel.getId());
+        }
     }
 
     @Override
@@ -516,6 +550,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
             tvNumOfComments.setText(receivedPostModel.getComments().size() + " Comments");
         }
 
+
         behavior = BottomSheetBehavior.from(bsComments);
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -524,6 +559,22 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
                 switch (newState) {
 
                     case BottomSheetBehavior.STATE_EXPANDED:
+                        if (PrefUtils.isAthlete()) {
+                            edtComments.setVisibility(View.VISIBLE);
+                            edtComments.addTextChangedListener(watcher);
+                            edtComments.setOnTouchListener(new View.OnTouchListener() {
+                                @Override
+                                public boolean onTouch(View view, MotionEvent motionEvent) {
+                                    tvPost.setVisibility(View.VISIBLE);
+                                    InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    keyboard.showSoftInput(edtComments, 0);
+                                    edtComments.requestFocus();
+                                    return false;
+                                }
+                            });
+                        } else {
+                            edtComments.setVisibility(View.GONE);
+                        }
                         break;
 
                     case BottomSheetBehavior.STATE_COLLAPSED:
@@ -542,5 +593,21 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
     public void onClickDownArrow() {
         behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
+
+    TextWatcher watcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            tvPost.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+        }
+    };
 
 }
