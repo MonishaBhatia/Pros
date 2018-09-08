@@ -111,6 +111,10 @@ public class PostModel implements Parcelable {
         return comments;
     }
 
+    public void setComments(List<PostModel> comments) {
+        this.comments = comments;
+    }
+
     public String getText() {
         return text;
     }

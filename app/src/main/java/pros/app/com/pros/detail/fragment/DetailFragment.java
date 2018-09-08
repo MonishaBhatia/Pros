@@ -30,6 +30,9 @@ import android.widget.VideoView;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +44,7 @@ import pros.app.com.pros.R;
 import pros.app.com.pros.base.CustomDialogFragment;
 import pros.app.com.pros.base.CustomDialogListener;
 import pros.app.com.pros.base.DateUtils;
+import pros.app.com.pros.base.KeyboardAction;
 import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.detail.adapter.CommentsAdapter;
 import pros.app.com.pros.detail.adapter.MentionsAdapter;
@@ -59,11 +63,9 @@ import pros.app.com.pros.home.model.PostModel;
  * create an instance of this fragment.
  */
 public class DetailFragment extends Fragment implements DetailView, CustomDialogListener {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_POST_MODEL = "post_model";
 
-    // TODO: Rename and change types of parameters
     private PostModel receivedPostModel;
 
     private OnFragmentInteractionListener mListener;
@@ -125,6 +127,8 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
     private DetailPresenter detailPresenter;
     private CommentsAdapter adapter;
     private int id;
+    private int commentId;
+    private int commentPosition;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -163,7 +167,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
         View view = inflater.inflate(R.layout.fragment_detail_layout, container, false);
         ButterKnife.bind(this, view);
         setupUI();
-        // TODO Use fields...
+
         return view;
     }
 
@@ -174,7 +178,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
         rvComments.setLayoutManager(layoutManager);
-        adapter = new CommentsAdapter(getContext(), receivedPostModel.getComments());
+        adapter = new CommentsAdapter(getContext(), receivedPostModel.getComments(), detailPresenter);
         rvComments.setAdapter(adapter);
 
     }
@@ -294,7 +298,6 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
         }
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -487,7 +490,11 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
     @OnClick(R.id.btn1)
     public void onClickbtn1() {
         behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        confirmationDialog();
+        if(btn1.getText().equals("Delete Comment")){
+            detailPresenter.deleteComment(commentId);
+        } else {
+            confirmationDialog();
+        }
     }
 
     @OnClick(R.id.btn2)
@@ -541,8 +548,26 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
         CustomDialogFragment.newInstance(bundle).show(getActivity().getSupportFragmentManager(), CustomDialogFragment.TAG);
     }
 
+    TextWatcher watcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+        }
+    };
+
     @OnClick({R.id.comments_iv, R.id.comment_count})
     public void onclickComment() {
+
+        bsComments.setVisibility(View.VISIBLE);
+        videoView.pause();
 
         if (!PrefUtils.isAthlete() && receivedPostModel.getComments() == null || receivedPostModel.getComments().size() == 0) {
             tvNumOfComments.setText("Beat everyone to the punch!\nBe the first to comment...");
@@ -550,8 +575,74 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
             tvNumOfComments.setText(receivedPostModel.getComments().size() + " Comments");
         }
 
+        if (PrefUtils.isAthlete()) {
+            edtComments.setVisibility(View.VISIBLE);
+            edtComments.addTextChangedListener(watcher);
+            edtComments.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    tvPost.setVisibility(View.VISIBLE);
+                    InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    keyboard.showSoftInput(edtComments, 0);
+                    edtComments.requestFocus();
+                    return false;
+                }
+            });
+        } else {
+            edtComments.setVisibility(View.GONE);
 
-        behavior = BottomSheetBehavior.from(bsComments);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        }
+    }
+
+    @OnClick(R.id.tvPost)
+    public void onClickPostcomment() {
+        if (TextUtils.isEmpty(edtComments.getText().toString())) {
+            Toast.makeText(edtComments.getContext(), "Enter some Comment", Toast.LENGTH_SHORT).show();
+        } else {
+            JSONObject jsonRequest = new JSONObject();
+            try {
+                jsonRequest.put("commentable_type", "Post");
+                jsonRequest.put("commentable_id", receivedPostModel.getId());
+                jsonRequest.put("text", edtComments.getText().toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            detailPresenter.postComment(jsonRequest.toString());
+        }
+    }
+
+    @OnClick(R.id.ivDownArrow)
+    public void onClickDownArrow() {
+        bsComments.setVisibility(View.GONE);
+        videoView.start();
+    }
+
+    @Override
+    public void onPostingComment(PostModel commentModel) {
+        receivedPostModel.setComments(commentModel.getComments());
+        adapter.setData(receivedPostModel.getComments());
+        adapter.notifyDataSetChanged();
+        edtComments.setText("");
+        tvPost.setVisibility(View.GONE);
+        tvNumOfComments.setText(receivedPostModel.getComments().size() + " Comments");
+        commentsCount.setText("" + receivedPostModel.getComments().size());
+        KeyboardAction.hideSoftKeyboard(getActivity(), edtComments);
+    }
+
+    @Override
+    public void onClickComment(int id, int position) {
+
+        if (PrefUtils.getUser().getId() != receivedPostModel.getComments().get(position).getAthlete().getId()) {
+            return;
+        }
+
+        commentPosition = position;
+        commentId = id;
+        btn1.setText("Delete Comment");
+
+        behavior = BottomSheetBehavior.from(bsButtons);
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -559,25 +650,11 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
                 switch (newState) {
 
                     case BottomSheetBehavior.STATE_EXPANDED:
-                        if (PrefUtils.isAthlete()) {
-                            edtComments.setVisibility(View.VISIBLE);
-                            edtComments.addTextChangedListener(watcher);
-                            edtComments.setOnTouchListener(new View.OnTouchListener() {
-                                @Override
-                                public boolean onTouch(View view, MotionEvent motionEvent) {
-                                    tvPost.setVisibility(View.VISIBLE);
-                                    InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    keyboard.showSoftInput(edtComments, 0);
-                                    edtComments.requestFocus();
-                                    return false;
-                                }
-                            });
-                        } else {
-                            edtComments.setVisibility(View.GONE);
-                        }
+                        edtComments.setVisibility(View.GONE);
                         break;
 
                     case BottomSheetBehavior.STATE_COLLAPSED:
+                        edtComments.setVisibility(View.VISIBLE);
                         break;
                 }
             }
@@ -589,25 +666,19 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
         });
     }
 
-    @OnClick(R.id.ivDownArrow)
-    public void onClickDownArrow() {
-        behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    @Override
+    public void onDeletingComment() {
+        receivedPostModel.getComments().remove(commentPosition);
+        adapter.setData(receivedPostModel.getComments());
+        adapter.notifyDataSetChanged();
+
+        if (!PrefUtils.isAthlete() && receivedPostModel.getComments() == null || receivedPostModel.getComments().size() == 0) {
+            tvNumOfComments.setText("Beat everyone to the punch!\nBe the first to comment...");
+        } else {
+            tvNumOfComments.setText(receivedPostModel.getComments().size()  + " Comments");
+        }
+        commentsCount.setText("" + receivedPostModel.getComments().size());
     }
 
-    TextWatcher watcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            tvPost.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-        }
-    };
 
 }

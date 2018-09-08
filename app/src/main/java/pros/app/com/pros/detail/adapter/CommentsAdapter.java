@@ -17,17 +17,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pros.app.com.pros.R;
 import pros.app.com.pros.base.DateUtils;
+import pros.app.com.pros.detail.presenter.DetailPresenter;
 import pros.app.com.pros.home.model.AthleteModel;
 import pros.app.com.pros.home.model.PostModel;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder> {
 
-    Context context;
-    List<PostModel> comments;
+    private List<PostModel> comments;
+    private DetailPresenter detailPresenter;
 
 
-    public CommentsAdapter(Context context, List<PostModel> comments) {
-        this.context = context;
+    public CommentsAdapter(Context context, List<PostModel> comments, DetailPresenter detailPresenter) {
+        this.comments = comments;
+        this.detailPresenter = detailPresenter;
+    }
+
+    public void setData(List<PostModel> comments){
         this.comments = comments;
     }
 
@@ -55,7 +60,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         return comments.size();
     }
 
-    public class CommentsViewHolder extends RecyclerView.ViewHolder  {
+    public class CommentsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.ivIcon)
         ImageView ivIcon;
@@ -69,6 +74,12 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         public CommentsViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            detailPresenter.onClickingComment(comments.get(getAdapterPosition()).getId(), getAdapterPosition());
         }
     }
 }

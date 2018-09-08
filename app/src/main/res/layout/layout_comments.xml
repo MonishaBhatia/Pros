@@ -7,9 +7,11 @@
     android:background="@color/colorPrimary">
 
     <LinearLayout
+        android:id="@+id/view_cmts"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dp_12"
         android:orientation="horizontal">
 
         <EditText
@@ -20,7 +22,7 @@
             android:layout_marginLeft="@dimen/dp_8"
             android:layout_marginRight="@dimen/dp_8"
             android:layout_weight="1"
-            android:background="@drawable/bg_round"
+            android:background="@drawable/bg_white"
             android:hint="@string/write_comment"
             android:imeOptions="actionGo"
             android:inputType="textNoSuggestions"
@@ -79,7 +81,7 @@
         android:id="@+id/rv_comments"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/edtComments"
+        android:layout_above="@id/view_cmts"
         android:layout_below="@id/tvNumOfComments"
         android:layout_marginLeft="@dimen/dp_12"
         android:layout_marginTop="@dimen/dp_24" />
