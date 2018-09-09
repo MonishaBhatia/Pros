@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.util.TypedValue;
 
 import pros.app.com.pros.ProsApplication;
+import pros.app.com.pros.account.model.AvatarModel;
 import pros.app.com.pros.account.model.SignInModel;
 import pros.app.com.pros.account.model.UserModel;
 
@@ -32,6 +33,9 @@ public final class PrefUtils {
         String LAST_NAME = USER + ".last_name";
         String API_KEY = USER + ".api_key";
         String USER_TYPE = USER + ".user_type";
+        String USER_THUMB_URL = USER + ".user_thumb_url";
+        String USER_MEDIUM_URL = USER + ".user_medium_url";
+        String USER_ORIGINAL_URL = USER + ".user_original_url";
     }
 
     private static SharedPreferences getSharedPreferences() {
@@ -100,9 +104,15 @@ public final class PrefUtils {
 
     public static void saveUser(@NonNull UserModel user) {
         SharedPreferences.Editor editor = getUserPreferences().edit();
+        editor.putInt(UserKeys.USER_ID, user.getId());
         editor.putString(UserKeys.EMAIL, user.getEmail());
         editor.putString(UserKeys.FIRST_NAME, user.getFirstName());
         editor.putString(UserKeys.LAST_NAME, user.getLastName());
+        editor.putString(UserKeys.API_KEY, user.getApiKey());
+        editor.putString(UserKeys.USER_TYPE, user.getUserType());
+        editor.putString(UserKeys.USER_THUMB_URL, user.getAvatar().getThumbnailUrl());
+        editor.putString(UserKeys.USER_MEDIUM_URL, user.getAvatar().getMediumUrl());
+        editor.putString(UserKeys.USER_ORIGINAL_URL, user.getAvatar().getOriginalUrl());
         editor.apply();
 
         LogUtils.LOGI(PrefUtils.class.getSimpleName(), "saveUser() -> " + user.toString());
@@ -111,15 +121,20 @@ public final class PrefUtils {
 
     public static UserModel getUser() {
 
-        if (!getUserPreferences().contains(UserKeys.API_KEY))
+        if (!getUserPreferences().contains(UserKeys.USER_ID))
             return null;
 
         return new UserModel(
+                getUserPreferences().getInt(UserKeys.USER_ID, 0),
                 getUserPreferences().getString(UserKeys.EMAIL, ""),
                 getUserPreferences().getString(UserKeys.FIRST_NAME, ""),
                 getUserPreferences().getString(UserKeys.LAST_NAME, ""),
                 getUserPreferences().getString(UserKeys.API_KEY, ""),
-                getUserPreferences().getString(UserKeys.USER_TYPE, ""));
+                getUserPreferences().getString(UserKeys.USER_TYPE, ""),
+                getUserPreferences().getString(UserKeys.USER_THUMB_URL, ""),
+                getUserPreferences().getString(UserKeys.USER_MEDIUM_URL, ""),
+                getUserPreferences().getString(UserKeys.USER_ORIGINAL_URL, ""));
+
     }
 
     public static void deleteUser() {
@@ -129,5 +144,9 @@ public final class PrefUtils {
     public static void clearAllSharedPref() {
         getUserPreferences().edit().clear().apply();
         getNewSharedPreferences().edit().clear().apply();
+    }
+
+    public static boolean isAthlete(){
+        return PrefUtils.getUser().getUserType().equalsIgnoreCase("Athlete");
     }
 }

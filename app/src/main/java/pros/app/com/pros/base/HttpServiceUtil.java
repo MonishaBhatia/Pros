@@ -1,10 +1,10 @@
 package pros.app.com.pros.base;
 
 import android.os.AsyncTask;
-import android.text.TextUtils;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -16,11 +16,15 @@ import static pros.app.com.pros.base.ProsConstants.DELETE_METHOD;
 import static pros.app.com.pros.base.ProsConstants.GET_METHOD;
 import static pros.app.com.pros.base.ProsConstants.PATCH_METHOD;
 import static pros.app.com.pros.base.ProsConstants.POST_METHOD;
+import static pros.app.com.pros.base.ProsConstants.PUT_METHOD;
 
 public class HttpServiceUtil extends AsyncTask<String, String, String> {
 
 
     MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private static final int LOW_CONNECT_TIMEOUT = 30 * 1000;
+    private static final long LOW_READ_TIMEOUT = 30 * 1000;
+    private static final int LOW_WRITE_TIME_OUT = 30 * 1000;
     /*
      * Listener to catch and parse response
      */
@@ -28,7 +32,9 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
     private String url;
     private String method;
     private String jsonRequest;
-    private final int tag;
+    private int tag;
+    private RequestBody body;
+    private byte[] bytes;
 
     private String getTokenHeader() {
         if (PrefUtils.getUser() != null) {
@@ -55,6 +61,11 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
         this.tag = tag;
     }
 
+    public HttpServiceUtil(HttpServiceView mListener, String url) {
+        this.mListener = mListener;
+        this.url = url;
+    }
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -64,55 +75,114 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
     @Override
     protected String doInBackground(String... strings) {
 
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client;
+        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
+                .connectTimeout(LOW_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
+                .readTimeout(LOW_READ_TIMEOUT, TimeUnit.MILLISECONDS)
+                .writeTimeout(LOW_WRITE_TIME_OUT, TimeUnit.MILLISECONDS);
+
+        client = clientBuilder.build();
+        Request request = null;
         MediaType mediaType = MediaType.parse("application/json");
 
-        Request request = null;
+        switch (method) {
+            case GET_METHOD:
+                if(url.contains("video")){
+                    request = new Request.Builder()
+                            .url(url)
+                            .get()
+                            .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                            .addHeader("Accept", "application/json")
+                            .addHeader(getTokenHeader(), getTokenValue())
+                            .build();
+                } else if (tag == ApiEndPoints.fb_sign_in.getTag()) {
+                    request = new Request.Builder()
+                            .url(url)
+                            .get()
+                            .addHeader("content-type", "application/json")
+                            .addHeader("Accept", "application/json")
+                            .build();
 
-        if (GET_METHOD.equals(method)) {
-            request = new Request.Builder()
-                    .url(url)
-                    .get()
-                    .addHeader("content-type", "application/json")
-                    .addHeader(getTokenHeader(), getTokenValue())
-                    .addHeader("Accept", "application/json")
-                    .addHeader("cache-control", "no-cache")
-                    .build();
-        } else if (POST_METHOD.equals(method)) {
-            RequestBody body = RequestBody.create(mediaType, jsonRequest);
-            request = new Request.Builder()
-                    .url(url)
-                    .post(body)
-                    .addHeader("content-type", "application/json")
-                    .addHeader(getTokenHeader(), getTokenValue())
-                    .addHeader("Accept", "application/json")
-                    .addHeader("cache-control", "no-cache")
-                    .build();
-        } else if (DELETE_METHOD.equals(method)) {
-            request = new Request.Builder()
-                    .url(url)
-                    .delete(null)
-                    .addHeader("content-type", "application/json")
-                    .addHeader(getTokenHeader(), getTokenValue())
-                    .addHeader("Accept", "application/json")
-                    .addHeader("cache-control", "no-cache")
-                    .build();
-        } else if (PATCH_METHOD.equals(method)) {
-            RequestBody body = RequestBody.create(mediaType, jsonRequest);
-            request = new Request.Builder()
-                    .url(url)
-                    .patch(body)
-                    .addHeader("content-type", "application/json")
-                    .addHeader(getTokenHeader(), getTokenValue())
-                    .addHeader("Accept", "application/json")
-                    .addHeader("cache-control", "no-cache")
-                    .build();
+                } else{
+                    request = new Request.Builder()
+                            .url(url)
+                            .get()
+                            .addHeader("content-type", "application/json")
+                            .addHeader(getTokenHeader(), getTokenValue())
+                            .addHeader("Accept", "application/json")
+                            .build();
+                }
+                break;
+            case POST_METHOD:
+                if(jsonRequest == null) {
+                    body = RequestBody.create(null, new byte[]{});
+                } else {
+                    body = RequestBody.create(mediaType, jsonRequest);
+                }
+
+                    if (tag == ApiEndPoints.sign_in.getTag() || tag == ApiEndPoints.sign_up.getTag()) {
+                        request = new Request.Builder()
+                                .url(url)
+                                .post(body)
+                                .addHeader("content-type", "application/json")
+                                .addHeader("Accept", "application/json")
+                                .build();
+                    } else {
+                        request = new Request.Builder()
+                                .url(url)
+                                .post(body)
+                                .addHeader("content-type", "application/json")
+                                .addHeader(getTokenHeader(), getTokenValue())
+                                .addHeader("Accept", "application/json")
+                                .build();
+                    }
+                break;
+            case DELETE_METHOD:
+                request = new Request.Builder()
+                        .url(url)
+                        .delete(null)
+                        .addHeader("content-type", "application/json")
+                        .addHeader(getTokenHeader(), getTokenValue())
+                        .addHeader("Accept", "application/json")
+                        .build();
+                break;
+            case PATCH_METHOD:
+                body = RequestBody.create(mediaType, jsonRequest);
+                request = new Request.Builder()
+                        .url(url)
+                        .patch(body)
+                        .addHeader("content-type", "application/json")
+                        .addHeader(getTokenHeader(), getTokenValue())
+                        .addHeader("Accept", "application/json")
+                        .build();
+                break;
+
+            case PUT_METHOD:
+                if(jsonRequest.contains("video")) {
+
+                    mediaType = MediaType.parse("text/x-markdown; charset=utf-8");
+                    File file = new File(jsonRequest);
+                    request = new Request.Builder()
+                                .url(url)
+                                .put(RequestBody.create(mediaType, file))
+                                .build();
+
+                } else {
+                    mediaType = MediaType.parse("image/jpg");
+                    body = RequestBody.create(mediaType, jsonRequest);
+                    request = new Request.Builder()
+                            .url(url)
+                            .put(body)
+                            .addHeader("Content-Type", "image/jpg")
+                            .build();
+                }
         }
 
         try {
             Response response = client.newCall(request).execute();
+            LogUtils.LOGD("Response", response.toString());
             if (!response.isSuccessful())
-                throw new IOException("Unexpected code " + response.toString());
+                return null;
 
             return response.body().string();
 
@@ -127,7 +197,7 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
     protected void onPostExecute(String response) {
         super.onPostExecute(response);
 
-        if (TextUtils.isEmpty(response)) {
+        if (null == response) {
             mListener.onError(tag);
         } else {
             mListener.response(response, tag);

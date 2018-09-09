@@ -2,17 +2,32 @@ package pros.app.com.pros.profile.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import butterknife.BindView;
+import butterknife.OnClick;
 import pros.app.com.pros.R;
 import pros.app.com.pros.base.BaseDialogFragment;
+import pros.app.com.pros.base.BaseView;
+import pros.app.com.pros.profile.presenter.ChangePasswordPresenter;
 
-public class ChangePasswordFragment extends BaseDialogFragment {
+public class ChangePasswordFragment extends BaseDialogFragment implements BaseView {
+
+    @BindView(R.id.edtNewPassword)
+    EditText edtNewPassword;
+
+    @BindView(R.id.edtRePassword)
+    EditText edtRePassword;
+
+    private ChangePasswordPresenter changePasswordPresenter;
 
     public static final String TAG = "ChangePasswordFragment";
 
@@ -34,6 +49,9 @@ public class ChangePasswordFragment extends BaseDialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        changePasswordPresenter = new ChangePasswordPresenter(this);
+
         setStyle(STYLE_NO_TITLE, R.style.DialogTheme);
         Window window = getDialog().getWindow();
         // set "origin" to top left corner, so to speak
@@ -49,5 +67,22 @@ public class ChangePasswordFragment extends BaseDialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
+    }
+
+    @OnClick(R.id.tvSave)
+    public void onClickSave(){
+
+        changePasswordPresenter.validateData(edtNewPassword.getText().toString(), edtRePassword.getText().toString() );
+
+    }
+
+    @Override
+    public void onSuccess() {
+        dismiss();
+    }
+
+    @Override
+    public void onFailure(int message) {
+        Toast.makeText(getContext(), getString(message), Toast.LENGTH_SHORT).show();
     }
 }

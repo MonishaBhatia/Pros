@@ -7,6 +7,8 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 import pros.app.com.pros.ProsApplication;
 import pros.app.com.pros.R;
 import pros.app.com.pros.account.model.SignInModel;
@@ -14,6 +16,7 @@ import pros.app.com.pros.account.views.SignInView;
 import pros.app.com.pros.base.ApiEndPoints;
 import pros.app.com.pros.base.HttpServiceUtil;
 import pros.app.com.pros.base.HttpServiceView;
+import pros.app.com.pros.base.JsonUtils;
 import pros.app.com.pros.base.ProsConstants;
 
 public class SignInPresenter implements HttpServiceView {
@@ -21,7 +24,6 @@ public class SignInPresenter implements HttpServiceView {
 
     private SignInView signInView;
     private SignInModel signInModel;
-    private Gson gson = new Gson();
 
     public SignInPresenter(SignInView signInView) {
         this.signInView = signInView;
@@ -64,7 +66,11 @@ public class SignInPresenter implements HttpServiceView {
     @Override
     public void response(String response, int tag) {
         if(tag == ApiEndPoints.sign_in.getTag()) {
-            signInModel = gson.fromJson(response, SignInModel.class);
+            try {
+                signInModel = JsonUtils.from(response, SignInModel.class);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             signInView.onSucess(signInModel);
         } else if (tag == ApiEndPoints.forgot_password.getTag())  {
             signInView.onSucessforgotPswd();
@@ -78,7 +84,6 @@ public class SignInPresenter implements HttpServiceView {
         } else if (tag == ApiEndPoints.forgot_password.getTag())  {
             signInView.onFailure(ProsApplication.getInstance().getApplicationContext().getString(R.string.internal_error));
         }
-
     }
 
     public void forgotPassword(String email) {

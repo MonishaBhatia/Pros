@@ -3,6 +3,7 @@ package pros.app.com.pros.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Html;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -11,6 +12,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+
+import com.google.zxing.common.StringUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -24,13 +27,23 @@ public class CustomDialogFragment extends BaseDialogFragment {
     TextView tvTitle;
     @BindView(R.id.tvContent)
     TextView tvContent;
-    @BindView(R.id.tvAction)
-    TextView tvAction;
+    @BindView(R.id.tvAction1)
+    TextView tvAction1;
+    @BindView(R.id.tvAction2)
+    TextView tvAction2;
+    @BindView(R.id.separator)
+    View separator;
+
+    private CustomDialogListener handleInterface;
 
     public static CustomDialogFragment newInstance(Bundle bundle) {
         CustomDialogFragment fragment = new CustomDialogFragment();
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    public void registerCallbackListener(CustomDialogListener handleInterface) {
+        this.handleInterface = handleInterface;
     }
 
     @Override
@@ -45,7 +58,7 @@ public class CustomDialogFragment extends BaseDialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         setStyle(STYLE_NO_TITLE, R.style.DialogTheme);
         getDialog().setCanceledOnTouchOutside(false);
         Window window = getDialog().getWindow();
@@ -59,8 +72,16 @@ public class CustomDialogFragment extends BaseDialogFragment {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    @OnClick(R.id.tvAction)
-    public void onClickGotIt() {
+
+    @OnClick(R.id.tvAction1)
+    public void onClickActionOne() {
+        if (null != handleInterface)
+            handleInterface.handleYes();
+        dismiss();
+    }
+
+    @OnClick(R.id.tvAction2)
+    public void onClickActionTwo() {
         dismiss();
     }
 
@@ -69,11 +90,21 @@ public class CustomDialogFragment extends BaseDialogFragment {
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            if(bundle.getString("Title")!=null && bundle.getString("Title").trim().length() > 0)
+            if (bundle.getString("Title") != null && bundle.getString("Title").trim().length() > 0)
                 tvTitle.setText(bundle.getString("Title"));
 
             tvContent.setText(bundle.getString("Content"));
-            tvAction.setText(bundle.getString("Action"));
+            tvAction2.setText(bundle.getString("Action2"));
+
+            String action1 = bundle.getString("Action1");
+            if (TextUtils.isEmpty(action1)) {
+                tvAction1.setVisibility(View.GONE);
+                separator.setVisibility(View.GONE);
+            } else {
+                tvAction1.setVisibility(View.VISIBLE);
+                separator.setVisibility(View.VISIBLE);
+                tvAction1.setText(action1);
+            }
             tvContent.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }

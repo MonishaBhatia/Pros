@@ -16,7 +16,10 @@
     <color name="bg_light_gray">#686e87</color>
     <color name="border_gray">#60667e</color>
     <color name="slection_blue">#2284f7</color>
+    <color name="slection_red">#ff0000</color>
     <color name="following_green">#2bbd66</color>
+
+    <color name="black_overlay">#66000000</color>
 
 
 </resources>
