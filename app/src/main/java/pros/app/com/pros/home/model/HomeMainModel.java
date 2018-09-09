@@ -11,6 +11,7 @@ public class HomeMainModel {
 
     private ArrayList<PostModel> posts;
     private ArrayList<PostModel> questions;
+    private ArrayList<PostModel> answers;
 
     public ArrayList<PostModel> getPosts() {
         return posts;
@@ -26,5 +27,13 @@ public class HomeMainModel {
 
     public void setQuestions(ArrayList<PostModel> questions) {
         this.questions = questions;
+    }
+
+    public ArrayList<PostModel> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(ArrayList<PostModel> answers) {
+        this.answers = answers;
     }
 }

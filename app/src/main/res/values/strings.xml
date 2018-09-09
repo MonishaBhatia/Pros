@@ -37,6 +37,8 @@
     <string name="label_posts">%d\nPosts</string>
     <string name="label_liked_posts">%d\nLiked Posts</string>
     <string name="label_questions">%d\nQuestions</string>
+    <string name="label_reactions">%d\nReactions</string>
+    <string name="label_answers">%d\nAnswers</string>
     <string name="label_liked_questions">%d\nLiked Questions</string>
     <string name="no_liked_posts">No Liked Posts Yet</string>
     <string name="no_liked_questions">No Liked Questions Yet</string>
