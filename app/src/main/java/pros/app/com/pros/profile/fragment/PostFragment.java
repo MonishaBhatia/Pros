@@ -17,12 +17,12 @@ import android.widget.TextView;
 import com.allattentionhere.autoplayvideos.AAH_CustomRecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import pros.app.com.pros.R;
 import pros.app.com.pros.home.adapter.PostAdapter;
 import pros.app.com.pros.home.model.PostModel;
 import pros.app.com.pros.profile.model.ProfileMainModel;
+import pros.app.com.pros.profile.presenter.AthleteProfilePresenter;
 import pros.app.com.pros.profile.presenter.ProfilePresenter;
 import pros.app.com.pros.profile.views.ProfileView;
 
@@ -37,16 +37,17 @@ import pros.app.com.pros.profile.views.ProfileView;
 public class PostFragment extends Fragment implements ProfileView {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String DATA_TYPE = "data_type";
+    private static final String ID = "id";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String dataType;
+    private int id;
 
     private OnFragmentInteractionListener mListener;
 
     private ProfilePresenter profilePresenter;
+    private AthleteProfilePresenter athleteProfilePresenter;
     private AAH_CustomRecyclerView likedPostsRecyclerview;
     private PostAdapter postAdapter;
     private TextView lableNothing;
@@ -61,16 +62,16 @@ public class PostFragment extends Fragment implements ProfileView {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param dataType Parameter 1.
+     * @param id Parameter 2.
      * @return A new instance of fragment PostFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PostFragment newInstance(String param1, String param2) {
+    public static PostFragment newInstance(String dataType, int id) {
         PostFragment fragment = new PostFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(DATA_TYPE, dataType);
+        args.putInt(ID, id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -79,10 +80,21 @@ public class PostFragment extends Fragment implements ProfileView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         profilePresenter = new ProfilePresenter(this);
-        profilePresenter.getLikedPostsData();
+        athleteProfilePresenter = new AthleteProfilePresenter(this);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            dataType = getArguments().getString(DATA_TYPE);
+            id = getArguments().getInt(ID);
+        }
+        if(dataType.equalsIgnoreCase("postData")){
+            athleteProfilePresenter.getPostData(id);
+        }
+        else if(dataType.equalsIgnoreCase("reactionsData")){
+            athleteProfilePresenter.getReactionsData(id);
+        } else if(dataType.equalsIgnoreCase("athleteAnswers")){
+            athleteProfilePresenter.getAnswersData(id);
+        }
+        else if(dataType.equalsIgnoreCase("likedPosts")) {
+            profilePresenter.getLikedPostsData();
         }
     }
 
@@ -93,6 +105,16 @@ public class PostFragment extends Fragment implements ProfileView {
         View view = inflater.inflate(R.layout.fragment_post, container, false);
         lableNothing = view.findViewById(R.id.label_nothing);
         emptyStateiv = view.findViewById(R.id.empty_state_iv);
+        if(dataType.equalsIgnoreCase("postData")){
+            lableNothing.setText("No Posts Yet");
+        }
+        else if(dataType.equalsIgnoreCase("reactionsData")){
+            lableNothing.setText("No Reactions Yet");
+        }else if(dataType.equalsIgnoreCase("athleteAnswers")){
+            lableNothing.setText("No Answers Yet");
+        } else if(dataType.equalsIgnoreCase("likedPosts")){
+            lableNothing.setText("No Liked Post Yet");
+        }
         likedPostsRecyclerview = view.findViewById(R.id.liked_posts);
         likedPostsRecyclerview.setNestedScrollingEnabled(false);
         return view;
@@ -140,12 +162,12 @@ public class PostFragment extends Fragment implements ProfileView {
             likedPostsRecyclerview.setDownloadPath(Environment.getExternalStorageDirectory() + "/MyVideo"); //optional
             likedPostsRecyclerview.setDownloadVideos(true);
 
-            List<String> urls = new ArrayList<>();
+          /*  List<String> urls = new ArrayList<>();
             for (PostModel object : postList) {
                 if (null != object.getUrls() && object.getUrls().getIntroUrl() != null && object.getUrls().getIntroUrl().endsWith(".mp4"))
                     urls.add(object.getUrls().getIntroUrl());
-            }
-            likedPostsRecyclerview.preDownload(urls);
+            }*/
+            //likedPostsRecyclerview.preDownload(urls);
 
             likedPostsRecyclerview.setVisiblePercent(50);
 
@@ -158,6 +180,8 @@ public class PostFragment extends Fragment implements ProfileView {
         }
 
     }
+
+
 
     @Override
     public void onsucessUnfollow() {

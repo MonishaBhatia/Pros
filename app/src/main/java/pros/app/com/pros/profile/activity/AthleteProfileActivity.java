@@ -2,9 +2,13 @@ package pros.app.com.pros.profile.activity;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
@@ -22,9 +26,13 @@ import pros.app.com.pros.R;
 import pros.app.com.pros.base.BaseActivity;
 import pros.app.com.pros.base.CustomDialogFragment;
 import pros.app.com.pros.base.CustomDialogListener;
+import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.home.model.PostModel;
+import pros.app.com.pros.profile.fragment.PostFragment;
+import pros.app.com.pros.profile.fragment.QuestionFragment;
 import pros.app.com.pros.profile.model.MetaDataModel;
 import pros.app.com.pros.profile.model.ProfileMainModel;
+import pros.app.com.pros.profile.presenter.AthleteProfilePresenter;
 import pros.app.com.pros.profile.presenter.ProfilePresenter;
 import pros.app.com.pros.profile.views.ProfileView;
 
@@ -33,7 +41,8 @@ import static pros.app.com.pros.base.ProsConstants.IMAGE_URL;
 import static pros.app.com.pros.base.ProsConstants.NAME;
 import static pros.app.com.pros.base.ProsConstants.PROFILE_ID;
 
-public class AthleteProfileActivity extends BaseActivity implements ProfileView, CustomDialogListener {
+public class AthleteProfileActivity extends BaseActivity implements ProfileView, CustomDialogListener,
+        PostFragment.OnFragmentInteractionListener,  QuestionFragment.OnFragmentInteractionListener{
 
     @BindView(R.id.ivAvatar)
     ImageView ivAvatar;
@@ -59,11 +68,6 @@ public class AthleteProfileActivity extends BaseActivity implements ProfileView,
     @BindView(R.id.tvLikedQuestions)
     TextView tvLikedQuestions;
 
-    @BindView(R.id.label_nothing)
-    TextView labelNothing;
-
-    @BindView(R.id.rvPosts)
-    RecyclerView rvPosts;
 
     @BindView(R.id.bsConfirm)
     View bsConfirm;
@@ -86,6 +90,15 @@ public class AthleteProfileActivity extends BaseActivity implements ProfileView,
     @BindView(R.id.btn2)
     Button btn2;
 
+    @BindView(R.id.posts_underline)
+    View postsUnderline;
+
+    @BindView(R.id.questions_underline)
+    View questionsUnderline;
+
+    private static final String POSTS ="posts";
+    private static final String QUESTIONS ="questions";
+
     private BottomSheetBehavior behavior;
     private ProfilePresenter profilePresenter;
     private MetaDataModel metaData;
@@ -106,14 +119,16 @@ public class AthleteProfileActivity extends BaseActivity implements ProfileView,
 
         tvNumFollowers.setText("-");
         tvNumFollowing.setText("-");
-        tvLikedVideos.setText(String.format(getString(R.string.label_liked_posts), 0));
-        tvLikedQuestions.setText(String.format(getString(R.string.label_liked_questions), 0));
+        tvLikedVideos.setText(String.format(getString(R.string.label_posts), 0));
+        tvLikedQuestions.setText(String.format(getString(R.string.label_questions), 0));
 
         profileId = getIntent().getIntExtra(PROFILE_ID, 0);
         imageUrl = getIntent().getStringExtra(IMAGE_URL);
         name = getIntent().getStringExtra(NAME);
 
         profilePresenter.getAthleteProfile(profileId);
+        PostFragment postFragment = PostFragment.newInstance("postData", profileId);
+        this.replaceFragment(postFragment);
 
     }
 
@@ -166,6 +181,20 @@ public class AthleteProfileActivity extends BaseActivity implements ProfileView,
         });
     }
 
+    @OnClick(R.id.tvLikedQuestions)
+    void showQuestions(){
+        updateUI(QUESTIONS);
+        QuestionFragment questionFragment = QuestionFragment.newInstance("athlete_questions", profileId);
+        this.replaceFragment(questionFragment);
+    }
+
+    @OnClick(R.id.tvLikedVideos)
+    void showPosts(){
+        updateUI(POSTS);
+        PostFragment postFragment = PostFragment.newInstance("postData", profileId);
+        this.replaceFragment(postFragment);
+    }
+
     @OnClick(R.id.tvAction1)
     public void onClickAction1() {
         behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -198,15 +227,6 @@ public class AthleteProfileActivity extends BaseActivity implements ProfileView,
         finish();
     }
 
-    @OnClick(R.id.tvLikedVideos)
-    public void onCLickLikedPosts() {
-        labelNothing.setText(getString(R.string.no_liked_posts));
-    }
-
-    @OnClick(R.id.tvLikedQuestions)
-    public void onCLickLikedQuestions() {
-        labelNothing.setText(getString(R.string.no_liked_questions));
-    }
 
     @OnClick({R.id.tvNumFollowing, R.id.labelFollowing})
     public void onCLickFollowing() {
@@ -223,6 +243,35 @@ public class AthleteProfileActivity extends BaseActivity implements ProfileView,
         startActivity(intent);
     }
 
+
+    void updateUI(String dataType){
+        if(dataType.equalsIgnoreCase(POSTS)){
+            postsUnderline.setVisibility(View.VISIBLE);
+            questionsUnderline.setVisibility(View.GONE);
+
+        } else if(dataType.equalsIgnoreCase(QUESTIONS)){
+            postsUnderline.setVisibility(View.GONE);
+            questionsUnderline.setVisibility(View.VISIBLE);
+        }
+    }
+
+    // Replace current Fragment with the destination Fragment.
+    public void replaceFragment(Fragment destFragment)
+    {
+        // First get FragmentManager object.
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
+
+        // Begin Fragment transaction.
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        // Replace the layout holder with the required Fragment object.
+        fragmentTransaction.replace(R.id.fragment_container, destFragment);
+
+        // Commit the Fragment replace action.
+        fragmentTransaction.commit();
+    }
+
+
     @Override
     public void onSuccessGetProfile(ProfileMainModel profileMainModel) {
 
@@ -232,8 +281,8 @@ public class AthleteProfileActivity extends BaseActivity implements ProfileView,
         tvName.setText(name);
         tvNumFollowing.setText(String.valueOf(metaData.getFollowCount()));
         tvNumFollowers.setText(String.valueOf(metaData.getFollowersCount()));
-        tvLikedVideos.setText(String.format(getString(R.string.label_posts), metaData.getLikedPostsCount()));
-        tvLikedQuestions.setText(String.format(getString(R.string.label_questions), metaData.getLikedQuestionsCount()));
+        tvLikedVideos.setText(String.format(getString(R.string.label_posts), metaData.getPostsCount()));
+        tvLikedQuestions.setText(String.format(getString(R.string.label_questions), metaData.getQuestionsAskedCount()));
     }
 
     @Override
@@ -282,5 +331,10 @@ public class AthleteProfileActivity extends BaseActivity implements ProfileView,
 
     @Override
     public void handleNo() {
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

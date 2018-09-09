@@ -100,8 +100,12 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView,
         }
 
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new PostFragment(), "Liked Posts");
-        adapter.addFragment(new QuestionFragment(), "Liked Question");
+
+        PostFragment postFragment = PostFragment.newInstance("likedPosts", PrefUtils.getUser().getId());
+        QuestionFragment questionFragment = QuestionFragment.newInstance("liked_questions", PrefUtils.getUser().getId());
+
+        adapter.addFragment(postFragment, "Liked Posts");
+        adapter.addFragment(questionFragment, "Liked Question");
         viewPager.setAdapter(adapter);
         viewPager.measure(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         tabLayout.setupWithViewPager(viewPager);
