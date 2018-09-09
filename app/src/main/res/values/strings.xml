@@ -75,5 +75,12 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
+    <string-array name="content_type">
+        <item>Posts</item>
+        <item>Reactions</item>
+        <item>Answers</item>
+        <item>Questions</item>
+    </string-array>
+
 
 </resources>

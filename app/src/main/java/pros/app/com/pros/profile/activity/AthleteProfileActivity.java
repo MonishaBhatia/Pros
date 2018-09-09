@@ -2,17 +2,26 @@ package pros.app.com.pros.profile.activity;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -22,12 +31,15 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnItemSelected;
 import pros.app.com.pros.R;
 import pros.app.com.pros.base.BaseActivity;
 import pros.app.com.pros.base.CustomDialogFragment;
 import pros.app.com.pros.base.CustomDialogListener;
+import pros.app.com.pros.base.LogUtils;
 import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.home.model.PostModel;
+import pros.app.com.pros.profile.adapter.CustomAdapter;
 import pros.app.com.pros.profile.fragment.PostFragment;
 import pros.app.com.pros.profile.fragment.QuestionFragment;
 import pros.app.com.pros.profile.model.MetaDataModel;
@@ -42,7 +54,7 @@ import static pros.app.com.pros.base.ProsConstants.NAME;
 import static pros.app.com.pros.base.ProsConstants.PROFILE_ID;
 
 public class AthleteProfileActivity extends BaseActivity implements ProfileView, CustomDialogListener,
-        PostFragment.OnFragmentInteractionListener,  QuestionFragment.OnFragmentInteractionListener{
+        PostFragment.OnFragmentInteractionListener,  QuestionFragment.OnFragmentInteractionListener, AdapterView.OnItemSelectedListener{
 
     @BindView(R.id.ivAvatar)
     ImageView ivAvatar;
@@ -96,8 +108,19 @@ public class AthleteProfileActivity extends BaseActivity implements ProfileView,
     @BindView(R.id.questions_underline)
     View questionsUnderline;
 
+    @BindView(R.id.dropdown)
+    Spinner dropDown;
+
+    @BindView(R.id.scrollView)
+    NestedScrollView scrollView;
+
+    @BindView(R.id.toolbar_background)
+    ConstraintLayout toolbarBackground;
+
     private static final String POSTS ="posts";
     private static final String QUESTIONS ="questions";
+    private static final String REACTIONS ="reactions";
+    private static final String ANSWERS ="answers";
 
     private BottomSheetBehavior behavior;
     private ProfilePresenter profilePresenter;
@@ -130,6 +153,64 @@ public class AthleteProfileActivity extends BaseActivity implements ProfileView,
         PostFragment postFragment = PostFragment.newInstance("postData", profileId);
         this.replaceFragment(postFragment);
 
+
+        CustomAdapter customAdapter = new CustomAdapter(getApplicationContext(),getResources().getStringArray(R.array.content_type ));
+        // Specify the layout to use when the list of choices appears
+        // Apply the adapter to the spinner
+        dropDown.setAdapter(customAdapter);
+        dropDown.getBackground().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        dropDown.setSelection(0,false);
+        dropDown.setOnItemSelectedListener(this);
+
+
+        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if(PrefUtils.isAthlete()) {
+                    if (isViewVisible()) {
+                        // Any portion of the imageView, even a single pixel, is within the visible window
+                        LogUtils.LOGE("Preeti Testing", "Visible");
+                        hideDropDown();
+
+                    } else {
+                        // NONE of the imageView is within the visible window
+                        showDropDown();
+                        LogUtils.LOGE("Preeti Testing", "Not Visible");
+                    }
+                }
+            }
+        });
+
+
+    }
+
+    private void showDropDown() {
+        dropDown.setVisibility(View.VISIBLE);
+        toolbarBackground.setBackgroundColor(getResources().getColor(R.color.bg_dark_gray));
+    }
+
+    private void hideDropDown() {
+        dropDown.setVisibility(View.GONE);
+        toolbarBackground.setBackgroundColor(Color.TRANSPARENT);
+    }
+
+    boolean isViewVisible(){
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+        if (tvLikedVideos == null) {
+            return false;
+        }
+        if (!tvLikedVideos.isShown()) {
+            return false;
+        }
+        final Rect actualPosition = new Rect();
+        tvLikedVideos.getGlobalVisibleRect(actualPosition);
+        final Rect screen = new Rect(0, 0, width, height);
+        return actualPosition.intersect(screen);
     }
 
     @OnClick(R.id.ivBlock)
@@ -335,6 +416,32 @@ public class AthleteProfileActivity extends BaseActivity implements ProfileView,
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String selectedContentType = (String) parent.getItemAtPosition(position);
+        if(POSTS.equalsIgnoreCase(selectedContentType)){
+            updateUI(POSTS);
+            PostFragment postFragment = PostFragment.newInstance("postData", profileId);
+            this.replaceFragment(postFragment);
+
+        } else if(REACTIONS.equalsIgnoreCase(selectedContentType)) {
+            PostFragment postFragment = PostFragment.newInstance("reactionsData", profileId);
+            this.replaceFragment(postFragment);
+        } else if(ANSWERS.equalsIgnoreCase(selectedContentType)){
+            PostFragment answersFragment = PostFragment.newInstance("athleteAnswers", PrefUtils.getUser().getId());
+            this.replaceFragment(answersFragment);
+        } else if(QUESTIONS.equalsIgnoreCase(selectedContentType)){
+            updateUI(QUESTIONS);
+            QuestionFragment questionFragment = QuestionFragment.newInstance("athlete_questions", profileId);
+            this.replaceFragment(questionFragment);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 }

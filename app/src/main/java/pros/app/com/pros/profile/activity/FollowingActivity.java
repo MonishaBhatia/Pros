@@ -84,7 +84,9 @@ public class FollowingActivity extends AppCompatActivity implements FollowingVie
 
         @Override
         public void afterTextChanged(Editable editable) {
-            adapter.getFilter().filter(editable.toString());
+            if(adapter != null) {
+                adapter.getFilter().filter(editable.toString());
+            }
         }
     };
 
