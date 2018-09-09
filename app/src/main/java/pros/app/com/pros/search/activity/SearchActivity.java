@@ -10,6 +10,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,6 +36,7 @@ import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.home.adapter.PostAdapter;
 import pros.app.com.pros.home.model.AthleteModel;
 import pros.app.com.pros.home.model.PostModel;
+import pros.app.com.pros.profile.activity.AthleteActivity;
 import pros.app.com.pros.profile.activity.ProfileActivity;
 import pros.app.com.pros.search.adapter.AllAthleteAdapter;
 import pros.app.com.pros.search.adapter.TopPostsAdapter;
@@ -99,7 +101,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView{
         setContentView(R.layout.activity_search);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ButterKnife.bind(this);
-        if(PrefUtils.getUser().getThumbUrl() != null) {
+        if(!TextUtils.isEmpty(PrefUtils.getUser().getThumbUrl())) {
             Picasso.get().load(PrefUtils.getUser().getThumbUrl()).placeholder(R.drawable.profile).into(ivProfile);
         }
         searchPresenter = new SearchPresenter(this);
@@ -122,7 +124,11 @@ public class SearchActivity extends AppCompatActivity implements SearchView{
 
     @OnClick(R.id.ivProfile)
     public void onClickProfile() {
-        startActivity(new Intent(this, ProfileActivity.class));
+        if(PrefUtils.isAthlete()){
+            startActivity(new Intent(this, AthleteActivity.class));
+        } else {
+            startActivity(new Intent(this, ProfileActivity.class));
+        }
     }
 
 

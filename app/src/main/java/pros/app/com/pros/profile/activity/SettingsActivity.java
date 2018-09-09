@@ -76,7 +76,7 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
 
     private void initializeViews() {
 
-        if(PrefUtils.isAthlete()){
+        if (PrefUtils.isAthlete()) {
             viewFollower.setVisibility(View.VISIBLE);
             separator.setVisibility(View.VISIBLE);
             tvNumFollower.setText(String.valueOf(getIntent().getIntExtra("Follower_Count", 0)));
@@ -88,6 +88,8 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
 
         if (!TextUtils.isEmpty(PrefUtils.getUser().getMediumUrl()))
             Picasso.get().load(PrefUtils.getUser().getMediumUrl()).into(ivPic);
+        else if (!TextUtils.isEmpty(PrefUtils.getString("Image")))
+            Picasso.get().load(PrefUtils.getString("Image")).into(ivPic);
 
         tvName.setText(String.format("%s %s", PrefUtils.getUser().getFirstName(), PrefUtils.getUser().getLastName()));
         tvNumFollowing.setText(String.valueOf(getIntent().getIntExtra("Follow_Count", 0)));
@@ -96,7 +98,7 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
     @OnClick(R.id.tvContact)
     public void onClickContactAdmin() {
 
-        if(PrefUtils.isAthlete()){
+        if (PrefUtils.isAthlete()) {
             InviteAProFragment.newInstance().show(this.getSupportFragmentManager(), InviteAProFragment.TAG);
         } else {
             Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
@@ -171,7 +173,7 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            ivAvatar.setImageBitmap(imageBitmap);
+            ivPic.setImageBitmap(imageBitmap);
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -182,8 +184,8 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
             // CALL THIS METHOD TO GET THE ACTUAL PATH
             File finalFile = new File(getRealPathFromURI(tempUri));
 
+            PrefUtils.putString("Image", Uri.fromFile(finalFile).toString());
             settingsPresenter.getUploadUrl(Uri.fromFile(finalFile));
-
         }
     }
 

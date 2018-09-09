@@ -169,7 +169,7 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
 
                 } else {
                     mediaType = MediaType.parse("image/jpg");
-                    body = RequestBody.create(mediaType, "file:///storage/emulated/0/Pictures/1532864791381.jpg");
+                    body = RequestBody.create(mediaType, jsonRequest);
                     request = new Request.Builder()
                             .url(url)
                             .put(body)

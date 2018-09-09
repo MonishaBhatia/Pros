@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -56,6 +57,9 @@ public class AthleteActivity extends BaseActivity implements ProfileView {
     @BindView(R.id.tvReactions)
     TextView tvReactions;
 
+    @BindView(R.id.ivSettings)
+    ImageView ivSetting;
+
     private ProfilePresenter profilePresenter;
     private MetaDataModel metaData;
 
@@ -84,10 +88,9 @@ public class AthleteActivity extends BaseActivity implements ProfileView {
         name = PrefUtils.getUser().getFirstName() + PrefUtils.getUser().getLastName();
 
         profilePresenter.getAthleteProfile(profileId);
-
     }
 
-    @OnClick(R.id.ivSetting)
+    @OnClick(R.id.ivSettings)
     public void onClickSetting() {
         Intent intent = new Intent(AthleteActivity.this, SettingsActivity.class);
         if (metaData != null) {
@@ -98,7 +101,7 @@ public class AthleteActivity extends BaseActivity implements ProfileView {
     }
 
 
-    @OnClick(R.id.ivBack)
+    @OnClick(R.id.ivGoBack)
     public void onClickBack() {
         finish();
     }

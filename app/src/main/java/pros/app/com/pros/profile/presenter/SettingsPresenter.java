@@ -51,7 +51,7 @@ public class SettingsPresenter implements HttpServiceView {
     private void updateProfilePic() {
         JSONObject jsonRequest = new JSONObject();
         try {
-            jsonRequest.put("newAvatar", uploadUrlModel.getGuid());
+            jsonRequest.put("image_guid", uploadUrlModel.getGuid());
         } catch (JSONException e) {
             e.printStackTrace();
         }
