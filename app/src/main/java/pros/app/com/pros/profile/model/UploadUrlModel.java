@@ -8,6 +8,8 @@ public class UploadUrlModel {
 
     @JsonProperty("upload_url")
     private String uploadUrl;
+    @JsonProperty("image_upload_url")
+    private String imageUploadUrl;
     @JsonProperty("guid")
     private String guid;
 
@@ -17,5 +19,9 @@ public class UploadUrlModel {
 
     public String getGuid() {
         return guid;
+    }
+
+    public String getImageUploadUrl() {
+        return imageUploadUrl;
     }
 }
