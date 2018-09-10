@@ -1,8 +1,6 @@
 package pros.app.com.pros.create_post.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
@@ -27,6 +25,8 @@ import com.vincent.videocompressor.VideoCompress;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,7 +34,6 @@ import butterknife.OnClick;
 import pros.app.com.pros.R;
 import pros.app.com.pros.base.ApiEndPoints;
 import pros.app.com.pros.base.LogUtils;
-import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.create_post.presenter.CreatePostPresenter;
 import pros.app.com.pros.create_question.activity.TagsActivity;
 
@@ -62,28 +61,33 @@ public class PreviewActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setupToolbar();
+        createPostPresenter = new CreatePostPresenter();
 
         if (getIntent().getBooleanExtra("fromPicker", false)) {
 
             if (getIntent().hasExtra("videoFileUri")) {
                 String fileUri = getIntent().getStringExtra("videoFileUri");
                 playVideo(fileUri);
+
             } else if (getIntent().hasExtra("imageFileUri")) {
                 String fileUri = getIntent().getStringExtra("imageFileUri");
                 imageView.setVisibility(View.VISIBLE);
                 imageView.setImageURI(Uri.parse(fileUri));
-                createPostPresenter.getImageUploadUrl(Uri.parse(fileUri));
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(fileUri));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                convertImageToByteArray(bitmap);
             }
-
 
         } else if (getIntent().getBooleanExtra("fromCamera", false)) {
 
             byte[] jpeg = ResultHolder.getImage();
             File video = ResultHolder.getVideo();
-            createPostPresenter = new CreatePostPresenter();
 
             if (jpeg != null) {
-                Log.e("Image Path:", "Yes");
                 imageView.setVisibility(View.VISIBLE);
 
                 Bitmap bitmap = BitmapFactory.decodeByteArray(jpeg, 0, jpeg.length);
@@ -93,7 +97,7 @@ public class PreviewActivity extends AppCompatActivity {
                     return;
                 }
                 imageView.setImageBitmap(bitmap);
-                uploadImage(bitmap);
+                createPostPresenter.getImageUploadUrl(jpeg);
 
             } else if (video != null) {
                 Log.e("Vode Path:", video.getPath());
@@ -104,34 +108,6 @@ public class PreviewActivity extends AppCompatActivity {
             finish();
             return;
         }
-    }
-
-    private void uploadImage(Bitmap imageBitmap) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-
-        // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
-        Uri tempUri = getImageUri(getApplicationContext(), imageBitmap);
-
-        // CALL THIS METHOD TO GET THE ACTUAL PATH
-        File finalFile = new File(getRealPathFromURI(tempUri));
-
-        PrefUtils.putString("Image", Uri.fromFile(finalFile).toString());
-        createPostPresenter.getImageUploadUrl(Uri.fromFile(finalFile));
-    }
-
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
-    }
-
-    public String getRealPathFromURI(Uri uri) {
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-        return cursor.getString(idx);
     }
 
     void playVideo(final String uri) {
@@ -148,11 +124,11 @@ public class PreviewActivity extends AppCompatActivity {
                 float multiplier = (float) videoView.getWidth() / (float) mp.getVideoWidth();
                 videoView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (mp.getVideoHeight() * multiplier)));
 
-            try2CreateCompressDir();
-            final String outPath = Environment.getExternalStorageDirectory()
-                    + File.separator
-                    + APP_DIR
-                    + COMPRESSED_VIDEOS_DIR;
+                try2CreateCompressDir();
+                final String outPath = Environment.getExternalStorageDirectory()
+                        + File.separator
+                        + APP_DIR
+                        + COMPRESSED_VIDEOS_DIR;
 
                 VideoCompress.compressVideoLow(uri, outPath, new VideoCompress.CompressListener() {
                     @Override
@@ -168,7 +144,24 @@ public class PreviewActivity extends AppCompatActivity {
                         long length = file.length();
                         length = length / 1024;
 
-                        createPostPresenter.getVideoUploadPath(ApiEndPoints.upload_video.getApi() + "?file_name=movie.m4v&file_size=" + length, uri);
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        FileInputStream fis = null;
+                        try {
+                            fis = new FileInputStream(new File(uri));
+
+                            byte[] buf = new byte[1024];
+                            int n;
+                            while (-1 != (n = fis.read(buf)))
+                                baos.write(buf, 0, n);
+
+                            byte[] videoBytes = baos.toByteArray();
+
+                            createPostPresenter.getVideoUploadPath(ApiEndPoints.upload_video.getApi() + "?file_name=movie.m4v&file_size=" + length, videoBytes);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
                     }
 
                     @Override
@@ -188,7 +181,18 @@ public class PreviewActivity extends AppCompatActivity {
             }
 
         });
-}
+    }
+
+
+    private void convertImageToByteArray(Bitmap bitmap) {
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        bitmap.recycle();
+
+        createPostPresenter.getImageUploadUrl(byteArray);
+    }
 
 
     public static void try2CreateCompressDir() {
@@ -209,10 +213,6 @@ public class PreviewActivity extends AppCompatActivity {
         }
     }
 
-    private static float getApproximateFileMegabytes(Bitmap bitmap) {
-        return (bitmap.getRowBytes() * bitmap.getHeight()) / 1024 / 1024;
-    }
-
     @OnClick(R.id.close_button)
     void closeActivity() {
         this.finish();
@@ -224,7 +224,5 @@ public class PreviewActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
-
-
 
 }
