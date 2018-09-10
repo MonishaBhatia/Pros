@@ -91,7 +91,9 @@ public class SearchActivity extends AppCompatActivity implements SearchView{
 
         @Override
         public void afterTextChanged(Editable editable) {
-            allAthleteAdapter.getFilter().filter(editable.toString());
+            if(allAthleteAdapter != null) {
+                allAthleteAdapter.getFilter().filter(editable.toString());
+            }
         }
     };
 
