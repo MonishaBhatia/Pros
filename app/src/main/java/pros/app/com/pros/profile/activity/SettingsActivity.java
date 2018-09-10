@@ -175,6 +175,8 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             ivPic.setImageBitmap(imageBitmap);
 
+
+
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
@@ -184,8 +186,11 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
             // CALL THIS METHOD TO GET THE ACTUAL PATH
             File finalFile = new File(getRealPathFromURI(tempUri));
 
+            byte[] byteArray = baos.toByteArray();
+            imageBitmap.recycle();
+
             PrefUtils.putString("Image", Uri.fromFile(finalFile).toString());
-            settingsPresenter.getUploadUrl(Uri.fromFile(finalFile));
+            settingsPresenter.getUploadUrl(byteArray);
         }
     }
 
