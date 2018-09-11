@@ -148,11 +148,11 @@ public class PreviewActivity extends AppCompatActivity {
                 float multiplier = (float) videoView.getWidth() / (float) mp.getVideoWidth();
                 videoView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (mp.getVideoHeight() * multiplier)));
 
-            try2CreateCompressDir();
-            final String outPath = Environment.getExternalStorageDirectory()
-                    + File.separator
-                    + APP_DIR
-                    + COMPRESSED_VIDEOS_DIR;
+                try2CreateCompressDir();
+                final String outPath = Environment.getExternalStorageDirectory()
+                        + File.separator
+                        + APP_DIR
+                        + COMPRESSED_VIDEOS_DIR;
 
                 VideoCompress.compressVideoLow(uri, outPath, new VideoCompress.CompressListener() {
                     @Override
@@ -188,7 +188,7 @@ public class PreviewActivity extends AppCompatActivity {
             }
 
         });
-}
+    }
 
 
     public static void try2CreateCompressDir() {
@@ -224,7 +224,6 @@ public class PreviewActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
-
 
 
 }

@@ -3,8 +3,6 @@ package pros.app.com.pros.create_post.presenter;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import pros.app.com.pros.base.ApiEndPoints;

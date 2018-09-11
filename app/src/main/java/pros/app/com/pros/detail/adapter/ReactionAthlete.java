@@ -23,15 +23,15 @@ import static pros.app.com.pros.base.ProsConstants.IMAGE_URL;
 import static pros.app.com.pros.base.ProsConstants.NAME;
 import static pros.app.com.pros.base.ProsConstants.PROFILE_ID;
 
-public class ReactionAthlete extends RecyclerView.Adapter<ReactionAthlete.ViewHolder>{
+public class ReactionAthlete extends RecyclerView.Adapter<ReactionAthlete.ViewHolder> {
 
 
     private ArrayList<AthleteModel> athleteModelArrayList;
     private Context context;
 
 
-    public ReactionAthlete(Context context, ArrayList<AthleteModel> athleteModels){
-        this.context =context;
+    public ReactionAthlete(Context context, ArrayList<AthleteModel> athleteModels) {
+        this.context = context;
         this.athleteModelArrayList = athleteModels;
     }
 
@@ -55,12 +55,12 @@ public class ReactionAthlete extends RecyclerView.Adapter<ReactionAthlete.ViewHo
         return athleteModelArrayList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.athlete_thumb)
         CircleImageView prosThumb;
 
-        public ViewHolder(View view){
+        public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
             prosThumb.setOnClickListener(this);

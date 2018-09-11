@@ -2,13 +2,9 @@ package pros.app.com.pros.base;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.util.TypedValue;
 
 import pros.app.com.pros.ProsApplication;
-import pros.app.com.pros.account.model.AvatarModel;
-import pros.app.com.pros.account.model.SignInModel;
 import pros.app.com.pros.account.model.UserModel;
 
 import static pros.app.com.pros.base.LogUtils.LOGD;
@@ -83,7 +79,6 @@ public final class PrefUtils {
     }
 
 
-
     public static String getString(String key) {
         String value = getNewSharedPreferences().getString(key, "");  // Empty string as default value
         return value;
@@ -146,7 +141,7 @@ public final class PrefUtils {
         getNewSharedPreferences().edit().clear().apply();
     }
 
-    public static boolean isAthlete(){
+    public static boolean isAthlete() {
         return PrefUtils.getUser().getUserType().equalsIgnoreCase("Athlete");
     }
 }

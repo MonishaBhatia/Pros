@@ -4,21 +4,21 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.VideoView;
 
 import com.facebook.CallbackManager;
 import com.facebook.login.LoginManager;
+
 import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pros.app.com.pros.R;
-import pros.app.com.pros.account.activity.SignUpActivity;
 import pros.app.com.pros.account.activity.SignInActivity;
-import pros.app.com.pros.base.BaseView;
+import pros.app.com.pros.account.activity.SignUpActivity;
 
 public class LaunchActivity extends AppCompatActivity {
 
@@ -47,9 +47,9 @@ public class LaunchActivity extends AppCompatActivity {
         playVideo();
     }
 
-    private void playVideo(){
+    private void playVideo() {
 
-        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+ R.raw.login);
+        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.login);
         videoView.setVideoURI(uri);
 
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -73,7 +73,7 @@ public class LaunchActivity extends AppCompatActivity {
 
         callbackManager = CallbackManager.Factory.create();
         launchPresenter.fbCallback(callbackManager);
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList(EMAIL,PUBLIC_PROFILE));
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList(EMAIL, PUBLIC_PROFILE));
     }
 
     @OnClick(R.id.tvSignUp)

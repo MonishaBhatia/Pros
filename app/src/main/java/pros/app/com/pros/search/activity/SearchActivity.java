@@ -3,9 +3,9 @@ package pros.app.com.pros.search.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,7 +33,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import pros.app.com.pros.R;
 import pros.app.com.pros.base.KeyboardAction;
 import pros.app.com.pros.base.PrefUtils;
-import pros.app.com.pros.home.adapter.PostAdapter;
 import pros.app.com.pros.home.model.AthleteModel;
 import pros.app.com.pros.home.model.PostModel;
 import pros.app.com.pros.profile.activity.AthleteActivity;
@@ -45,7 +44,7 @@ import pros.app.com.pros.search.presenter.SearchPresenter;
 import pros.app.com.pros.search.views.SearchView;
 
 
-public class SearchActivity extends AppCompatActivity implements SearchView{
+public class SearchActivity extends AppCompatActivity implements SearchView {
 
     @BindView(R.id.topPros)
     RecyclerView topProsRecyclerview;
@@ -91,7 +90,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView{
 
         @Override
         public void afterTextChanged(Editable editable) {
-            if(allAthleteAdapter != null) {
+            if (allAthleteAdapter != null) {
                 allAthleteAdapter.getFilter().filter(editable.toString());
             }
         }
@@ -103,7 +102,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView{
         setContentView(R.layout.activity_search);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ButterKnife.bind(this);
-        if(!TextUtils.isEmpty(PrefUtils.getUser().getThumbUrl())) {
+        if (!TextUtils.isEmpty(PrefUtils.getUser().getThumbUrl())) {
             Picasso.get().load(PrefUtils.getUser().getThumbUrl()).placeholder(R.drawable.profile).into(ivProfile);
         }
         searchPresenter = new SearchPresenter(this);
@@ -126,7 +125,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView{
 
     @OnClick(R.id.ivProfile)
     public void onClickProfile() {
-        if(PrefUtils.isAthlete()){
+        if (PrefUtils.isAthlete()) {
             startActivity(new Intent(this, AthleteActivity.class));
         } else {
             startActivity(new Intent(this, ProfileActivity.class));

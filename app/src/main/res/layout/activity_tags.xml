@@ -55,7 +55,7 @@
                     android:textSize="@dimen/sp_14"
                     android:textColor="@color/green"
                     android:visibility="gone"
-                    android:layout_alignParentRight="true"/>
+                    android:layout_alignParentRight="true" />
 
             </RelativeLayout>
 

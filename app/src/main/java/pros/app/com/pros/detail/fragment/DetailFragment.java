@@ -490,7 +490,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
     @OnClick(R.id.btn1)
     public void onClickbtn1() {
         behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        if(btn1.getText().equals("Delete Comment")){
+        if (btn1.getText().equals("Delete Comment")) {
             detailPresenter.deleteComment(commentId);
         } else {
             confirmationDialog();
@@ -675,7 +675,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
         if (!PrefUtils.isAthlete() && receivedPostModel.getComments() == null || receivedPostModel.getComments().size() == 0) {
             tvNumOfComments.setText("Beat everyone to the punch!\nBe the first to comment...");
         } else {
-            tvNumOfComments.setText(receivedPostModel.getComments().size()  + " Comments");
+            tvNumOfComments.setText(receivedPostModel.getComments().size() + " Comments");
         }
         commentsCount.setText("" + receivedPostModel.getComments().size());
     }

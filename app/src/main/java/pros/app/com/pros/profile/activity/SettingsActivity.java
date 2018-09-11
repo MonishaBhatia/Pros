@@ -18,8 +18,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,8 +28,8 @@ import pros.app.com.pros.base.CustomDialogFragment;
 import pros.app.com.pros.base.CustomDialogListener;
 import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.launch_screen.LaunchActivity;
-import pros.app.com.pros.profile.views.SettingsView;
 import pros.app.com.pros.profile.presenter.SettingsPresenter;
+import pros.app.com.pros.profile.views.SettingsView;
 
 import static pros.app.com.pros.base.ProsConstants.FOLLOWING_LIST;
 import static pros.app.com.pros.base.ProsConstants.IS_FAN;

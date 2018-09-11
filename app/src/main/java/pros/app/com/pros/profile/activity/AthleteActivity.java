@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -29,7 +28,6 @@ import pros.app.com.pros.profile.fragment.PostFragment;
 import pros.app.com.pros.profile.fragment.QuestionFragment;
 import pros.app.com.pros.profile.model.MetaDataModel;
 import pros.app.com.pros.profile.model.ProfileMainModel;
-import pros.app.com.pros.profile.presenter.AthleteProfilePresenter;
 import pros.app.com.pros.profile.presenter.ProfilePresenter;
 import pros.app.com.pros.profile.views.ProfileView;
 
@@ -37,7 +35,7 @@ import static pros.app.com.pros.base.ProsConstants.FOLLOWING_LIST;
 import static pros.app.com.pros.base.ProsConstants.PROFILE_ID;
 
 public class AthleteActivity extends BaseActivity implements ProfileView,
-        PostFragment.OnFragmentInteractionListener,  QuestionFragment.OnFragmentInteractionListener{
+        PostFragment.OnFragmentInteractionListener, QuestionFragment.OnFragmentInteractionListener {
 
     @BindView(R.id.ivAvatar)
     ImageView ivAvatar;
@@ -88,11 +86,10 @@ public class AthleteActivity extends BaseActivity implements ProfileView,
     private String imageUrl;
     private int profileId;
 
-    private static final String POSTS ="posts";
-    private static final String REACTIONS ="reactions";
-    private static final String ANSWERS ="answers";
-    private static final String QUESTIONS ="questions";
-
+    private static final String POSTS = "posts";
+    private static final String REACTIONS = "reactions";
+    private static final String ANSWERS = "answers";
+    private static final String QUESTIONS = "questions";
 
 
     @Override
@@ -176,7 +173,7 @@ public class AthleteActivity extends BaseActivity implements ProfileView,
     }
 
     @OnClick(R.id.tvReactions)
-    void showReactions(){
+    void showReactions() {
         updateUI(REACTIONS);
         PostFragment postFragment = PostFragment.newInstance("reactionsData", PrefUtils.getUser().getId());
         this.replaceFragment(postFragment);
@@ -184,21 +181,21 @@ public class AthleteActivity extends BaseActivity implements ProfileView,
 
 
     @OnClick(R.id.tvLikedVideos)
-    void showPosts(){
+    void showPosts() {
         updateUI(POSTS);
         PostFragment postFragment = PostFragment.newInstance("postData", PrefUtils.getUser().getId());
         this.replaceFragment(postFragment);
     }
 
     @OnClick(R.id.tvLikedQuestions)
-    void showQuestions(){
+    void showQuestions() {
         updateUI(QUESTIONS);
         QuestionFragment questionFragment = QuestionFragment.newInstance("athlete_questions", PrefUtils.getUser().getId());
         this.replaceFragment(questionFragment);
     }
 
     @OnClick(R.id.tv_answers)
-    void showAnswers(){
+    void showAnswers() {
         updateUI(ANSWERS);
         PostFragment answersFragment = PostFragment.newInstance("athleteAnswers", PrefUtils.getUser().getId());
         this.replaceFragment(answersFragment);
@@ -206,8 +203,7 @@ public class AthleteActivity extends BaseActivity implements ProfileView,
 
 
     // Replace current Fragment with the destination Fragment.
-    public void replaceFragment(Fragment destFragment)
-    {
+    public void replaceFragment(Fragment destFragment) {
         // First get FragmentManager object.
         FragmentManager fragmentManager = this.getSupportFragmentManager();
 
@@ -221,25 +217,25 @@ public class AthleteActivity extends BaseActivity implements ProfileView,
         fragmentTransaction.commit();
     }
 
-    void updateUI(String dataType){
-        if(dataType.equalsIgnoreCase(POSTS)){
+    void updateUI(String dataType) {
+        if (dataType.equalsIgnoreCase(POSTS)) {
             postsUnderline.setVisibility(View.VISIBLE);
             questionsUnderline.setVisibility(View.GONE);
             reactionsUnderline.setVisibility(View.GONE);
             answersUnderline.setVisibility(View.GONE);
 
-        } else if(dataType.equalsIgnoreCase(REACTIONS)){
+        } else if (dataType.equalsIgnoreCase(REACTIONS)) {
             postsUnderline.setVisibility(View.GONE);
             questionsUnderline.setVisibility(View.GONE);
             reactionsUnderline.setVisibility(View.VISIBLE);
             answersUnderline.setVisibility(View.GONE);
-        } else if(dataType.equalsIgnoreCase(ANSWERS)){
+        } else if (dataType.equalsIgnoreCase(ANSWERS)) {
             postsUnderline.setVisibility(View.GONE);
             questionsUnderline.setVisibility(View.GONE);
             reactionsUnderline.setVisibility(View.GONE);
             answersUnderline.setVisibility(View.VISIBLE);
 
-        } else if(dataType.equalsIgnoreCase(QUESTIONS)){
+        } else if (dataType.equalsIgnoreCase(QUESTIONS)) {
             postsUnderline.setVisibility(View.GONE);
             questionsUnderline.setVisibility(View.VISIBLE);
             reactionsUnderline.setVisibility(View.GONE);

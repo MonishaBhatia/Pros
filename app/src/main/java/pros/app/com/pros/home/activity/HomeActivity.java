@@ -2,10 +2,10 @@ package pros.app.com.pros.home.activity;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -74,7 +74,7 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
 
         ButterKnife.bind(this);
         homePresenter = new HomePresenter(this);
-        if(!TextUtils.isEmpty(PrefUtils.getUser().getThumbUrl())) {
+        if (!TextUtils.isEmpty(PrefUtils.getUser().getThumbUrl())) {
             Picasso.get().load(PrefUtils.getUser().getThumbUrl()).placeholder(R.drawable.profile).into(ivProfile);
         }
         homePresenter.getPostData(false);
@@ -85,7 +85,7 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
                 // Your code to refresh the list here.
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
-               homePresenter.getPostData(true);
+                homePresenter.getPostData(true);
             }
         });
         // Configure the refreshing colors
@@ -98,7 +98,7 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
 
     @OnClick(R.id.ivProfile)
     public void onClickProfile() {
-        if(PrefUtils.isAthlete()){
+        if (PrefUtils.isAthlete()) {
             startActivity(new Intent(this, AthleteActivity.class));
         } else {
             startActivity(new Intent(this, ProfileActivity.class));
@@ -113,7 +113,7 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     @Override
     public void bindData(ArrayList<PostModel> postsList) {
         postsPrgressBar.setVisibility(View.GONE);
-        if(PrefUtils.isAthlete()){
+        if (PrefUtils.isAthlete()) {
             createPostContainer.setVisibility(View.VISIBLE);
 
         }
@@ -161,24 +161,24 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     }
 
     @OnClick(R.id.upload_post_button)
-    void onCreatePostButtonClick(){
+    void onCreatePostButtonClick() {
         togglePostListOptions = !togglePostListOptions;
-        if(togglePostListOptions) {
+        if (togglePostListOptions) {
             createPostOptions.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             createPostOptions.setVisibility(View.GONE);
         }
     }
 
     @OnClick(R.id.create_post)
-    void createPost(){
+    void createPost() {
         togglePostListOptions = false;
         createPostOptions.setVisibility(View.GONE);
         startActivity(new Intent(getApplicationContext(), CreatePost.class));
     }
 
     @OnClick(R.id.ask_question)
-    void createQuestion(){
+    void createQuestion() {
         togglePostListOptions = false;
         createPostOptions.setVisibility(View.GONE);
         startActivity(new Intent(getApplicationContext(), AskQuestionActivity.class));

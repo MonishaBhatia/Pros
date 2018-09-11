@@ -16,12 +16,12 @@ public class SearchPresenter implements HttpServiceView {
 
     private SearchView searchView;
 
-    public SearchPresenter(SearchView searchView){
+    public SearchPresenter(SearchView searchView) {
         this.searchView = searchView;
     }
 
 
-    public void getSearchData(){
+    public void getSearchData() {
         new HttpServiceUtil(
                 this,
                 ApiEndPoints.top_atheltes.getApi(),
@@ -59,23 +59,23 @@ public class SearchPresenter implements HttpServiceView {
             }
         }
 
-        if(tag == ApiEndPoints.top_posts.getTag()){
-            try{
+        if (tag == ApiEndPoints.top_posts.getTag()) {
+            try {
 
                 HomeMainModel postsData = JsonUtils.from(response, HomeMainModel.class);
                 searchView.updateTopPosts(postsData.getPosts());
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        if(tag == ApiEndPoints.atheltes.getTag()){
-            try{
+        if (tag == ApiEndPoints.atheltes.getTag()) {
+            try {
                 FollowingModel followingModel = JsonUtils.from(response, FollowingModel.class);
                 searchView.updateAllAthletes(followingModel.getAthletes());
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

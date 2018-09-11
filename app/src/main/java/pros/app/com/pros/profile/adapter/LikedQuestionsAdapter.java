@@ -7,13 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -29,7 +26,7 @@ public class LikedQuestionsAdapter extends RecyclerView.Adapter<LikedQuestionsAd
     ArrayList<PostModel> likedQuestionsList;
     private Context context;
 
-    public LikedQuestionsAdapter(Context context, ArrayList<PostModel> likedQuestionsList){
+    public LikedQuestionsAdapter(Context context, ArrayList<PostModel> likedQuestionsList) {
         this.likedQuestionsList = likedQuestionsList;
         this.context = context;
     }
@@ -44,23 +41,23 @@ public class LikedQuestionsAdapter extends RecyclerView.Adapter<LikedQuestionsAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            PostModel postModel = likedQuestionsList.get(position);
+        PostModel postModel = likedQuestionsList.get(position);
 
-            String athleteName = postModel.getQuestioner().getName();
-            String athleteThumbUrl = postModel.getQuestioner().getAvatar().getThumbnailUrl();
-            String question = postModel.getText();
-            String likesCount = String.format("%d Likes", postModel.getLikes().getCount());
-            String answerCount = String.format("%d Answers", postModel.getReactions().size());
+        String athleteName = postModel.getQuestioner().getName();
+        String athleteThumbUrl = postModel.getQuestioner().getAvatar().getThumbnailUrl();
+        String question = postModel.getText();
+        String likesCount = String.format("%d Likes", postModel.getLikes().getCount());
+        String answerCount = String.format("%d Answers", postModel.getReactions().size());
 
 
-            holder.athleteName.setText(athleteName);
-            holder.questionDescription.setText(question);
-            holder.questionLikesCount.setText(likesCount);
-            holder.questionAnswerCount.setText(answerCount);
+        holder.athleteName.setText(athleteName);
+        holder.questionDescription.setText(question);
+        holder.questionLikesCount.setText(likesCount);
+        holder.questionAnswerCount.setText(answerCount);
 
-            if(athleteThumbUrl != null){
-                Picasso.get().load(athleteThumbUrl).placeholder(R.drawable.profile).into(holder.profilePic);
-            }
+        if (athleteThumbUrl != null) {
+            Picasso.get().load(athleteThumbUrl).placeholder(R.drawable.profile).into(holder.profilePic);
+        }
 
     }
 
@@ -92,7 +89,7 @@ public class LikedQuestionsAdapter extends RecyclerView.Adapter<LikedQuestionsAd
         @BindView(R.id.question_container)
         RelativeLayout questionContainer;
 
-        public ViewHolder(View view){
+        public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
             questionContainer.setOnClickListener(this);

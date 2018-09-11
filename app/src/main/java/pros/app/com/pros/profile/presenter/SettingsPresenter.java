@@ -108,7 +108,7 @@ public class SettingsPresenter implements HttpServiceView {
 
     @Override
     public void onError(int tag) {
-        if(tag == ApiEndPoints.sign_out.getTag() || tag == ApiEndPoints.deactivate.getTag()) {
+        if (tag == ApiEndPoints.sign_out.getTag() || tag == ApiEndPoints.deactivate.getTag()) {
             settingsView.onFailure(ProsApplication.getInstance().getApplicationContext().getString(R.string.internal_error));
         }
     }

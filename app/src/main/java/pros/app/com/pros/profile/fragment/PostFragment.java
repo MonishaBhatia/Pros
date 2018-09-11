@@ -63,7 +63,7 @@ public class PostFragment extends Fragment implements ProfileView {
      * this fragment using the provided parameters.
      *
      * @param dataType Parameter 1.
-     * @param id Parameter 2.
+     * @param id       Parameter 2.
      * @return A new instance of fragment PostFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -85,15 +85,13 @@ public class PostFragment extends Fragment implements ProfileView {
             dataType = getArguments().getString(DATA_TYPE);
             id = getArguments().getInt(ID);
         }
-        if(dataType.equalsIgnoreCase("postData")){
+        if (dataType.equalsIgnoreCase("postData")) {
             athleteProfilePresenter.getPostData(id);
-        }
-        else if(dataType.equalsIgnoreCase("reactionsData")){
+        } else if (dataType.equalsIgnoreCase("reactionsData")) {
             athleteProfilePresenter.getReactionsData(id);
-        } else if(dataType.equalsIgnoreCase("athleteAnswers")){
+        } else if (dataType.equalsIgnoreCase("athleteAnswers")) {
             athleteProfilePresenter.getAnswersData(id);
-        }
-        else if(dataType.equalsIgnoreCase("likedPosts")) {
+        } else if (dataType.equalsIgnoreCase("likedPosts")) {
             profilePresenter.getLikedPostsData();
         }
     }
@@ -105,14 +103,13 @@ public class PostFragment extends Fragment implements ProfileView {
         View view = inflater.inflate(R.layout.fragment_post, container, false);
         lableNothing = view.findViewById(R.id.label_nothing);
         emptyStateiv = view.findViewById(R.id.empty_state_iv);
-        if(dataType.equalsIgnoreCase("postData")){
+        if (dataType.equalsIgnoreCase("postData")) {
             lableNothing.setText("No Posts Yet");
-        }
-        else if(dataType.equalsIgnoreCase("reactionsData")){
+        } else if (dataType.equalsIgnoreCase("reactionsData")) {
             lableNothing.setText("No Reactions Yet");
-        }else if(dataType.equalsIgnoreCase("athleteAnswers")){
+        } else if (dataType.equalsIgnoreCase("athleteAnswers")) {
             lableNothing.setText("No Answers Yet");
-        } else if(dataType.equalsIgnoreCase("likedPosts")){
+        } else if (dataType.equalsIgnoreCase("likedPosts")) {
             lableNothing.setText("No Liked Post Yet");
         }
         likedPostsRecyclerview = view.findViewById(R.id.liked_posts);
@@ -155,7 +152,7 @@ public class PostFragment extends Fragment implements ProfileView {
 
     @Override
     public void updateLikedPosts(ArrayList<PostModel> postList) {
-        if(postList !=null && !postList.isEmpty()) {
+        if (postList != null && !postList.isEmpty()) {
             lableNothing.setVisibility(View.GONE);
             emptyStateiv.setVisibility(View.GONE);
             likedPostsRecyclerview.setActivity(getActivity());
@@ -180,7 +177,6 @@ public class PostFragment extends Fragment implements ProfileView {
         }
 
     }
-
 
 
     @Override

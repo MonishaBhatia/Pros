@@ -2,7 +2,6 @@ package pros.app.com.pros.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Html;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
@@ -12,8 +11,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
-
-import com.google.zxing.common.StringUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;

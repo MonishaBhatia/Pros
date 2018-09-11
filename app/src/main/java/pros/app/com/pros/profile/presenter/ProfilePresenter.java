@@ -1,7 +1,5 @@
 package pros.app.com.pros.profile.presenter;
 
-import com.google.gson.JsonObject;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,7 +34,7 @@ public class ProfilePresenter implements HttpServiceView {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else if (tag == ApiEndPoints.fans_liked_questions.getTag()){
+        } else if (tag == ApiEndPoints.fans_liked_questions.getTag()) {
             try {
                 HomeMainModel homeMainModel = JsonUtils.from(response, HomeMainModel.class);
                 view.updateLikedQuestions(homeMainModel.getQuestions());
@@ -44,7 +42,7 @@ public class ProfilePresenter implements HttpServiceView {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else if (tag == ApiEndPoints.fans_liked_posts.getTag()){
+        } else if (tag == ApiEndPoints.fans_liked_posts.getTag()) {
             try {
                 HomeMainModel homeMainModel = JsonUtils.from(response, HomeMainModel.class);
                 view.updateLikedPosts(homeMainModel.getPosts());
@@ -86,7 +84,7 @@ public class ProfilePresenter implements HttpServiceView {
         ).execute();
     }
 
-    public void getLikedQuestionsData(){
+    public void getLikedQuestionsData() {
         new HttpServiceUtil(
                 this,
                 String.format(ApiEndPoints.fans_liked_questions.getApi(), PrefUtils.getUser().getId()),
@@ -96,7 +94,7 @@ public class ProfilePresenter implements HttpServiceView {
         ).execute();
     }
 
-    public void getLikedPostsData(){
+    public void getLikedPostsData() {
         new HttpServiceUtil(
                 this,
                 String.format(ApiEndPoints.fans_liked_posts.getApi(), PrefUtils.getUser().getId()),

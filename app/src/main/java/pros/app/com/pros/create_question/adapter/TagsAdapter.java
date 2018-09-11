@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,7 @@ import pros.app.com.pros.R;
 import pros.app.com.pros.create_question.view.TagsView;
 import pros.app.com.pros.home.model.AthleteModel;
 
-public class TagsAdapter  extends RecyclerView.Adapter<TagsAdapter.ViewHolder> implements Filterable{
+public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ViewHolder> implements Filterable {
 
     private ArrayList<AthleteModel> athleteModelList = new ArrayList<>();
     private Context context;
@@ -33,15 +32,15 @@ public class TagsAdapter  extends RecyclerView.Adapter<TagsAdapter.ViewHolder> i
 
 
     public TagsAdapter(Context context, ArrayList<AthleteModel> athleteModelList,
-                       ArrayList<AthleteModel> userSelectedList, TagsView tagsView){
+                       ArrayList<AthleteModel> userSelectedList, TagsView tagsView) {
         this.context = context;
         this.athleteModelList.clear();
         this.athleteModelList = athleteModelList;
         this.modelFiltered.clear();
         this.modelFiltered.addAll(athleteModelList);
         this.tagsView = tagsView;
-        if(userSelectedList.size()>0){
-            this.userSelectedList= userSelectedList;
+        if (userSelectedList.size() > 0) {
+            this.userSelectedList = userSelectedList;
         }
     }
 
@@ -60,7 +59,7 @@ public class TagsAdapter  extends RecyclerView.Adapter<TagsAdapter.ViewHolder> i
         Picasso.get().load(currentItem.getAvatar().getThumbnailUrl()).placeholder(R.drawable.profile).into(holder.ivIcon);
         holder.tvName.setText(String.format("%s %s", currentItem.getFirstName(), currentItem.getLastName()));
 
-        if(userSelectedList.contains(currentItem)){
+        if (userSelectedList.contains(currentItem)) {
             holder.addToList = !holder.addToList;
             holder.ivFollow.setVisibility(View.VISIBLE);
             holder.ivTags.setVisibility(View.GONE);
@@ -72,16 +71,16 @@ public class TagsAdapter  extends RecyclerView.Adapter<TagsAdapter.ViewHolder> i
         holder.athleteContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               holder.updateViews();
-               if(holder.addToList && !userSelectedList.contains(currentItem)) {
-                   userSelectedList.add(currentItem);
+                holder.updateViews();
+                if (holder.addToList && !userSelectedList.contains(currentItem)) {
+                    userSelectedList.add(currentItem);
 
-               } else{
-                   if(userSelectedList.contains(currentItem)){
-                       userSelectedList.remove(currentItem);
-                   }
-               }
-               tagsView.updateUserSelectedList(userSelectedList);
+                } else {
+                    if (userSelectedList.contains(currentItem)) {
+                        userSelectedList.remove(currentItem);
+                    }
+                }
+                tagsView.updateUserSelectedList(userSelectedList);
             }
         });
 
@@ -125,10 +124,7 @@ public class TagsAdapter  extends RecyclerView.Adapter<TagsAdapter.ViewHolder> i
     }
 
 
-
-
-
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.ivIcon)
         ImageView ivIcon;
@@ -144,16 +140,16 @@ public class TagsAdapter  extends RecyclerView.Adapter<TagsAdapter.ViewHolder> i
         private boolean addToList = false;
 
 
-        public ViewHolder(View view){
+        public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
             ivTags.setVisibility(View.VISIBLE);
             ivFollow.setVisibility(View.GONE);
         }
 
-        void updateViews(){
+        void updateViews() {
             addToList = !addToList;
-            if(addToList) {
+            if (addToList) {
                 ivFollow.setVisibility(View.VISIBLE);
                 ivTags.setVisibility(View.GONE);
             } else {

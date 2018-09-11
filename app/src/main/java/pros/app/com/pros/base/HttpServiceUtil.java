@@ -87,7 +87,7 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
 
         switch (method) {
             case GET_METHOD:
-                if(url.contains("video")){
+                if (url.contains("video")) {
                     request = new Request.Builder()
                             .url(url)
                             .get()
@@ -103,7 +103,7 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
                             .addHeader("Accept", "application/json")
                             .build();
 
-                } else{
+                } else {
                     request = new Request.Builder()
                             .url(url)
                             .get()
@@ -114,28 +114,28 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
                 }
                 break;
             case POST_METHOD:
-                if(jsonRequest == null) {
+                if (jsonRequest == null) {
                     body = RequestBody.create(null, new byte[]{});
                 } else {
                     body = RequestBody.create(mediaType, jsonRequest);
                 }
 
-                    if (tag == ApiEndPoints.sign_in.getTag() || tag == ApiEndPoints.sign_up.getTag()) {
-                        request = new Request.Builder()
-                                .url(url)
-                                .post(body)
-                                .addHeader("content-type", "application/json")
-                                .addHeader("Accept", "application/json")
-                                .build();
-                    } else {
-                        request = new Request.Builder()
-                                .url(url)
-                                .post(body)
-                                .addHeader("content-type", "application/json")
-                                .addHeader(getTokenHeader(), getTokenValue())
-                                .addHeader("Accept", "application/json")
-                                .build();
-                    }
+                if (tag == ApiEndPoints.sign_in.getTag() || tag == ApiEndPoints.sign_up.getTag()) {
+                    request = new Request.Builder()
+                            .url(url)
+                            .post(body)
+                            .addHeader("content-type", "application/json")
+                            .addHeader("Accept", "application/json")
+                            .build();
+                } else {
+                    request = new Request.Builder()
+                            .url(url)
+                            .post(body)
+                            .addHeader("content-type", "application/json")
+                            .addHeader(getTokenHeader(), getTokenValue())
+                            .addHeader("Accept", "application/json")
+                            .build();
+                }
                 break;
             case DELETE_METHOD:
                 request = new Request.Builder()
@@ -158,14 +158,14 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
                 break;
 
             case PUT_METHOD:
-                if(jsonRequest.contains("video")) {
+                if (jsonRequest.contains("video")) {
 
                     mediaType = MediaType.parse("text/x-markdown; charset=utf-8");
                     File file = new File(jsonRequest);
                     request = new Request.Builder()
-                                .url(url)
-                                .put(RequestBody.create(mediaType, file))
-                                .build();
+                            .url(url)
+                            .put(RequestBody.create(mediaType, file))
+                            .build();
 
                 } else {
                     mediaType = MediaType.parse("image/jpg");

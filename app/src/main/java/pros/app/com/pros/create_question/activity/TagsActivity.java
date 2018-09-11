@@ -3,8 +3,8 @@ package pros.app.com.pros.create_question.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,8 +28,6 @@ import pros.app.com.pros.base.KeyboardAction;
 import pros.app.com.pros.create_question.adapter.TagsAdapter;
 import pros.app.com.pros.create_question.view.TagsView;
 import pros.app.com.pros.home.model.AthleteModel;
-import pros.app.com.pros.home.model.PostModel;
-import pros.app.com.pros.profile.adapter.FollowingAdapter;
 
 public class TagsActivity extends AppCompatActivity implements TagsView {
 
@@ -79,8 +76,8 @@ public class TagsActivity extends AppCompatActivity implements TagsView {
         setContentView(R.layout.activity_tags);
         ButterKnife.bind(this);
         Intent i = getIntent();
-        ArrayList<AthleteModel> athleteArrayList= i.getParcelableArrayListExtra("athletesList");
-        if(i.hasExtra("userSelectedList")){
+        ArrayList<AthleteModel> athleteArrayList = i.getParcelableArrayListExtra("athletesList");
+        if (i.hasExtra("userSelectedList")) {
             userSelectedList = i.getParcelableArrayListExtra("userSelectedList");
         }
 
@@ -113,8 +110,8 @@ public class TagsActivity extends AppCompatActivity implements TagsView {
 
     private void sendDataBack() {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("userSelectedList", userSelectedList );
-        setResult(Activity.RESULT_OK,returnIntent);
+        returnIntent.putExtra("userSelectedList", userSelectedList);
+        setResult(Activity.RESULT_OK, returnIntent);
         finish();
     }
 

@@ -6,7 +6,6 @@ import pros.app.com.pros.base.ApiEndPoints;
 import pros.app.com.pros.base.HttpServiceUtil;
 import pros.app.com.pros.base.HttpServiceView;
 import pros.app.com.pros.base.JsonUtils;
-import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.base.ProsConstants;
 import pros.app.com.pros.home.model.HomeMainModel;
 import pros.app.com.pros.profile.model.ProfileMainModel;
@@ -24,7 +23,7 @@ public class AthleteProfilePresenter implements HttpServiceView {
     @Override
     public void response(String response, int tag) {
         if (tag == ApiEndPoints.pros_posts.getTag()
-                || tag == ApiEndPoints.pros_reactions.getTag()){
+                || tag == ApiEndPoints.pros_reactions.getTag()) {
             try {
                 HomeMainModel homeMainModel = JsonUtils.from(response, HomeMainModel.class);
                 view.updateLikedPosts(homeMainModel.getPosts());
@@ -33,7 +32,7 @@ public class AthleteProfilePresenter implements HttpServiceView {
                 e.printStackTrace();
             }
         }
-        if(tag == ApiEndPoints.pros_answers.getTag()){
+        if (tag == ApiEndPoints.pros_answers.getTag()) {
             try {
                 HomeMainModel homeMainModel = JsonUtils.from(response, HomeMainModel.class);
                 view.updateLikedPosts(homeMainModel.getAnswers());
@@ -42,7 +41,7 @@ public class AthleteProfilePresenter implements HttpServiceView {
                 e.printStackTrace();
             }
         }
-        if(tag == ApiEndPoints.pros_questions.getTag()){
+        if (tag == ApiEndPoints.pros_questions.getTag()) {
             try {
                 HomeMainModel homeMainModel = JsonUtils.from(response, HomeMainModel.class);
                 view.updateLikedQuestions(homeMainModel.getQuestions());
@@ -58,7 +57,7 @@ public class AthleteProfilePresenter implements HttpServiceView {
 
     }
 
-    public void getPostData(int id){
+    public void getPostData(int id) {
         new HttpServiceUtil(
                 this,
                 String.format(ApiEndPoints.pros_posts.getApi(), id),
@@ -68,7 +67,7 @@ public class AthleteProfilePresenter implements HttpServiceView {
         ).execute();
     }
 
-    public void getReactionsData(int id){
+    public void getReactionsData(int id) {
         new HttpServiceUtil(
                 this,
                 String.format(ApiEndPoints.pros_reactions.getApi(), id),
@@ -78,7 +77,7 @@ public class AthleteProfilePresenter implements HttpServiceView {
         ).execute();
     }
 
-    public void getQuestionsData(int id){
+    public void getQuestionsData(int id) {
         new HttpServiceUtil(
                 this,
                 String.format(ApiEndPoints.pros_questions.getApi(), id),
@@ -88,7 +87,7 @@ public class AthleteProfilePresenter implements HttpServiceView {
         ).execute();
     }
 
-    public void getAnswersData(int id){
+    public void getAnswersData(int id) {
         new HttpServiceUtil(
                 this,
                 String.format(ApiEndPoints.pros_answers.getApi(), id),

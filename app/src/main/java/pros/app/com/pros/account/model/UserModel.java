@@ -34,7 +34,7 @@ public class UserModel {
     public UserModel() {
     }
 
-    public UserModel(int id, String email, String firstName, String lastName, String apiKey, String userType, String thumbUrl, String mediumUrl, String originalUrl ) {
+    public UserModel(int id, String email, String firstName, String lastName, String apiKey, String userType, String thumbUrl, String mediumUrl, String originalUrl) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;

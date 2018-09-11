@@ -32,7 +32,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         this.detailPresenter = detailPresenter;
     }
 
-    public void setData(List<PostModel> comments){
+    public void setData(List<PostModel> comments) {
         this.comments = comments;
     }
 
@@ -42,6 +42,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false);
         return new CommentsViewHolder(view);
     }
+
     @Override
     public void onBindViewHolder(@NonNull CommentsViewHolder holder, int position) {
 

@@ -8,7 +8,6 @@ import pros.app.com.pros.base.ApiEndPoints;
 import pros.app.com.pros.base.HttpServiceUtil;
 import pros.app.com.pros.base.HttpServiceView;
 import pros.app.com.pros.base.JsonUtils;
-import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.base.ProsConstants;
 import pros.app.com.pros.profile.model.FollowingModel;
 import pros.app.com.pros.profile.views.FollowingView;
