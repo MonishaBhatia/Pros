@@ -1,5 +1,6 @@
 package pros.app.com.pros.create_post.presenter;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.text.TextUtils;
 
@@ -16,14 +17,13 @@ import pros.app.com.pros.profile.model.UploadUrlModel;
 
 public class CreatePostPresenter implements HttpServiceView {
 
-    private String filePath;
     private VideoPathModel videoPathModel;
-    private Uri uri;
     private UploadUrlModel uploadUrlModel;
+    private byte[] byteArray;
 
-    public void getVideoUploadPath(String url, String filePath) {
+    public void getVideoUploadPath(String url, byte[] byteArray) {
 
-        this.filePath = filePath;
+        this.byteArray = byteArray;
 
         new HttpServiceUtil(
                 this,
@@ -40,7 +40,7 @@ public class CreatePostPresenter implements HttpServiceView {
         if (tag == ApiEndPoints.upload_video.getTag()) {
             try {
                 videoPathModel = JsonUtils.from(response, VideoPathModel.class);
-                uploadVideo();
+                uploadVideoToDb();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -66,19 +66,20 @@ public class CreatePostPresenter implements HttpServiceView {
                 this,
                 uploadUrlModel.getImageUploadUrl(),
                 ProsConstants.PUT_METHOD,
-                uri.toString(),
+                "",
+                byteArray,
                 ApiEndPoints.upload_url_to_db.getTag()
         ).execute();
     }
 
-    private void uploadVideo() {
-
+    private void uploadVideoToDb() {
         new HttpServiceUtil(
                 this,
                 videoPathModel.getUploadUrl(),
                 ProsConstants.PUT_METHOD,
-                filePath,
-                123
+                "video",
+                byteArray,
+                ApiEndPoints.upload_url_to_db.getTag()
         ).execute();
     }
 
@@ -92,8 +93,8 @@ public class CreatePostPresenter implements HttpServiceView {
         ).execute();
     }
 
-    public void getImageUploadUrl(Uri uri) {
-        this.uri = uri;
+    public void getImageUploadUrl(byte[] byteArray) {
+        this.byteArray = byteArray;
         new HttpServiceUtil(
                 this,
                 ApiEndPoints.upload_image.getApi(),

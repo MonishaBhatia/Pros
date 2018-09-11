@@ -22,7 +22,7 @@ public class SettingsPresenter implements HttpServiceView {
 
     private final SettingsView settingsView;
     private UploadUrlModel uploadUrlModel;
-    private Uri uri;
+    private byte[] byteArray;
 
     public SettingsPresenter(SettingsView settingsView) {
         this.settingsView = settingsView;
@@ -70,7 +70,8 @@ public class SettingsPresenter implements HttpServiceView {
                 this,
                 uploadUrlModel.getUploadUrl(),
                 ProsConstants.PUT_METHOD,
-                uri.toString(),
+                "",
+                byteArray,
                 ApiEndPoints.upload_url_to_db.getTag()
         ).execute();
     }
@@ -95,8 +96,8 @@ public class SettingsPresenter implements HttpServiceView {
         ).execute();
     }
 
-    public void getUploadUrl(Uri uri) {
-        this.uri = uri;
+    public void getUploadUrl(byte[] byteArray) {
+        this.byteArray = byteArray;
         new HttpServiceUtil(
                 this,
                 ApiEndPoints.upload_avatar.getApi(),

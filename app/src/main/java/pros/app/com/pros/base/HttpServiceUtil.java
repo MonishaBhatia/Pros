@@ -1,7 +1,9 @@
 package pros.app.com.pros.base;
 
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -11,6 +13,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import pros.app.com.pros.create_post.presenter.CreatePostPresenter;
 
 import static pros.app.com.pros.base.ProsConstants.DELETE_METHOD;
 import static pros.app.com.pros.base.ProsConstants.GET_METHOD;
@@ -21,6 +24,7 @@ import static pros.app.com.pros.base.ProsConstants.PUT_METHOD;
 public class HttpServiceUtil extends AsyncTask<String, String, String> {
 
 
+    private byte[] byteArray;
     MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static final int LOW_CONNECT_TIMEOUT = 30 * 1000;
     private static final long LOW_READ_TIMEOUT = 30 * 1000;
@@ -58,6 +62,14 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
         this.url = url;
         this.method = method;
         this.jsonRequest = jsonRequest;
+        this.tag = tag;
+    }
+    public HttpServiceUtil(HttpServiceView mListener, String url, String method, String jsonRequest, byte[] byteArray, int tag) {
+        this.mListener = mListener;
+        this.url = url;
+        this.method = method;
+        this.jsonRequest = jsonRequest;
+        this.byteArray = byteArray;
         this.tag = tag;
     }
 
@@ -160,20 +172,24 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
             case PUT_METHOD:
                 if (jsonRequest.contains("video")) {
 
-                    mediaType = MediaType.parse("text/x-markdown; charset=utf-8");
-                    File file = new File(jsonRequest);
+                    mediaType = MediaType.parse("application/octet-stream");
+                    body = RequestBody.create(mediaType, byteArray);
                     request = new Request.Builder()
                             .url(url)
-                            .put(RequestBody.create(mediaType, file))
+                            .put(body)
+                            .addHeader("Content-Type", "application/octet-stream")
+                            .addHeader(getTokenHeader(), getTokenValue())
                             .build();
 
                 } else {
+
                     mediaType = MediaType.parse("image/jpg");
-                    body = RequestBody.create(mediaType, jsonRequest);
+                    body = RequestBody.create(mediaType, byteArray);
                     request = new Request.Builder()
                             .url(url)
                             .put(body)
                             .addHeader("Content-Type", "image/jpg")
+                            .addHeader(getTokenHeader(), getTokenValue())
                             .build();
                 }
         }
