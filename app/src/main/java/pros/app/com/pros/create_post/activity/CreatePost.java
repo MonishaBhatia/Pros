@@ -1,11 +1,19 @@
 package pros.app.com.pros.create_post.activity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.DialogOnDeniedPermissionListener;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.wonderkiln.camerakit.CameraKit;
 import com.wonderkiln.camerakit.CameraView;
 
@@ -38,6 +46,20 @@ public class CreatePost extends AppCompatActivity {
 
         camera.setMethod(cameraMethod);
         camera.setCropOutput(cropOutput);
+
+        PermissionListener dialogPermissionListener =
+                DialogOnDeniedPermissionListener.Builder
+                        .withContext(this)
+                        .withTitle("Storage permission")
+                        .withMessage("Storage Permission is required to record videos")
+                        .withButtonText(android.R.string.ok)
+                        .withIcon(R.mipmap.ic_launcher)
+                        .build();
+
+
+        Dexter.withActivity(this)
+                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(dialogPermissionListener).check();
 
     }
 
