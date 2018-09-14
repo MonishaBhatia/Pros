@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -32,9 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pros.app.com.pros.R;
-import pros.app.com.pros.base.ApiEndPoints;
 import pros.app.com.pros.base.LogUtils;
-import pros.app.com.pros.create_post.presenter.CreatePostPresenter;
 import pros.app.com.pros.create_question.activity.TagsActivity;
 
 public class PreviewActivity extends AppCompatActivity {
@@ -45,13 +42,15 @@ public class PreviewActivity extends AppCompatActivity {
     @BindView(R.id.video)
     VideoView videoView;
 
-    private CreatePostPresenter createPostPresenter;
-
     public static final String APP_DIR = "VideoCompressor";
 
     public static final String COMPRESSED_VIDEOS_DIR = "/Compressed Videos/";
 
     public static final String TEMP_DIR = "/Temp/";
+    private String fileUri;
+    private byte[] imageByteArray;
+    private byte[] videoBytes;
+    private long length;
 
 
     @Override
@@ -61,16 +60,15 @@ public class PreviewActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setupToolbar();
-        createPostPresenter = new CreatePostPresenter();
 
         if (getIntent().getBooleanExtra("fromPicker", false)) {
 
             if (getIntent().hasExtra("videoFileUri")) {
-                String fileUri = getIntent().getStringExtra("videoFileUri");
+                fileUri = getIntent().getStringExtra("videoFileUri");
                 playVideo(fileUri);
 
             } else if (getIntent().hasExtra("imageFileUri")) {
-                String fileUri = getIntent().getStringExtra("imageFileUri");
+                fileUri = getIntent().getStringExtra("imageFileUri");
                 imageView.setVisibility(View.VISIBLE);
                 imageView.setImageURI(Uri.parse(fileUri));
                 Bitmap bitmap = null;
@@ -84,23 +82,21 @@ public class PreviewActivity extends AppCompatActivity {
 
         } else if (getIntent().getBooleanExtra("fromCamera", false)) {
 
-            byte[] jpeg = ResultHolder.getImage();
+            imageByteArray = ResultHolder.getImage();
             File video = ResultHolder.getVideo();
 
-            if (jpeg != null) {
+            if (imageByteArray != null) {
                 imageView.setVisibility(View.VISIBLE);
 
-                Bitmap bitmap = BitmapFactory.decodeByteArray(jpeg, 0, jpeg.length);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
 
                 if (bitmap == null) {
                     finish();
                     return;
                 }
                 imageView.setImageBitmap(bitmap);
-                createPostPresenter.getImageUploadUrl(jpeg);
 
             } else if (video != null) {
-                Log.e("Vode Path:", video.getPath());
                 playVideo(video.getAbsolutePath());
             }
 
@@ -141,7 +137,7 @@ public class PreviewActivity extends AppCompatActivity {
                     public void onSuccess() {
                         LogUtils.LOGD("Compress", "its done");
                         File file = new File(outPath);
-                        long length = file.length();
+                        length = file.length();
                         length = length / 1024;
 
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -154,9 +150,7 @@ public class PreviewActivity extends AppCompatActivity {
                             while (-1 != (n = fis.read(buf)))
                                 baos.write(buf, 0, n);
 
-                            byte[] videoBytes = baos.toByteArray();
-
-                            createPostPresenter.getVideoUploadPath(ApiEndPoints.upload_video.getApi() + "?file_name=movie.m4v&file_size=" + length, videoBytes);
+                            videoBytes = baos.toByteArray();
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -187,10 +181,8 @@ public class PreviewActivity extends AppCompatActivity {
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
+        imageByteArray = stream.toByteArray();
         bitmap.recycle();
-
-        createPostPresenter.getImageUploadUrl(byteArray);
     }
 
     public static void try2CreateCompressDir() {
@@ -218,8 +210,10 @@ public class PreviewActivity extends AppCompatActivity {
 
     @OnClick(R.id.post_content_button)
     void moveForward() {
-        Intent intent = new Intent(this, TagsActivity.class);
+        Intent intent = new Intent(PreviewActivity.this, TagsActivity.class);
+        intent.putExtra("ImageByte", imageByteArray);
+        intent.putExtra("VideoByte", videoBytes);
+        intent.putExtra("VideoLength", length);
         startActivity(intent);
-
     }
 }

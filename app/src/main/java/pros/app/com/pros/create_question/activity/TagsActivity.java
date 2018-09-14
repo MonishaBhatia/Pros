@@ -24,12 +24,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pros.app.com.pros.R;
+import pros.app.com.pros.base.ApiEndPoints;
 import pros.app.com.pros.base.KeyboardAction;
+import pros.app.com.pros.create_post.presenter.CreatePostPresenter;
 import pros.app.com.pros.create_question.adapter.TagsAdapter;
+import pros.app.com.pros.create_question.presenter.CreateQuestionPresenter;
+import pros.app.com.pros.create_question.view.CreateQuestionView;
 import pros.app.com.pros.create_question.view.TagsView;
 import pros.app.com.pros.home.model.AthleteModel;
 
-public class TagsActivity extends AppCompatActivity implements TagsView {
+public class TagsActivity extends AppCompatActivity implements TagsView, CreateQuestionView {
 
     private List<AthleteModel> athleteModelList;
 
@@ -48,10 +52,18 @@ public class TagsActivity extends AppCompatActivity implements TagsView {
 
     @BindView(R.id.ivClose)
     ImageView ivClose;
+    @BindView(R.id.post_button)
+    TextView tvPost;
 
 
     private TagsAdapter tagsAdapter;
     private ArrayList<AthleteModel> userSelectedList = new ArrayList<>();
+    private ArrayList<AthleteModel> athleteArrayList = new ArrayList<>();
+    private CreateQuestionPresenter createQuestionPresenter;
+    private CreatePostPresenter createPostPresenter;
+    private byte[] imageByte;
+    private byte[] videoByte;
+    private long length;
 
     TextWatcher watcher = new TextWatcher() {
         @Override
@@ -75,10 +87,24 @@ public class TagsActivity extends AppCompatActivity implements TagsView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tags);
         ButterKnife.bind(this);
+
+        createQuestionPresenter = new CreateQuestionPresenter(this);
+        createPostPresenter = new CreatePostPresenter();
+
         Intent i = getIntent();
-        ArrayList<AthleteModel> athleteArrayList = i.getParcelableArrayListExtra("athletesList");
-        if (i.hasExtra("userSelectedList")) {
-            userSelectedList = i.getParcelableArrayListExtra("userSelectedList");
+        imageByte = i.getByteArrayExtra("ImageByte");
+        videoByte = i.getByteArrayExtra("VideoByte");
+        length = i.getLongExtra("VideoLength", 0);
+
+        if (null == imageByte && null == videoByte) {
+            tvPost.setVisibility(View.GONE);
+            athleteArrayList = i.getParcelableArrayListExtra("athletesList");
+            if (i.hasExtra("userSelectedList")) {
+                userSelectedList = i.getParcelableArrayListExtra("userSelectedList");
+            }
+        } else {
+            createQuestionPresenter.getAthletesData();
+            tvPost.setVisibility(View.VISIBLE);
         }
 
 
@@ -142,5 +168,34 @@ public class TagsActivity extends AppCompatActivity implements TagsView {
     @Override
     public void updateUserSelectedList(ArrayList<AthleteModel> userSelectedList) {
         this.userSelectedList = userSelectedList;
+    }
+
+    @Override
+    public void updateAthletesData(List<AthleteModel> athletes) {
+        athleteArrayList = new ArrayList<>(athletes);
+    }
+
+    @Override
+    public void closeActivity() {
+        finish();
+    }
+
+    @Override
+    public void showLoader() {
+
+    }
+
+    @Override
+    public void showPostErrorMessage() {
+
+    }
+
+    @OnClick(R.id.post_button)
+    public void onClickPostButton() {
+        if (videoByte == null) {
+            createPostPresenter.getImageUploadUrl(imageByte);
+        } else {
+            createPostPresenter.getVideoUploadPath(ApiEndPoints.upload_video.getApi() + "?file_name=movie.m4v&file_size=" + length, videoByte);
+        }
     }
 }
