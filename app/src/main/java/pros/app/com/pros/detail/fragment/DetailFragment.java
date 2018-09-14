@@ -46,6 +46,7 @@ import pros.app.com.pros.base.CustomDialogListener;
 import pros.app.com.pros.base.DateUtils;
 import pros.app.com.pros.base.KeyboardAction;
 import pros.app.com.pros.base.PrefUtils;
+import pros.app.com.pros.create_post.activity.CreatePost;
 import pros.app.com.pros.detail.adapter.CommentsAdapter;
 import pros.app.com.pros.detail.adapter.MentionsAdapter;
 import pros.app.com.pros.detail.adapter.ReactionAthlete;
@@ -65,6 +66,9 @@ import pros.app.com.pros.home.model.PostModel;
 public class DetailFragment extends Fragment implements DetailView, CustomDialogListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_POST_MODEL = "post_model";
+    private static final String ARG_CONTENT_TYPE = "content_type";
+    private static final String REACTIONS = "reactions";
+    private static final String ANSWERS = "answers";
 
     private PostModel receivedPostModel;
 
@@ -117,6 +121,9 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
     @BindView(R.id.rv_comments)
     RecyclerView rvComments;
 
+    @BindView(R.id.reaction_button)
+    Button reactionButton;
+
     private BottomSheetBehavior behavior;
 
     boolean videoVisibleToUser = false;
@@ -129,6 +136,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
     private int id;
     private int commentId;
     private int commentPosition;
+    private String recievedContentType;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -142,10 +150,11 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
      * @return A new instance of fragment DetailFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DetailFragment newInstance(PostModel postModel) {
+    public static DetailFragment newInstance(PostModel postModel, String contentType) {
         DetailFragment fragment = new DetailFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_POST_MODEL, postModel);
+        args.putString(ARG_CONTENT_TYPE, contentType);
         fragment.setArguments(args);
         return fragment;
     }
@@ -155,8 +164,8 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             receivedPostModel = getArguments().getParcelable(ARG_POST_MODEL);
+            recievedContentType = getArguments().getString(ARG_CONTENT_TYPE);
         }
-
         detailPresenter = new DetailPresenter(this);
     }
 
@@ -188,6 +197,17 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
         String athleteFullName = "";
         String thumbnailUrl = "";
         String athleteThumbnailUrl = "";
+
+        if(PrefUtils.isAthlete()){
+            if(REACTIONS.equalsIgnoreCase(recievedContentType)
+                    || ANSWERS.equalsIgnoreCase(recievedContentType)){
+                reactionButton.setVisibility(View.GONE);
+            } else {
+                reactionButton.setVisibility(View.VISIBLE);
+            }
+        } else {
+            reactionButton.setVisibility(View.GONE);
+        }
 
         if (contentType != null &&
                 (contentType.equalsIgnoreCase("image") || contentType.equalsIgnoreCase("video"))) {
@@ -532,6 +552,13 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
         } else {
             detailPresenter.flagPost(receivedPostModel.getId());
         }
+    }
+
+    @OnClick(R.id.reaction_button)
+    void createReaction(){
+        Intent createPostIntent = new Intent(getActivity(), CreatePost.class);
+        createPostIntent.putExtra("create_reaction", true);
+        startActivity(createPostIntent);
     }
 
     @Override

@@ -32,9 +32,13 @@ public class DetailActivity extends FragmentActivity implements DetailFragment.O
 
         Intent i = getIntent();
         ArrayList<PostModel> postArrayList = i.getParcelableArrayListExtra("postArray");
+        String receivedContentType = "";
+        if(i.hasExtra("contentType")) {
+           receivedContentType = i.getStringExtra("contentType");
+        }
         int currentPosition = i.getIntExtra("selectedPosition", 0);
         LogUtils.LOGE("Detail:", "" + currentPosition);
-        detailPageAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), postArrayList);
+        detailPageAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), postArrayList, receivedContentType);
         detailViewPager.setAdapter(detailPageAdapter);
         detailViewPager.setCurrentItem(currentPosition);
 

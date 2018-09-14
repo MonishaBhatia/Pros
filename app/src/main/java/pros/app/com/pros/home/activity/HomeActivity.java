@@ -130,7 +130,7 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
         }
         rvPosts.preDownload(urls);
 
-        postAdapter = new PostAdapter(postsList, getApplicationContext());
+        postAdapter = new PostAdapter(postsList, getApplicationContext(), "posts");
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         rvPosts.setLayoutManager(mLayoutManager);
         rvPosts.setItemAnimator(new DefaultItemAnimator());

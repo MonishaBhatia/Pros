@@ -35,10 +35,12 @@ public class PostAdapter extends AAH_VideosAdapter {
 
     private ArrayList<PostModel> postsArrayList;
     private Context context;
+    private String contentType;
 
-    public PostAdapter(ArrayList<PostModel> postsArrayList, Context context) {
+    public PostAdapter(ArrayList<PostModel> postsArrayList, Context context, String contentType) {
         this.postsArrayList = postsArrayList;
         this.context = context;
+        this.contentType = contentType;
     }
 
     @NonNull
@@ -174,6 +176,7 @@ public class PostAdapter extends AAH_VideosAdapter {
                     Intent intent = new Intent(context, DetailActivity.class);
                     intent.putExtra("postArray", postsArrayList);
                     intent.putExtra("selectedPosition", this.getLayoutPosition());
+                    intent.putExtra("contentType", contentType);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                     break;
