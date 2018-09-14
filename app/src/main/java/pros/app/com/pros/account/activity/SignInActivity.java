@@ -62,9 +62,9 @@ public class SignInActivity extends BaseActivity implements SignInView {
         playVideo();
     }
 
-    private void playVideo(){
+    private void playVideo() {
 
-        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+ R.raw.login);
+        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.login);
         videoView.setVideoURI(uri);
 
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -105,7 +105,7 @@ public class SignInActivity extends BaseActivity implements SignInView {
     @Override
     public void onSucess(SignInModel signInModel) {
 
-        if(signInModel.getFan() != null) {
+        if (signInModel.getFan() != null) {
             PrefUtils.saveUser(signInModel.getFan());
         } else {
             PrefUtils.saveUser(signInModel.getAthlete());

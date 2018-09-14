@@ -7,6 +7,7 @@ public interface SignInView {
     void onSucess(SignInModel signInModel);
 
     void onFailure(String message);
+
     void onValidationError(int message);
 
     void onSucessforgotPswd();

@@ -6,7 +6,7 @@ public class MediaUpload extends AsyncTask {
 
     private HttpServiceView mListener;
 
-    MediaUpload(HttpServiceView mListener){
+    MediaUpload(HttpServiceView mListener) {
         this.mListener = mListener;
     }
 

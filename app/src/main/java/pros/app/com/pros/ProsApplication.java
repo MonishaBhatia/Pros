@@ -5,6 +5,7 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.danikula.videocache.HttpProxyCacheServer;
+
 import pros.app.com.pros.base.PrefUtils;
 
 public class ProsApplication extends MultiDexApplication {

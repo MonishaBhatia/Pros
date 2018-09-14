@@ -1,15 +1,16 @@
 package pros.app.com.pros.search.adapter;
 
-import android.graphics.Color;
+import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.allattentionhere.autoplayvideos.AAH_CustomViewHolder;
+import com.allattentionhere.autoplayvideos.AAH_VideoImage;
+import com.allattentionhere.autoplayvideos.AAH_VideosAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -18,20 +19,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import pros.app.com.pros.R;
-import pros.app.com.pros.base.DateUtils;
+import pros.app.com.pros.detail.activity.DetailActivity;
 import pros.app.com.pros.home.model.PostModel;
 
-public class TopPostsAdapter extends RecyclerView.Adapter<TopPostsAdapter.ViewHolder> {
+public class TopPostsAdapter extends AAH_VideosAdapter {
 
     private ArrayList<PostModel> postsArrayList;
 
-    public  TopPostsAdapter(ArrayList<PostModel> postsArrayList){
+    public TopPostsAdapter(ArrayList<PostModel> postsArrayList) {
         this.postsArrayList = postsArrayList;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AAH_CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_top_posts, parent, false);
 
@@ -39,28 +40,29 @@ public class TopPostsAdapter extends RecyclerView.Adapter<TopPostsAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AAH_CustomViewHolder holder, int position) {
         //Main logic of updating UI
 
-        PostModel postModel =  postsArrayList.get(position);
+        PostModel postModel = postsArrayList.get(position);
         String contentType = postModel.getContentType();
 
-        if(contentType != null &&
-                        (contentType.equalsIgnoreCase("image") || contentType.equalsIgnoreCase("video")));
+        if (contentType != null &&
+                (contentType.equalsIgnoreCase("image") || contentType.equalsIgnoreCase("video"))) ;
         {
 
-            String thumbnailUrl= postModel.getUrls().getThumbnailUrl();
-            String athleteThumbnailUrl =  postModel.getAthlete().getAvatar().getThumbnailUrl();
+            String thumbnailUrl = postModel.getUrls().getThumbnailUrl();
+            String athleteThumbnailUrl = postModel.getAthlete().getAvatar().getThumbnailUrl();
             String athleteFullName = postModel.getAthlete().getFirstName() + " " + postModel.getAthlete().getLastName();
             int reactionsCount = postModel.getReactions().size();
 
-            holder.postLikeCount.setText("" + postModel.getLikes().getCount());
-            holder.postReactionCount.setText("" +reactionsCount);
-            Picasso.get().load(thumbnailUrl).into(holder.postImage);
-            Picasso.get().load(athleteThumbnailUrl).into(holder.athleteThumb);
-            holder.athleteName.setText(athleteFullName);
+            ((ViewHolder) holder).postLikeCount.setText("" + postModel.getLikes().getCount());
+            ((ViewHolder) holder).postReactionCount.setText("" + reactionsCount);
+            Picasso.get().load(athleteThumbnailUrl).into(((ViewHolder) holder).athleteThumb);
+            ((ViewHolder) holder).athleteName.setText(athleteFullName);
 
-
+            holder.setVideoUrl(postModel.getUrls().getIntroUrl());
+            holder.setImageUrl(thumbnailUrl);
+            Picasso.get().load(holder.getImageUrl()).into(holder.getAAH_ImageView());
         }
 
     }
@@ -70,11 +72,11 @@ public class TopPostsAdapter extends RecyclerView.Adapter<TopPostsAdapter.ViewHo
         return postsArrayList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends AAH_CustomViewHolder implements View.OnClickListener {
 
         //Bind the view
         @BindView(R.id.post_image)
-        ImageView postImage;
+        AAH_VideoImage postImage;
 
         @BindView(R.id.post_reaction_count)
         TextView postReactionCount;
@@ -88,12 +90,40 @@ public class TopPostsAdapter extends RecyclerView.Adapter<TopPostsAdapter.ViewHo
         @BindView(R.id.athlete_thumb)
         CircleImageView athleteThumb;
 
+        @BindView(R.id.container)
+        FrameLayout container;
 
-        public ViewHolder(View view){
+
+        public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+            container.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.container:
+                    Intent intent = new Intent(container.getContext(), DetailActivity.class);
+                    intent.putExtra("postArray", postsArrayList);
+                    intent.putExtra("selectedPosition", this.getLayoutPosition());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    container.getContext().startActivity(intent);
+                    break;
+            }
+        }
+
+        @Override
+        public void videoStarted() {
+            super.videoStarted();
+            muteVideo();
+        }
+
+        @Override
+        public void pauseVideo() {
+            super.pauseVideo();
+            muteVideo();
         }
     }
-
 
 }

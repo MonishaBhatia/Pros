@@ -28,11 +28,13 @@ public class UserModel {
     private AvatarModel avatar;
 
     private String thumbUrl;
+    private String mediumUrl;
+    private String originalUrl;
 
     public UserModel() {
     }
 
-    public UserModel(int id, String email, String firstName, String lastName, String apiKey, String userType, String thumbUrl) {
+    public UserModel(int id, String email, String firstName, String lastName, String apiKey, String userType, String thumbUrl, String mediumUrl, String originalUrl) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
@@ -40,6 +42,8 @@ public class UserModel {
         this.apiKey = apiKey;
         this.userType = userType;
         this.thumbUrl = thumbUrl;
+        this.mediumUrl = mediumUrl;
+        this.originalUrl = originalUrl;
     }
 
     public int getId() {
@@ -88,5 +92,13 @@ public class UserModel {
 
     public void setThumbUrl(String thumbUrl) {
         this.thumbUrl = thumbUrl;
+    }
+
+    public String getMediumUrl() {
+        return mediumUrl;
+    }
+
+    public String getOriginalUrl() {
+        return originalUrl;
     }
 }

@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,10 +24,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-import pros.app.com.pros.ProsApplication;
 import pros.app.com.pros.R;
 import pros.app.com.pros.base.DateUtils;
-import pros.app.com.pros.base.LogUtils;
 import pros.app.com.pros.detail.activity.DetailActivity;
 import pros.app.com.pros.detail.adapter.ReactionAthlete;
 import pros.app.com.pros.home.model.AthleteModel;
@@ -39,7 +36,7 @@ public class PostAdapter extends AAH_VideosAdapter {
     private ArrayList<PostModel> postsArrayList;
     private Context context;
 
-    public PostAdapter(ArrayList<PostModel> postsArrayList, Context context){
+    public PostAdapter(ArrayList<PostModel> postsArrayList, Context context) {
         this.postsArrayList = postsArrayList;
         this.context = context;
     }
@@ -61,14 +58,13 @@ public class PostAdapter extends AAH_VideosAdapter {
     @Override
     public void onBindViewHolder(@NonNull AAH_CustomViewHolder holder, int position) {
         //Main logic of updating UI
-        PostModel postModel =  postsArrayList.get(position);
+        PostModel postModel = postsArrayList.get(position);
         String contentType = postModel.getContentType();
         String dateDifference = DateUtils.getDateDifference(postModel.getCreatedAt(), false);
 
-        if(postModel.getQuestioner() != null ||
+        if (postModel.getQuestioner() != null ||
                 (contentType != null &&
-                (contentType.equalsIgnoreCase("image") || contentType.equalsIgnoreCase("video"))))
-        {
+                        (contentType.equalsIgnoreCase("image") || contentType.equalsIgnoreCase("video")))) {
             String athleteFullName = "";
             String thumbnailUrl = "";
             String athleteThumbnailUrl = "";
@@ -76,11 +72,11 @@ public class PostAdapter extends AAH_VideosAdapter {
             ((PostsViewHolder) holder).postLike.setText("" + postModel.getLikes().getCount());
             List<PostModel> reactionsList = postModel.getReactions();
 
-            if(reactionsList.size() >0){
+            if (reactionsList.size() > 0) {
 
                 ArrayList<AthleteModel> athleteModels = new ArrayList<>();
 
-                for(int i=0; i<reactionsList.size(); i++){
+                for (int i = 0; i < reactionsList.size(); i++) {
                     athleteModels.add(reactionsList.get(i).getAthlete());
                 }
 
@@ -89,7 +85,7 @@ public class PostAdapter extends AAH_VideosAdapter {
             }
 
 
-            if(postModel.getQuestioner() != null){
+            if (postModel.getQuestioner() != null) {
                 athleteFullName = postModel.getQuestioner().getName();
                 thumbnailUrl = postModel.getQuestioner().getAvatar().getThumbnailUrl();
                 athleteThumbnailUrl = postModel.getQuestioner().getAvatar().getThumbnailUrl();
@@ -102,15 +98,15 @@ public class PostAdapter extends AAH_VideosAdapter {
                 Picasso.get().load(holder.getImageUrl()).into(holder.getAAH_ImageView());
 
             } else {
-                thumbnailUrl= postModel.getUrls().getThumbnailUrl();
-                athleteThumbnailUrl =  postModel.getAthlete().getAvatar().getThumbnailUrl();
+                thumbnailUrl = postModel.getUrls().getMediumUrl();
+                athleteThumbnailUrl = postModel.getAthlete().getAvatar().getThumbnailUrl();
                 athleteFullName = postModel.getAthlete().getFirstName() + " " + postModel.getAthlete().getLastName();
                 ((PostsViewHolder) holder).questionContainer.setVisibility(View.GONE);
                 ((PostsViewHolder) holder).questionContainer.setVisibility(View.GONE);
                 ((PostsViewHolder) holder).athleteName.setTextColor(Color.parseColor("#ffffff"));
 
                 holder.setVideoUrl(postModel.getUrls().getIntroUrl());
-               // holder.setVideoUrl(ProsApplication.getProxy().getProxyUrl(postModel.getUrls().getIntroUrl()+"")); // url should not be null
+                // holder.setVideoUrl(ProsApplication.getProxy().getProxyUrl(postModel.getUrls().getIntroUrl()+"")); // url should not be null
                 holder.setImageUrl(thumbnailUrl);
                 Picasso.get().load(holder.getImageUrl()).into(holder.getAAH_ImageView());
             }
@@ -128,7 +124,7 @@ public class PostAdapter extends AAH_VideosAdapter {
         return postsArrayList.size();
     }
 
-    public class PostsViewHolder extends AAH_CustomViewHolder implements View.OnClickListener{
+    public class PostsViewHolder extends AAH_CustomViewHolder implements View.OnClickListener {
 
         //Bind the view
         @BindView(R.id.post_image)
@@ -164,7 +160,7 @@ public class PostAdapter extends AAH_VideosAdapter {
         @BindView(R.id.athlete_list)
         RecyclerView athleteRecyclerview;
 
-        public PostsViewHolder(View view){
+        public PostsViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
             postContainer.setOnClickListener(this);
@@ -183,18 +179,17 @@ public class PostAdapter extends AAH_VideosAdapter {
                     break;
             }
         }
-        
+
         @Override
         public void videoStarted() {
             super.videoStarted();
             muteVideo();
-            LogUtils.LOGD("PlayPlay", "Video started : " + getAdapterPosition());
         }
+
         @Override
         public void pauseVideo() {
             super.pauseVideo();
             muteVideo();
-            LogUtils.LOGD("PlayPlay", "Video paused : " + getAdapterPosition());
         }
     }
 

@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-feature
@@ -15,6 +16,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
@@ -65,7 +67,8 @@
         <activity
             android:name=".create_question.activity.AskQuestionActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".create_question.activity.TagsActivity"></activity>
+        <activity android:name=".create_question.activity.TagsActivity" />
+        <activity android:name=".profile.activity.AthleteActivity" />
     </application>
 
 </manifest>

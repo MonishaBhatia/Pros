@@ -70,9 +70,9 @@ public class SignUpActivity extends BaseActivity implements SignInView {
         playVideo();
     }
 
-    private void playVideo(){
+    private void playVideo() {
 
-        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+ R.raw.login);
+        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.login);
         videoView.setVideoURI(uri);
 
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -88,7 +88,7 @@ public class SignUpActivity extends BaseActivity implements SignInView {
 
 
     @OnClick(R.id.ivBack)
-    public void onClickBack(){
+    public void onClickBack() {
         finish();
     }
 

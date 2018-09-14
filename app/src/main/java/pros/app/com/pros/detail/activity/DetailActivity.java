@@ -2,10 +2,9 @@ package pros.app.com.pros.detail.activity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import java.util.ArrayList;
 
@@ -20,7 +19,6 @@ import pros.app.com.pros.home.model.PostModel;
 public class DetailActivity extends FragmentActivity implements DetailFragment.OnFragmentInteractionListener {
 
 
-
     @BindView(R.id.pager)
     ViewPager detailViewPager;
 
@@ -33,9 +31,9 @@ public class DetailActivity extends FragmentActivity implements DetailFragment.O
         ButterKnife.bind(this);
 
         Intent i = getIntent();
-        ArrayList<PostModel> postArrayList= i.getParcelableArrayListExtra("postArray");
+        ArrayList<PostModel> postArrayList = i.getParcelableArrayListExtra("postArray");
         int currentPosition = i.getIntExtra("selectedPosition", 0);
-        LogUtils.LOGE("Detail:", ""+currentPosition);
+        LogUtils.LOGE("Detail:", "" + currentPosition);
         detailPageAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), postArrayList);
         detailViewPager.setAdapter(detailPageAdapter);
         detailViewPager.setCurrentItem(currentPosition);

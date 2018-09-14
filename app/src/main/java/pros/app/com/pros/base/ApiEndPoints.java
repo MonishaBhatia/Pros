@@ -2,7 +2,7 @@ package pros.app.com.pros.base;
 
 public enum ApiEndPoints {
 
-    sign_in("/sign-in",1),
+    sign_in("/sign-in", 1),
     fb_sign_in("/sign-in/facebook/create", 2),
     sign_out("/sign-out", 3),
     sign_up("/sign-up", 4),
@@ -74,7 +74,7 @@ public enum ApiEndPoints {
     }
 
     public String getApi() {
-        return String.format("%s%s", BASE_URL , api);
+        return String.format("%s%s", BASE_URL, api);
     }
 
     public int getTag() {

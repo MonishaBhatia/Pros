@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -13,13 +12,23 @@
         android:layout_height="match_parent">
 
         <ImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_400"
+            android:layout_marginTop="@dimen/dp_12"
+            android:scaleType="centerCrop"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
             android:id="@+id/ivSettings"
             android:layout_width="@dimen/dp_32"
             android:layout_height="@dimen/dp_32"
             android:layout_marginLeft="@dimen/dp_8"
             android:layout_marginTop="@dimen/dp_8"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/ivAvatar"
+            app:layout_constraintTop_toTopOf="@id/ivAvatar"
             app:srcCompat="@drawable/ic_settings" />
 
         <ImageView
@@ -28,12 +37,12 @@
             android:layout_height="@dimen/dp_32"
             android:layout_marginRight="@dimen/dp_8"
             android:layout_marginTop="@dimen/dp_8"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="@id/ivAvatar"
+            app:layout_constraintTop_toTopOf="@id/ivAvatar"
             app:srcCompat="@drawable/ic_right_arrow" />
 
         <ImageView
-            android:id="@+id/ivAvatar"
+            android:id="@+id/ivAvatarDefault"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_200"
             android:layout_marginTop="@dimen/dp_12"
@@ -42,23 +51,25 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+
         <TextView
             android:id="@+id/tvName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_12"
+            android:layout_marginTop="@dimen/dp_40"
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_24"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/ivAvatar"
+            app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
+            app:layout_constraintTop_toTopOf="@id/ivAvatar"
             tools:text="Testing Test" />
 
         <TextView
             android:id="@+id/tvNumFollowing"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_50"
+            android:layout_marginTop="@dimen/dp_32"
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_16"
@@ -120,36 +131,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintTop_toBottomOf="@+id/tab_layout" />
-
-
-        <!--        <TextView
-                    android:id="@+id/label_nothing"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/dp_50"
-                    android:drawablePadding="@dimen/dp_16"
-                    android:drawableTop="@drawable/ic_slideshow"
-                    android:gravity="center"
-                    android:text="@string/no_liked_posts"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/sp_12"
-                    app:layout_constraintTop_toBottomOf="@id/tvLikedVideos" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/liked_posts"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    app:layout_constraintTop_toBottomOf="@id/tvLikedVideos" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/liked_questions"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/dp_16"
-                    android:visibility="gone"
-                    app:layout_constraintTop_toBottomOf="@id/tvLikedVideos"
-                    tools:listitem="@layout/item_liked_question" />-->
 
     </android.support.constraint.ConstraintLayout>
 </android.support.v4.widget.NestedScrollView>

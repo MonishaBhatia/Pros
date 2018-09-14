@@ -18,7 +18,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import pros.app.com.pros.R;
-import pros.app.com.pros.home.adapter.PostAdapter;
 import pros.app.com.pros.home.model.AthleteModel;
 import pros.app.com.pros.profile.activity.AthleteProfileActivity;
 
@@ -32,8 +31,8 @@ public class TopProsAdapter extends RecyclerView.Adapter<TopProsAdapter.ViewHold
     private Context context;
 
 
-    public TopProsAdapter(Context context, ArrayList<AthleteModel> athleteModels){
-        this.context =context;
+    public TopProsAdapter(Context context, ArrayList<AthleteModel> athleteModels) {
+        this.context = context;
         this.athleteModelArrayList = athleteModels;
     }
 
@@ -61,7 +60,7 @@ public class TopProsAdapter extends RecyclerView.Adapter<TopProsAdapter.ViewHold
         return athleteModelArrayList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.pros_thumb)
         CircleImageView prosThumb;
@@ -75,7 +74,7 @@ public class TopProsAdapter extends RecyclerView.Adapter<TopProsAdapter.ViewHold
         @BindView(R.id.athlete_row)
         LinearLayout athleteRow;
 
-        public ViewHolder(View view){
+        public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
             athleteRow.setOnClickListener(this);

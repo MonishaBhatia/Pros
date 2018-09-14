@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import pros.app.com.pros.ProsApplication;
 import pros.app.com.pros.R;
 import pros.app.com.pros.base.ApiEndPoints;
 import pros.app.com.pros.base.BaseView;
@@ -54,5 +53,15 @@ public class ChangePasswordPresenter implements HttpServiceView {
             changePswd(jsonRequest.toString());
         }
 
+    }
+
+    public void sendInvite(String request) {
+        new HttpServiceUtil(
+                this,
+                ApiEndPoints.post_invite.getApi(),
+                ProsConstants.POST_METHOD,
+                request,
+                ApiEndPoints.post_invite.getTag()
+        ).execute();
     }
 }

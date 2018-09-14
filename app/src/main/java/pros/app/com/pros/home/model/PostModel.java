@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,6 +108,10 @@ public class PostModel implements Parcelable {
 
     public List<PostModel> getComments() {
         return comments;
+    }
+
+    public void setComments(List<PostModel> comments) {
+        this.comments = comments;
     }
 
     public String getText() {

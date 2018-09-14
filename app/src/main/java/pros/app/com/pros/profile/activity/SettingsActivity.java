@@ -9,13 +9,15 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,8 +28,8 @@ import pros.app.com.pros.base.CustomDialogFragment;
 import pros.app.com.pros.base.CustomDialogListener;
 import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.launch_screen.LaunchActivity;
-import pros.app.com.pros.profile.views.SettingsView;
 import pros.app.com.pros.profile.presenter.SettingsPresenter;
+import pros.app.com.pros.profile.views.SettingsView;
 
 import static pros.app.com.pros.base.ProsConstants.FOLLOWING_LIST;
 import static pros.app.com.pros.base.ProsConstants.IS_FAN;
@@ -35,12 +37,24 @@ import static pros.app.com.pros.base.ProsConstants.PROFILE_ID;
 
 public class SettingsActivity extends BaseActivity implements SettingsView, CustomDialogListener {
 
+    @BindView(R.id.ivPic)
+    ImageView ivPic;
     @BindView(R.id.ivAvatar)
     ImageView ivAvatar;
     @BindView(R.id.tvName)
     TextView tvName;
     @BindView(R.id.tvNumFollowing)
     TextView tvNumFollowing;
+    @BindView(R.id.tvContact)
+    TextView tvContact;
+    @BindView(R.id.tvNumFollower)
+    TextView tvNumFollower;
+    @BindView(R.id.viewFollower)
+    View viewFollower;
+    @BindView(R.id.viewFollowing)
+    View viewFollowing;
+    @BindView(R.id.separator)
+    View separator;
 
     private SettingsPresenter settingsPresenter;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -60,7 +74,20 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
 
     private void initializeViews() {
 
-//        Picasso.get().load(PrefUtils.getUser().getAvatar().getMediumUrl()).error(R.drawable.ic_account).into(ivAvatar);
+        if (PrefUtils.isAthlete()) {
+            viewFollower.setVisibility(View.VISIBLE);
+            separator.setVisibility(View.VISIBLE);
+            tvNumFollower.setText(String.valueOf(getIntent().getIntExtra("Follower_Count", 0)));
+            tvContact.setText(getString(R.string.invite_a_pro));
+        } else {
+            viewFollower.setVisibility(View.GONE);
+            separator.setVisibility(View.GONE);
+        }
+
+        if (!TextUtils.isEmpty(PrefUtils.getUser().getMediumUrl()))
+            Picasso.get().load(PrefUtils.getUser().getMediumUrl()).into(ivPic);
+        else if (!TextUtils.isEmpty(PrefUtils.getString("Image")))
+            Picasso.get().load(PrefUtils.getString("Image")).into(ivPic);
 
         tvName.setText(String.format("%s %s", PrefUtils.getUser().getFirstName(), PrefUtils.getUser().getLastName()));
         tvNumFollowing.setText(String.valueOf(getIntent().getIntExtra("Follow_Count", 0)));
@@ -69,14 +96,18 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
     @OnClick(R.id.tvContact)
     public void onClickContactAdmin() {
 
-        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-        emailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        emailIntent.setType("message/rfc822");
-        emailIntent.setData(Uri.parse("mailto:hello@theprosapp.com"));
-        try {
-            startActivity(Intent.createChooser(emailIntent, "Send mail using..."));
-        } catch (ActivityNotFoundException e) {
-            openDialog(getString(R.string.email_error_title), getString(R.string.email_error_content), "Close");
+        if (PrefUtils.isAthlete()) {
+            InviteAProFragment.newInstance().show(this.getSupportFragmentManager(), InviteAProFragment.TAG);
+        } else {
+            Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+            emailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            emailIntent.setType("message/rfc822");
+            emailIntent.setData(Uri.parse("mailto:hello@theprosapp.com"));
+            try {
+                startActivity(Intent.createChooser(emailIntent, "Send mail using..."));
+            } catch (ActivityNotFoundException e) {
+                openDialog(getString(R.string.email_error_title), getString(R.string.email_error_content), "Close");
+            }
         }
     }
 
@@ -118,6 +149,13 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
         startActivity(intent);
     }
 
+    @OnClick({R.id.tvNumFollower, R.id.labelFollower})
+    public void onCLickFollower() {
+        Intent intent = new Intent(this, FollowingActivity.class);
+        intent.putExtra(PROFILE_ID, PrefUtils.getUser().getId());
+        startActivity(intent);
+    }
+
     @OnClick(R.id.ivAvatar)
     public void onClickAvatar() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -133,7 +171,9 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            ivAvatar.setImageBitmap(imageBitmap);
+            ivPic.setImageBitmap(imageBitmap);
+
+
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -144,8 +184,11 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
             // CALL THIS METHOD TO GET THE ACTUAL PATH
             File finalFile = new File(getRealPathFromURI(tempUri));
 
-            settingsPresenter.getUploadUrl(Uri.fromFile(finalFile));
+            byte[] byteArray = baos.toByteArray();
+            imageBitmap.recycle();
 
+            PrefUtils.putString("Image", Uri.fromFile(finalFile).toString());
+            settingsPresenter.getUploadUrl(byteArray);
         }
     }
 

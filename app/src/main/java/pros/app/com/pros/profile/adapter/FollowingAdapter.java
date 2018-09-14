@@ -127,7 +127,7 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.Foll
                     Intent intent = new Intent(context, AthleteProfileActivity.class);
                     intent.putExtra(PROFILE_ID, athleteModelList.get(getAdapterPosition()).getId());
                     intent.putExtra(IMAGE_URL, athleteModelList.get(getAdapterPosition()).getAvatar().getMediumUrl());
-                    intent.putExtra(NAME, String.format("%s %s", athleteModelList.get(getAdapterPosition()).getFirstName(),athleteModelList.get(getAdapterPosition()).getLastName()));
+                    intent.putExtra(NAME, String.format("%s %s", athleteModelList.get(getAdapterPosition()).getFirstName(), athleteModelList.get(getAdapterPosition()).getLastName()));
                     context.startActivity(intent);
                     break;
                 case R.id.ivFollow:

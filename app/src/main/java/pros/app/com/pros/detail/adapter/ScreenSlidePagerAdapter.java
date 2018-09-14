@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import java.util.ArrayList;
 
 import pros.app.com.pros.detail.fragment.DetailFragment;
-import pros.app.com.pros.home.adapter.PostAdapter;
 import pros.app.com.pros.home.model.PostModel;
 
 public class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {

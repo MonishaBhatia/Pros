@@ -2,7 +2,6 @@ package pros.app.com.pros.profile.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +10,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -73,9 +69,9 @@ public class ChangePasswordFragment extends BaseDialogFragment implements BaseVi
     }
 
     @OnClick(R.id.tvSave)
-    public void onClickSave(){
+    public void onClickSave() {
 
-        changePasswordPresenter.validateData(edtNewPassword.getText().toString(), edtRePassword.getText().toString() );
+        changePasswordPresenter.validateData(edtNewPassword.getText().toString(), edtRePassword.getText().toString());
 
     }
 

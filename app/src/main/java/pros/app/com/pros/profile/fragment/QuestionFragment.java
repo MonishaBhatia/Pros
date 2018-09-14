@@ -14,12 +14,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import pros.app.com.pros.R;
 import pros.app.com.pros.home.model.PostModel;
 import pros.app.com.pros.profile.adapter.LikedQuestionsAdapter;
 import pros.app.com.pros.profile.model.ProfileMainModel;
+import pros.app.com.pros.profile.presenter.AthleteProfilePresenter;
 import pros.app.com.pros.profile.presenter.ProfilePresenter;
 import pros.app.com.pros.profile.views.ProfileView;
 
@@ -34,16 +33,17 @@ import pros.app.com.pros.profile.views.ProfileView;
 public class QuestionFragment extends Fragment implements ProfileView {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String DATA_TYPE = "data_type";
+    private static final String ID = "id";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String dataType;
+    private int id;
 
     RecyclerView likedQuestionsRecyclerview;
 
     private ProfilePresenter profilePresenter;
+    private AthleteProfilePresenter athleteProfilePresenter;
     private LikedQuestionsAdapter likedQuestionsAdapter;
     private TextView labelNothing;
     private ImageView emptyStateiv;
@@ -58,16 +58,16 @@ public class QuestionFragment extends Fragment implements ProfileView {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param dataType Parameter 1.
+     * @param id       Parameter 2.
      * @return A new instance of fragment QuestionFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static QuestionFragment newInstance(String param1, String param2) {
+    public static QuestionFragment newInstance(String dataType, int id) {
         QuestionFragment fragment = new QuestionFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(DATA_TYPE, dataType);
+        args.putInt(ID, id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -76,10 +76,16 @@ public class QuestionFragment extends Fragment implements ProfileView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         profilePresenter = new ProfilePresenter(this);
-        profilePresenter.getLikedQuestionsData();
+        athleteProfilePresenter = new AthleteProfilePresenter(this);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            dataType = getArguments().getString(DATA_TYPE);
+            id = getArguments().getInt(ID);
+        }
+
+        if (dataType.equalsIgnoreCase("athlete_questions")) {
+            athleteProfilePresenter.getQuestionsData(id);
+        } else if (dataType.equalsIgnoreCase("liked_questions")) {
+            profilePresenter.getLikedQuestionsData();
         }
 
     }
@@ -91,6 +97,12 @@ public class QuestionFragment extends Fragment implements ProfileView {
         View view = inflater.inflate(R.layout.fragment_question, container, false);
         labelNothing = view.findViewById(R.id.label_nothing);
         emptyStateiv = view.findViewById(R.id.empty_state_iv);
+        if (dataType.equalsIgnoreCase("athlete_questions")) {
+            labelNothing.setText("No Questions Yet");
+        } else if (dataType.equalsIgnoreCase("liked_questions")) {
+            labelNothing.setText("No Liked Questions Yet");
+        }
+
         likedQuestionsRecyclerview = view.findViewById(R.id.liked_questions);
         likedQuestionsRecyclerview.setNestedScrollingEnabled(false);
         return view;
@@ -127,7 +139,7 @@ public class QuestionFragment extends Fragment implements ProfileView {
 
     @Override
     public void updateLikedQuestions(ArrayList<PostModel> postsList) {
-        if(postsList != null && !postsList.isEmpty()) {
+        if (postsList != null && !postsList.isEmpty()) {
             labelNothing.setVisibility(View.GONE);
             emptyStateiv.setVisibility(View.GONE);
             likedQuestionsRecyclerview.setVisibility(View.VISIBLE);
