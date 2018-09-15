@@ -239,6 +239,15 @@
 
         </android.support.constraint.ConstraintLayout>
 
+        <Button
+            android:id="@+id/reaction_button"
+            android:layout_width="@dimen/dp_56"
+            android:layout_height="@dimen/dp_70"
+            android:background="@drawable/roudable_button"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="@dimen/dp_8"
+            android:layout_marginBottom="@dimen/dp_8" />`
+
         <include
             android:id="@+id/bsComments"
             layout="@layout/layout_comments"

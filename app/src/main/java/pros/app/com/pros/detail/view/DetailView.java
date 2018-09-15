@@ -17,4 +17,6 @@ public interface DetailView {
     void onFailure(int message);
 
     void onClickComment(int id, int adapterPosition);
+
+    void playVideo(String url);
 }

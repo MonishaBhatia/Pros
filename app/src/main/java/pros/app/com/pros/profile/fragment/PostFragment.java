@@ -43,6 +43,7 @@ public class PostFragment extends Fragment implements ProfileView {
     // TODO: Rename and change types of parameters
     private String dataType;
     private int id;
+    private String receivedContentType = "";
 
     private OnFragmentInteractionListener mListener;
 
@@ -86,6 +87,7 @@ public class PostFragment extends Fragment implements ProfileView {
             id = getArguments().getInt(ID);
         }
         if (dataType.equalsIgnoreCase("postData")) {
+
             athleteProfilePresenter.getPostData(id);
         } else if (dataType.equalsIgnoreCase("reactionsData")) {
             athleteProfilePresenter.getReactionsData(id);
@@ -106,8 +108,10 @@ public class PostFragment extends Fragment implements ProfileView {
         if (dataType.equalsIgnoreCase("postData")) {
             lableNothing.setText("No Posts Yet");
         } else if (dataType.equalsIgnoreCase("reactionsData")) {
+            receivedContentType = "reactions";
             lableNothing.setText("No Reactions Yet");
         } else if (dataType.equalsIgnoreCase("athleteAnswers")) {
+            receivedContentType = "answers";
             lableNothing.setText("No Answers Yet");
         } else if (dataType.equalsIgnoreCase("likedPosts")) {
             lableNothing.setText("No Liked Post Yet");
@@ -169,7 +173,7 @@ public class PostFragment extends Fragment implements ProfileView {
             likedPostsRecyclerview.setVisiblePercent(50);
 
             likedPostsRecyclerview.setVisibility(View.VISIBLE);
-            postAdapter = new PostAdapter(postList, getActivity());
+            postAdapter = new PostAdapter(postList, getActivity(),receivedContentType );
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
             likedPostsRecyclerview.setLayoutManager(mLayoutManager);
             likedPostsRecyclerview.setItemAnimator(new DefaultItemAnimator());
