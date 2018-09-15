@@ -107,13 +107,27 @@ public class TagsActivity extends AppCompatActivity implements TagsView, CreateQ
             tvPost.setVisibility(View.VISIBLE);
         }
 
+        if(athleteArrayList != null || !athleteArrayList.isEmpty()) {
+            initializeRecyclerView();
+        }
+    }
 
+    private void initializeRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-
         athletesRecyclerview.setLayoutManager(layoutManager);
         tagsAdapter = new TagsAdapter(this, athleteArrayList, userSelectedList, this);
         athletesRecyclerview.setAdapter(tagsAdapter);
+    }
 
+
+    @OnClick(R.id.ivBack)
+    public void onClickBack() {
+        sendDataBack();
+
+    }
+
+    @OnClick(R.id.viewSearch)
+    public void onClickSearch(){
         edtSearch.addTextChangedListener(watcher);
         edtSearch.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -125,13 +139,6 @@ public class TagsActivity extends AppCompatActivity implements TagsView, CreateQ
                 return false;
             }
         });
-    }
-
-
-    @OnClick(R.id.ivBack)
-    public void onClickBack() {
-        sendDataBack();
-
     }
 
     private void sendDataBack() {
@@ -173,6 +180,7 @@ public class TagsActivity extends AppCompatActivity implements TagsView, CreateQ
     @Override
     public void updateAthletesData(List<AthleteModel> athletes) {
         athleteArrayList = new ArrayList<>(athletes);
+        initializeRecyclerView();
     }
 
     @Override

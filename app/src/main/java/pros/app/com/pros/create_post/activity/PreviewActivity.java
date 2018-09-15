@@ -95,6 +95,7 @@ public class PreviewActivity extends AppCompatActivity {
                     return;
                 }
                 imageView.setImageBitmap(bitmap);
+                convertImageToByteArray(bitmap);
 
             } else if (video != null) {
                 playVideo(video.getAbsolutePath());
@@ -179,10 +180,25 @@ public class PreviewActivity extends AppCompatActivity {
 
     private void convertImageToByteArray(Bitmap bitmap) {
 
+        Bitmap converetdImage = getResizedBitmap(bitmap, 500);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        converetdImage.compress(Bitmap.CompressFormat.PNG, 80, stream);
         imageByteArray = stream.toByteArray();
-        bitmap.recycle();
+    }
+
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
     public static void try2CreateCompressDir() {
@@ -209,11 +225,11 @@ public class PreviewActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.post_content_button)
-    void moveForward() {
-        Intent intent = new Intent(PreviewActivity.this, TagsActivity.class);
-        intent.putExtra("ImageByte", imageByteArray);
-        intent.putExtra("VideoByte", videoBytes);
-        intent.putExtra("VideoLength", length);
-        startActivity(intent);
+    public void moveForward() {
+        Intent intents = new Intent(PreviewActivity.this, TagsActivity.class);
+        intents.putExtra("ImageByte", imageByteArray);
+        intents.putExtra("VideoByte", videoBytes);
+        intents.putExtra("VideoLength", length);
+        startActivity(intents);
     }
 }

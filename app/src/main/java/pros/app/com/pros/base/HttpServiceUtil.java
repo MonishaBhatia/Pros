@@ -64,6 +64,7 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
         this.jsonRequest = jsonRequest;
         this.tag = tag;
     }
+
     public HttpServiceUtil(HttpServiceView mListener, String url, String method, String jsonRequest, byte[] byteArray, int tag) {
         this.mListener = mListener;
         this.url = url;
@@ -132,7 +133,7 @@ public class HttpServiceUtil extends AsyncTask<String, String, String> {
                     body = RequestBody.create(mediaType, jsonRequest);
                 }
 
-                if (tag == ApiEndPoints.sign_in.getTag() || tag == ApiEndPoints.sign_up.getTag()) {
+                if (tag == ApiEndPoints.sign_in.getTag() || tag == ApiEndPoints.sign_up.getTag() || tag == ApiEndPoints.forgot_password.getTag()) {
                     request = new Request.Builder()
                             .url(url)
                             .post(body)
