@@ -82,7 +82,7 @@ public class PostAdapter extends AAH_VideosAdapter {
                     athleteModels.add(reactionsList.get(i).getAthlete());
                 }
 
-                ReactionAthlete reactionAthleteAdapter = new ReactionAthlete(context, athleteModels);
+                ReactionAthlete reactionAthleteAdapter = new ReactionAthlete(context, athleteModels, null, null);
                 ((PostsViewHolder) holder).athleteRecyclerview.setAdapter(reactionAthleteAdapter);
             }
 

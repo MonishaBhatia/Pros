@@ -254,6 +254,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
 
         List<PostModel> reactionsList = receivedPostModel.getReactions();
         List<AthleteModel> mentionsList = receivedPostModel.getMentions();
+        ArrayList<String> reactionUrlList = new ArrayList<>();
 
         if (reactionsList.size() > 0) {
 
@@ -261,9 +262,10 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
 
             for (int i = 0; i < reactionsList.size(); i++) {
                 athleteModels.add(reactionsList.get(i).getAthlete());
+                reactionUrlList.add(reactionsList.get(i).getUrls().getMobileUrl());
             }
 
-            ReactionAthlete reactionAthleteAdapter = new ReactionAthlete(getActivity(), athleteModels);
+            ReactionAthlete reactionAthleteAdapter = new ReactionAthlete(getActivity(), athleteModels, reactionUrlList,  this);
 
             athleteRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
             athleteRecyclerview.setAdapter(reactionAthleteAdapter);
@@ -689,6 +691,28 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
 
+            }
+        });
+    }
+
+    @Override
+    public void playVideo(String url) {
+        videoView.setVideoPath(url);
+        if (videoVisibleToUser) {
+            videoView.start();
+        }
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                thumbnailBackground.setVisibility(View.GONE);
+                questionContainer.setVisibility(View.GONE);
+            }
+        });
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                videoView.stopPlayback();
+                videoView.suspend();
             }
         });
     }
