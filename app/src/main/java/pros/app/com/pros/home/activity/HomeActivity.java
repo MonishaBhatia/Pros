@@ -118,7 +118,6 @@ public class HomeActivity extends BaseActivity implements HomeView {
 
         if(PrefUtils.getString("LAST_SCREEN").equals(TagsActivity.class.getName())) {
             openDialog("", "We got your content and are currently processing.\n\nCheck back in a few minutes!", "Ok");
-            PrefUtils.putString("LAST_SCREEN", "");
         }
 
         if (PrefUtils.isAthlete()) {
@@ -144,6 +143,7 @@ public class HomeActivity extends BaseActivity implements HomeView {
         rvPosts.setItemAnimator(new DefaultItemAnimator());
         rvPosts.setVisiblePercent(50);
         rvPosts.setAdapter(postAdapter);
+        PrefUtils.putString("LAST_SCREEN", "");
 
     }
 

@@ -47,10 +47,12 @@ public class CreatePostPresenter implements HttpServiceView {
     public void compressVideo(final String videoPath, ArrayList<AthleteModel> userSelectedList) {
         this.userSelectedList = userSelectedList;
         try2CreateCompressDir();
-        String outPath = Environment.getExternalStorageDirectory()
+        final String outPath = Environment.getExternalStorageDirectory()
                 + File.separator
                 + APP_DIR
-                + COMPRESSED_VIDEOS_DIR;
+                + COMPRESSED_VIDEOS_DIR
+                + "video.mp4"
+                ;
 
         VideoCompress.compressVideoLow(videoPath, outPath, new VideoCompress.CompressListener() {
             @Override
@@ -62,14 +64,14 @@ public class CreatePostPresenter implements HttpServiceView {
             @Override
             public void onSuccess() {
                 LogUtils.LOGD("Compress", "its done");
-                File file = new File(videoPath);
+                File file = new File(outPath);
                 long length = file.length();
                 length = length / 1024;
 
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 FileInputStream fis = null;
                 try {
-                    fis = new FileInputStream(new File(videoPath));
+                    fis = new FileInputStream(new File(outPath));
 
                     byte[] buf = new byte[1024];
                     int n;
@@ -146,8 +148,7 @@ public class CreatePostPresenter implements HttpServiceView {
                     jsonObject.put("content_type", "image");
                     jsonObject.put("image_guid", uploadUrlModel.getGuid());
                     jsonObject.put("tags", array);
-                    jsonObject.put("tags", array);
-                    jsonObject.put("parent_id", PrefUtils.getUser().getId());
+                    //jsonObject.put("parent_id", PrefUtils.getUser().getId());
 
                     jsonRequest.put("post", jsonObject);
 
@@ -164,10 +165,11 @@ public class CreatePostPresenter implements HttpServiceView {
                     jsonObject.put("tags", array);
                     if(DetailFragment.class.getName().equals(PrefUtils.getString("LAST_SCREEN"))){
                         jsonObject.put("parent_type", "Question");
+                        PrefUtils.putString("LAST_SCREEN", "");
                     } else {
                         jsonObject.put("parent_type", "Post");
                     }
-                    jsonObject.put("parent_id", PrefUtils.getUser().getId());
+                    //jsonObject.put("parent_id", PrefUtils.getUser().getId());
 
                     jsonRequest.put("post", jsonObject);
 
