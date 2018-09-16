@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -26,13 +27,19 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pros.app.com.pros.R;
 import pros.app.com.pros.base.LogUtils;
+import pros.app.com.pros.base.PrefUtils;
+import pros.app.com.pros.create_post.presenter.CreatePostPresenter;
 import pros.app.com.pros.create_question.activity.TagsActivity;
+import pros.app.com.pros.detail.fragment.DetailFragment;
+import pros.app.com.pros.home.activity.HomeActivity;
+import pros.app.com.pros.home.model.AthleteModel;
 
 public class PreviewActivity extends AppCompatActivity {
 
@@ -42,15 +49,11 @@ public class PreviewActivity extends AppCompatActivity {
     @BindView(R.id.video)
     VideoView videoView;
 
-    public static final String APP_DIR = "VideoCompressor";
-
-    public static final String COMPRESSED_VIDEOS_DIR = "/Compressed Videos/";
-
     public static final String TEMP_DIR = "/Temp/";
     private String fileUri;
     private byte[] imageByteArray;
-    private byte[] videoBytes;
-    private long length;
+    private String outPath;
+    private CreatePostPresenter createPostPresenter;
 
 
     @Override
@@ -60,6 +63,7 @@ public class PreviewActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setupToolbar();
+        createPostPresenter = new CreatePostPresenter();
 
         if (getIntent().getBooleanExtra("fromPicker", false)) {
 
@@ -108,6 +112,7 @@ public class PreviewActivity extends AppCompatActivity {
     }
 
     void playVideo(final String uri) {
+        outPath = uri;
         videoView.setVisibility(View.VISIBLE);
         videoView.setVideoURI(Uri.parse(uri));
         MediaController mediaController = new MediaController(this);
@@ -120,61 +125,7 @@ public class PreviewActivity extends AppCompatActivity {
                 mp.start();
                 float multiplier = (float) videoView.getWidth() / (float) mp.getVideoWidth();
                 videoView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (mp.getVideoHeight() * multiplier)));
-
-                try2CreateCompressDir();
-                final String outPath = Environment.getExternalStorageDirectory()
-                        + File.separator
-                        + APP_DIR
-                        + COMPRESSED_VIDEOS_DIR;
-
-                VideoCompress.compressVideoLow(uri, outPath, new VideoCompress.CompressListener() {
-                    @Override
-                    public void onStart() {
-                        //Start Compress
-                        LogUtils.LOGD("Compress", "its started");
-                    }
-
-                    @Override
-                    public void onSuccess() {
-                        LogUtils.LOGD("Compress", "its done");
-                        File file = new File(outPath);
-                        length = file.length();
-                        length = length / 1024;
-
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        FileInputStream fis = null;
-                        try {
-                            fis = new FileInputStream(new File(uri));
-
-                            byte[] buf = new byte[1024];
-                            int n;
-                            while (-1 != (n = fis.read(buf)))
-                                baos.write(buf, 0, n);
-
-                            videoBytes = baos.toByteArray();
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-
-                    @Override
-                    public void onFail() {
-                        //Failed
-                        LogUtils.LOGD("Compress", "its failed");
-                    }
-
-                    @Override
-                    public void onProgress(float percent) {
-                        //Progress
-                        LogUtils.LOGD("Compress", "in progress");
-                    }
-                });
-
-
             }
-
         });
     }
 
@@ -201,10 +152,7 @@ public class PreviewActivity extends AppCompatActivity {
         return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
-    public static void try2CreateCompressDir() {
-        File f = new File(Environment.getExternalStorageDirectory(), File.separator + APP_DIR + COMPRESSED_VIDEOS_DIR);
-        f.mkdirs();
-    }
+
 
 
     private void setupToolbar() {
@@ -226,10 +174,20 @@ public class PreviewActivity extends AppCompatActivity {
 
     @OnClick(R.id.post_content_button)
     public void moveForward() {
-        Intent intents = new Intent(PreviewActivity.this, TagsActivity.class);
-        intents.putExtra("ImageByte", imageByteArray);
-        intents.putExtra("VideoByte", videoBytes);
-        intents.putExtra("VideoLength", length);
-        startActivity(intents);
+        if(DetailFragment.class.getName().equals(PrefUtils.getString("LAST_SCREEN"))){
+            if(TextUtils.isEmpty(outPath)) {
+                createPostPresenter.getImageUploadUrl(imageByteArray, null);
+            } else {
+                createPostPresenter.compressVideo(outPath, null);
+            }
+            Intent intenty = new Intent(this, HomeActivity.class);
+            intenty.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intenty);
+        } else {
+            Intent intents = new Intent(PreviewActivity.this, TagsActivity.class);
+            intents.putExtra("ImageByte", imageByteArray);
+            intents.putExtra("VideoPath", outPath);
+            startActivity(intents);
+        }
     }
 }

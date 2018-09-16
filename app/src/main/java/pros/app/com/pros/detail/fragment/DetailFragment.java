@@ -558,6 +558,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
 
     @OnClick(R.id.reaction_button)
     void createReaction(){
+        PrefUtils.putString("LAST_SCREEN", DetailFragment.class.getName());
         Intent createPostIntent = new Intent(getActivity(), CreatePost.class);
         createPostIntent.putExtra("create_reaction", true);
         startActivity(createPostIntent);
