@@ -26,9 +26,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import pros.app.com.pros.R;
+import pros.app.com.pros.base.BaseActivity;
 import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.create_post.activity.CreatePost;
 import pros.app.com.pros.create_question.activity.AskQuestionActivity;
+import pros.app.com.pros.create_question.activity.TagsActivity;
 import pros.app.com.pros.home.adapter.PostAdapter;
 import pros.app.com.pros.home.model.PostModel;
 import pros.app.com.pros.home.presenter.HomePresenter;
@@ -37,7 +39,7 @@ import pros.app.com.pros.profile.activity.AthleteActivity;
 import pros.app.com.pros.profile.activity.ProfileActivity;
 import pros.app.com.pros.search.activity.SearchActivity;
 
-public class HomeActivity extends AppCompatActivity implements HomeView {
+public class HomeActivity extends BaseActivity implements HomeView {
 
     @BindView(R.id.rvPosts)
     AAH_CustomRecyclerView rvPosts;
@@ -113,6 +115,11 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     @Override
     public void bindData(ArrayList<PostModel> postsList) {
         postsPrgressBar.setVisibility(View.GONE);
+
+        if(PrefUtils.getString("LAST_SCREEN").equals(TagsActivity.class.getName())) {
+            openDialog("", "We got your content and are currently processing.\n\nCheck back in a few minutes!", "Ok");
+        }
+
         if (PrefUtils.isAthlete()) {
             createPostContainer.setVisibility(View.VISIBLE);
 
@@ -136,6 +143,7 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
         rvPosts.setItemAnimator(new DefaultItemAnimator());
         rvPosts.setVisiblePercent(50);
         rvPosts.setAdapter(postAdapter);
+        PrefUtils.putString("LAST_SCREEN", "");
 
     }
 

@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -17,6 +19,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.vincent.videocompressor.VideoCompress;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,12 +33,16 @@ import butterknife.OnClick;
 import pros.app.com.pros.R;
 import pros.app.com.pros.base.ApiEndPoints;
 import pros.app.com.pros.base.KeyboardAction;
+import pros.app.com.pros.base.LogUtils;
+import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.create_post.presenter.CreatePostPresenter;
 import pros.app.com.pros.create_question.adapter.TagsAdapter;
 import pros.app.com.pros.create_question.presenter.CreateQuestionPresenter;
 import pros.app.com.pros.create_question.view.CreateQuestionView;
 import pros.app.com.pros.create_question.view.TagsView;
+import pros.app.com.pros.home.activity.HomeActivity;
 import pros.app.com.pros.home.model.AthleteModel;
+
 
 public class TagsActivity extends AppCompatActivity implements TagsView, CreateQuestionView {
 
@@ -62,8 +73,7 @@ public class TagsActivity extends AppCompatActivity implements TagsView, CreateQ
     private CreateQuestionPresenter createQuestionPresenter;
     private CreatePostPresenter createPostPresenter;
     private byte[] imageByte;
-    private byte[] videoByte;
-    private long length;
+    private String videoPath;
 
     TextWatcher watcher = new TextWatcher() {
         @Override
@@ -93,10 +103,9 @@ public class TagsActivity extends AppCompatActivity implements TagsView, CreateQ
 
         Intent i = getIntent();
         imageByte = i.getByteArrayExtra("ImageByte");
-        videoByte = i.getByteArrayExtra("VideoByte");
-        length = i.getLongExtra("VideoLength", 0);
+        videoPath = i.getStringExtra("VideoPath");
 
-        if (null == imageByte && null == videoByte) {
+        if (null == imageByte && TextUtils.isEmpty(videoPath)) {
             tvPost.setVisibility(View.GONE);
             athleteArrayList = i.getParcelableArrayListExtra("athletesList");
             if (i.hasExtra("userSelectedList")) {
@@ -107,13 +116,27 @@ public class TagsActivity extends AppCompatActivity implements TagsView, CreateQ
             tvPost.setVisibility(View.VISIBLE);
         }
 
+        if (athleteArrayList != null || !athleteArrayList.isEmpty()) {
+            initializeRecyclerView();
+        }
+    }
 
+    private void initializeRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-
         athletesRecyclerview.setLayoutManager(layoutManager);
         tagsAdapter = new TagsAdapter(this, athleteArrayList, userSelectedList, this);
         athletesRecyclerview.setAdapter(tagsAdapter);
+    }
 
+
+    @OnClick(R.id.ivBack)
+    public void onClickBack() {
+        sendDataBack();
+
+    }
+
+    @OnClick(R.id.viewSearch)
+    public void onClickSearch() {
         edtSearch.addTextChangedListener(watcher);
         edtSearch.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -125,13 +148,6 @@ public class TagsActivity extends AppCompatActivity implements TagsView, CreateQ
                 return false;
             }
         });
-    }
-
-
-    @OnClick(R.id.ivBack)
-    public void onClickBack() {
-        sendDataBack();
-
     }
 
     private void sendDataBack() {
@@ -173,6 +189,7 @@ public class TagsActivity extends AppCompatActivity implements TagsView, CreateQ
     @Override
     public void updateAthletesData(List<AthleteModel> athletes) {
         athleteArrayList = new ArrayList<>(athletes);
+        initializeRecyclerView();
     }
 
     @Override
@@ -192,10 +209,15 @@ public class TagsActivity extends AppCompatActivity implements TagsView, CreateQ
 
     @OnClick(R.id.post_button)
     public void onClickPostButton() {
-        if (videoByte == null) {
-            createPostPresenter.getImageUploadUrl(imageByte);
+        if (videoPath == null) {
+            createPostPresenter.getImageUploadUrl(imageByte, userSelectedList);
         } else {
-            createPostPresenter.getVideoUploadPath(ApiEndPoints.upload_video.getApi() + "?file_name=movie.m4v&file_size=" + length, videoByte);
+            createPostPresenter.compressVideo(videoPath, userSelectedList);
         }
+
+        PrefUtils.putString("LAST_SCREEN", TagsActivity.class.getName());
+        Intent intenty = new Intent(this, HomeActivity.class);
+        intenty.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intenty);
     }
 }

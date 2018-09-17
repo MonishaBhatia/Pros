@@ -3,6 +3,7 @@ package pros.app.com.pros.detail.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,11 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
 
         Picasso.get().load(currentItem.getAvatar().getThumbnailUrl()).placeholder(R.drawable.profile).into(holder.ivIcon);
         holder.tvName.setText(String.format("%s %s", currentItem.getFirstName(), currentItem.getLastName()));
-        holder.tvTime.setText(dateDifference.toLowerCase());
+        if(TextUtils.isEmpty(dateDifference)){
+            holder.tvTime.setText("");
+        } else {
+            holder.tvTime.setText(dateDifference.toLowerCase());
+        }
         holder.tvComment.setText(comments.get(position).getText());
 
     }
