@@ -217,7 +217,7 @@ public class TagsActivity extends AppCompatActivity implements TagsView, CreateQ
 
         PrefUtils.putString("LAST_SCREEN", TagsActivity.class.getName());
         Intent intenty = new Intent(this, HomeActivity.class);
-        intenty.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intenty.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intenty);
     }
 }

@@ -140,7 +140,7 @@ public class CreatePostPresenter implements HttpServiceView {
             if(userSelectedList != null && !userSelectedList.isEmpty() ) {
 
                 for (int i = 0; i < userSelectedList.size(); i++) {
-                    array.put(userSelectedList.get(i).getId());
+                    array.put(String.valueOf(userSelectedList.get(i).getId()));
                 }
             }
             if(isImage) {
@@ -163,15 +163,16 @@ public class CreatePostPresenter implements HttpServiceView {
                     jsonObject.put("video_guid", videoPathModel.getVideoGuid());
                     jsonObject.put("panda_video_id", videoUploadModel.getId());
                     jsonObject.put("tags", array);
-                    if(DetailFragment.class.getName().equals(PrefUtils.getString("LAST_SCREEN"))){
+                    /*if(DetailFragment.class.getName().equals(PrefUtils.getString("LAST_SCREEN"))){
                         jsonObject.put("parent_type", "Question");
                         PrefUtils.putString("LAST_SCREEN", "");
                     } else {
                         jsonObject.put("parent_type", "Post");
-                    }
+                    }*/
                     //jsonObject.put("parent_id", PrefUtils.getUser().getId());
 
                     jsonRequest.put("post", jsonObject);
+                    PrefUtils.putString("LAST_SCREEN", "");
 
                 } catch (Exception e) {
                     e.printStackTrace();
