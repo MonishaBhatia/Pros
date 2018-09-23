@@ -643,7 +643,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
         }
     }
 
-    @OnClick(R.id.ivDownArrow)
+    @OnClick({R.id.ivDownArrow, R.id.view_top})
     public void onClickDownArrow() {
         bsComments.setVisibility(View.GONE);
         videoView.start();
