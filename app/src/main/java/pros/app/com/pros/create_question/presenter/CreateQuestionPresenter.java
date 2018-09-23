@@ -17,11 +17,11 @@ public class CreateQuestionPresenter implements HttpServiceView {
 
     private CreateQuestionView createQuestionView;
 
-    public CreateQuestionPresenter(CreateQuestionView createQuestionView){
+    public CreateQuestionPresenter(CreateQuestionView createQuestionView) {
         this.createQuestionView = createQuestionView;
     }
 
-    public void getAthletesData(){
+    public void getAthletesData() {
         new HttpServiceUtil(this,
                 ApiEndPoints.atheltes.getApi(),
                 ProsConstants.GET_METHOD,
@@ -30,8 +30,8 @@ public class CreateQuestionPresenter implements HttpServiceView {
         ).execute();
     }
 
-    public void postQuestion(String question, String[] tags){
-        if(countWords(question)>1) {
+    public void postQuestion(String question, String[] tags) {
+        if (countWords(question) > 1) {
             JSONObject jsonRequest = new JSONObject();
             try {
                 jsonRequest.put("text", question);
@@ -55,24 +55,24 @@ public class CreateQuestionPresenter implements HttpServiceView {
     @Override
     public void response(String response, int tag) {
 
-        if(tag == ApiEndPoints.atheltes.getTag()){
-            try{
+        if (tag == ApiEndPoints.atheltes.getTag()) {
+            try {
                 FollowingModel followingModel = JsonUtils.from(response, FollowingModel.class);
                 createQuestionView.updateAthletesData(followingModel.getAthletes());
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        if(tag == ApiEndPoints.post_question.getTag()){
-            try{
+        if (tag == ApiEndPoints.post_question.getTag()) {
+            try {
                 Log.e("Response", response);
-                if(response.isEmpty()){
+                if (response.isEmpty()) {
                     createQuestionView.closeActivity();
                 }
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -85,8 +85,7 @@ public class CreateQuestionPresenter implements HttpServiceView {
     }
 
     public static int countWords(String sentence) {
-        if (sentence == null || sentence.isEmpty())
-        {
+        if (sentence == null || sentence.isEmpty()) {
             return 0;
         }
         String[] words = sentence.split("\\s+");

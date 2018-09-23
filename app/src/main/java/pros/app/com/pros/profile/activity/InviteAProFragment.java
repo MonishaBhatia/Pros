@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
-import android.text.InputFilter;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -16,12 +14,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -223,6 +218,6 @@ public class InviteAProFragment extends BaseDialogFragment implements BaseView {
 
     @Override
     public void onFailure(int message) {
-        openDialog("Pending Invite","This Athlete has a pending invitation to join Pros", "Close");
+        openDialog("Pending Invite", "This Athlete has a pending invitation to join Pros", "Close");
     }
 }

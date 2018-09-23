@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import pros.app.com.pros.ProsApplication;
 import pros.app.com.pros.R;
 import pros.app.com.pros.base.ApiEndPoints;
 import pros.app.com.pros.base.BaseView;

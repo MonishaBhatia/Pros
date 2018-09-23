@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -37,7 +36,7 @@ public class HomePresenter implements HttpServiceView {
     }
 
     public void getPostData(boolean pullToRefresh) {
-        this.pullToRefresh =pullToRefresh;
+        this.pullToRefresh = pullToRefresh;
         new HttpServiceUtil(
                 this,
                 ApiEndPoints.post_content.getApi(),
@@ -68,7 +67,7 @@ public class HomePresenter implements HttpServiceView {
             }
         }
 
-        if(tag == ApiEndPoints.questions.getTag()) {
+        if (tag == ApiEndPoints.questions.getTag()) {
             questionsAPIHit = true;
             try {
                 HomeMainModel questionsData = JsonUtils.from(response, HomeMainModel.class);
@@ -78,11 +77,12 @@ public class HomePresenter implements HttpServiceView {
             }
         }
 
-        if(postsAPIHit && questionsAPIHit) {
+        if (postsAPIHit && questionsAPIHit) {
             postsList = new ArrayList<>();
-            if(homePostModel.getPosts() != null) postsList.addAll(homePostModel.getPosts());
-            if(homePostModel.getQuestions() !=null) postsList.addAll(homePostModel.getQuestions());
-            Log.d("Merged List:",""+postsList);
+            if (homePostModel.getPosts() != null) postsList.addAll(homePostModel.getPosts());
+            if (homePostModel.getQuestions() != null)
+                postsList.addAll(homePostModel.getQuestions());
+            Log.d("Merged List:", "" + postsList);
             Collections.sort(postsList, new Comparator<PostModel>() {
                 @Override
                 public int compare(PostModel o1, PostModel o2) {
@@ -94,7 +94,7 @@ public class HomePresenter implements HttpServiceView {
                     try {
                         date1 = format.parse(o1.getCreatedAt());
                         date2 = format.parse(o2.getCreatedAt());
-                        Log.e("Dates", ""+date1 +date2);
+                        Log.e("Dates", "" + date1 + date2);
 
                     } catch (ParseException e) {
                         e.printStackTrace();
@@ -102,11 +102,11 @@ public class HomePresenter implements HttpServiceView {
                     return date2.compareTo(date1);
                 }
             });
-            Log.d("Sorted List:",""+postsList);
+            Log.d("Sorted List:", "" + postsList);
 
-            if(pullToRefresh){
+            if (pullToRefresh) {
                 view.updateHomeScreen(postsList);
-            }else {
+            } else {
                 view.bindData(postsList);
             }
         }

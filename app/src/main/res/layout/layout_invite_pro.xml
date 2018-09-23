@@ -21,7 +21,7 @@
         android:text="@string/invite_text"
         android:gravity="center"
         android:textSize="@dimen/sp_12"
-        android:layout_marginTop="@dimen/dp_20"/>
+        android:layout_marginTop="@dimen/dp_20" />
 
     <TextView
         android:id="@+id/tvEmail"

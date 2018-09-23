@@ -7,21 +7,22 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import java.util.ArrayList;
 
 import pros.app.com.pros.detail.fragment.DetailFragment;
-import pros.app.com.pros.home.adapter.PostAdapter;
 import pros.app.com.pros.home.model.PostModel;
 
 public class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
 
     private ArrayList<PostModel> postModelArrayList;
+    private String contentType = "";
 
-    public ScreenSlidePagerAdapter(FragmentManager fm, ArrayList<PostModel> postModelArrayList) {
+    public ScreenSlidePagerAdapter(FragmentManager fm, ArrayList<PostModel> postModelArrayList, String contentType) {
         super(fm);
         this.postModelArrayList = postModelArrayList;
+        this.contentType = contentType;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return DetailFragment.newInstance(postModelArrayList.get(position));
+        return DetailFragment.newInstance(postModelArrayList.get(position), contentType);
     }
 
     @Override

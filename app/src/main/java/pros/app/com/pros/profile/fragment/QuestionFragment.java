@@ -59,7 +59,7 @@ public class QuestionFragment extends Fragment implements ProfileView {
      * this fragment using the provided parameters.
      *
      * @param dataType Parameter 1.
-     * @param id Parameter 2.
+     * @param id       Parameter 2.
      * @return A new instance of fragment QuestionFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -82,10 +82,9 @@ public class QuestionFragment extends Fragment implements ProfileView {
             id = getArguments().getInt(ID);
         }
 
-        if(dataType.equalsIgnoreCase("athlete_questions")){
+        if (dataType.equalsIgnoreCase("athlete_questions")) {
             athleteProfilePresenter.getQuestionsData(id);
-        }
-        else if(dataType.equalsIgnoreCase("liked_questions")) {
+        } else if (dataType.equalsIgnoreCase("liked_questions")) {
             profilePresenter.getLikedQuestionsData();
         }
 
@@ -98,9 +97,9 @@ public class QuestionFragment extends Fragment implements ProfileView {
         View view = inflater.inflate(R.layout.fragment_question, container, false);
         labelNothing = view.findViewById(R.id.label_nothing);
         emptyStateiv = view.findViewById(R.id.empty_state_iv);
-        if(dataType.equalsIgnoreCase("athlete_questions")){
+        if (dataType.equalsIgnoreCase("athlete_questions")) {
             labelNothing.setText("No Questions Yet");
-        }else if(dataType.equalsIgnoreCase("liked_questions")) {
+        } else if (dataType.equalsIgnoreCase("liked_questions")) {
             labelNothing.setText("No Liked Questions Yet");
         }
 
@@ -140,7 +139,7 @@ public class QuestionFragment extends Fragment implements ProfileView {
 
     @Override
     public void updateLikedQuestions(ArrayList<PostModel> postsList) {
-        if(postsList != null && !postsList.isEmpty()) {
+        if (postsList != null && !postsList.isEmpty()) {
             labelNothing.setVisibility(View.GONE);
             emptyStateiv.setVisibility(View.GONE);
             likedQuestionsRecyclerview.setVisibility(View.VISIBLE);

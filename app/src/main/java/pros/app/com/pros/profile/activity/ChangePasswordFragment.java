@@ -2,7 +2,6 @@ package pros.app.com.pros.profile.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,9 +69,9 @@ public class ChangePasswordFragment extends BaseDialogFragment implements BaseVi
     }
 
     @OnClick(R.id.tvSave)
-    public void onClickSave(){
+    public void onClickSave() {
 
-        changePasswordPresenter.validateData(edtNewPassword.getText().toString(), edtRePassword.getText().toString() );
+        changePasswordPresenter.validateData(edtNewPassword.getText().toString(), edtRePassword.getText().toString());
 
     }
 

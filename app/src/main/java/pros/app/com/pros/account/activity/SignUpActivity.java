@@ -5,8 +5,10 @@ import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -41,6 +43,9 @@ public class SignUpActivity extends BaseActivity implements SignInView {
     @BindView(R.id.videoView)
     VideoView videoView;
 
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
+
     private SignUpPresenter signUpPresenter;
 
 
@@ -70,9 +75,9 @@ public class SignUpActivity extends BaseActivity implements SignInView {
         playVideo();
     }
 
-    private void playVideo(){
+    private void playVideo() {
 
-        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+ R.raw.login);
+        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.login);
         videoView.setVideoURI(uri);
 
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -88,7 +93,7 @@ public class SignUpActivity extends BaseActivity implements SignInView {
 
 
     @OnClick(R.id.ivBack)
-    public void onClickBack(){
+    public void onClickBack() {
         finish();
     }
 
@@ -103,12 +108,18 @@ public class SignUpActivity extends BaseActivity implements SignInView {
 
     @OnClick(R.id.tvSignUp)
     public void onClickSignUp() {
+        progressBar.setVisibility(View.VISIBLE);
         signUpPresenter.validateData(edtName.getText().toString(), edtEmail.getText().toString(), edtPassword.getText().toString());
     }
 
     @Override
     public void onSucess(SignInModel signInModel) {
-        PrefUtils.saveUser(signInModel.getFan());
+        if(signInModel.getFan() != null) {
+            PrefUtils.saveUser(signInModel.getFan());
+        } else {
+            PrefUtils.saveUser(signInModel.getAthlete());
+        }
+        progressBar.setVisibility(View.GONE);
         Intent intent = new Intent(this, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
@@ -116,6 +127,7 @@ public class SignUpActivity extends BaseActivity implements SignInView {
 
     @Override
     public void onFailure(String message) {
+        progressBar.setVisibility(View.GONE);
         openDialog("", message, "Close");
     }
 

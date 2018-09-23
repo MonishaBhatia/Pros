@@ -2,8 +2,6 @@ package pros.app.com.pros.account.presenter;
 
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -65,23 +63,23 @@ public class SignInPresenter implements HttpServiceView {
 
     @Override
     public void response(String response, int tag) {
-        if(tag == ApiEndPoints.sign_in.getTag()) {
+        if (tag == ApiEndPoints.sign_in.getTag()) {
             try {
                 signInModel = JsonUtils.from(response, SignInModel.class);
             } catch (IOException e) {
                 e.printStackTrace();
             }
             signInView.onSucess(signInModel);
-        } else if (tag == ApiEndPoints.forgot_password.getTag())  {
+        } else if (tag == ApiEndPoints.forgot_password.getTag()) {
             signInView.onSucessforgotPswd();
         }
     }
 
     @Override
     public void onError(int tag) {
-        if(tag == ApiEndPoints.sign_in.getTag()) {
+        if (tag == ApiEndPoints.sign_in.getTag()) {
             signInView.onFailure(ProsApplication.getInstance().getApplicationContext().getString(R.string.sign_in_error));
-        } else if (tag == ApiEndPoints.forgot_password.getTag())  {
+        } else if (tag == ApiEndPoints.forgot_password.getTag()) {
             signInView.onFailure(ProsApplication.getInstance().getApplicationContext().getString(R.string.internal_error));
         }
     }

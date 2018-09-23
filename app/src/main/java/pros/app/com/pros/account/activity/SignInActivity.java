@@ -6,7 +6,9 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -36,6 +38,9 @@ public class SignInActivity extends BaseActivity implements SignInView {
     @BindView(R.id.videoView)
     VideoView videoView;
 
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
+
     private SignInPresenter signInPresenter;
 
     @Override
@@ -62,9 +67,9 @@ public class SignInActivity extends BaseActivity implements SignInView {
         playVideo();
     }
 
-    private void playVideo(){
+    private void playVideo() {
 
-        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+ R.raw.login);
+        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.login);
         videoView.setVideoURI(uri);
 
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -85,6 +90,7 @@ public class SignInActivity extends BaseActivity implements SignInView {
 
     @OnClick(R.id.tvSignIn)
     public void onClickSignIn() {
+        progressBar.setVisibility(View.VISIBLE);
         signInPresenter.validateData(edtEmail.getText().toString(), edtPassword.getText().toString());
     }
 
@@ -105,11 +111,12 @@ public class SignInActivity extends BaseActivity implements SignInView {
     @Override
     public void onSucess(SignInModel signInModel) {
 
-        if(signInModel.getFan() != null) {
+        if (signInModel.getFan() != null) {
             PrefUtils.saveUser(signInModel.getFan());
         } else {
             PrefUtils.saveUser(signInModel.getAthlete());
         }
+        progressBar.setVisibility(View.GONE);
         Intent intent = new Intent(this, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
@@ -117,6 +124,7 @@ public class SignInActivity extends BaseActivity implements SignInView {
 
     @Override
     public void onFailure(String message) {
+        progressBar.setVisibility(View.GONE);
         openDialog("", message, "Close");
     }
 

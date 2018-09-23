@@ -1,17 +1,19 @@
 package pros.app.com.pros.create_post.activity;
 
-import android.annotation.SuppressLint;
+import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.provider.MediaStore;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.MotionEvent;
-import android.view.View;
+import android.support.v7.app.AppCompatActivity;
 
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.DialogOnDeniedPermissionListener;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.wonderkiln.camerakit.CameraKit;
 import com.wonderkiln.camerakit.CameraView;
 
@@ -45,6 +47,20 @@ public class CreatePost extends AppCompatActivity {
         camera.setMethod(cameraMethod);
         camera.setCropOutput(cropOutput);
 
+        PermissionListener dialogPermissionListener =
+                DialogOnDeniedPermissionListener.Builder
+                        .withContext(this)
+                        .withTitle("Storage permission")
+                        .withMessage("Storage Permission is required to record videos")
+                        .withButtonText(android.R.string.ok)
+                        .withIcon(R.mipmap.ic_launcher)
+                        .build();
+
+
+        Dexter.withActivity(this)
+                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(dialogPermissionListener).check();
+
     }
 
     @Override
@@ -60,19 +76,19 @@ public class CreatePost extends AppCompatActivity {
     }
 
     @OnClick(R.id.close_button)
-    void closeActivity(){
+    void closeActivity() {
         this.finish();
     }
 
     @OnClick(R.id.gallery_picker_button)
-    void openGallery(){
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+    void openGallery() {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // Do something for lollipop and above versions
             Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
             photoPickerIntent.setType("*/*");
-            photoPickerIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] {"image/*", "video/*"});
+            photoPickerIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/*", "video/*"});
             startActivityForResult(photoPickerIntent, IMAGE_PICKER_SELECT);
-        } else{
+        } else {
             // do something for phones running an SDK before lollipop
             Intent mediaChooser = new Intent(Intent.ACTION_GET_CONTENT);
             //comma-separated MIME types

@@ -20,6 +20,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pros.app.com.pros.R;
+import pros.app.com.pros.base.KeyboardAction;
 import pros.app.com.pros.home.model.AthleteModel;
 import pros.app.com.pros.profile.activity.AthleteProfileActivity;
 import pros.app.com.pros.profile.presenter.FollowingPresenter;
@@ -51,8 +52,8 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.Foll
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FollowingViewHolder holder, int position) {
-        AthleteModel currentItem = modelFiltered.get(position);
+    public void onBindViewHolder(@NonNull final FollowingViewHolder holder, int position) {
+        final AthleteModel currentItem = modelFiltered.get(position);
 
         Picasso.get().load(currentItem.getAvatar().getThumbnailUrl()).placeholder(R.drawable.profile).into(holder.ivIcon);
         holder.tvName.setText(String.format("%s %s", currentItem.getFirstName(), currentItem.getLastName()));
@@ -64,6 +65,37 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.Foll
             holder.ivFollow.setVisibility(View.GONE);
             holder.ivUnFollow.setVisibility(View.VISIBLE);
         }
+
+        holder.ivFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                KeyboardAction.hideSoftKeyboard(context, holder.ivFollow);
+                currentItem.setFollowedByCurrentUser(false);
+                String name = String.format("%s %s", currentItem.getFirstName(),
+                        currentItem.getLastName());
+                presenter.unFollowAthlete(currentItem.getId(), name);
+            }
+        });
+
+        holder.ivUnFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                KeyboardAction.hideSoftKeyboard(context, holder.ivUnFollow);
+                currentItem.setFollowedByCurrentUser(true);
+                presenter.followAthlete(currentItem.getId());
+            }
+        });
+
+        holder.tvName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, AthleteProfileActivity.class);
+                intent.putExtra(PROFILE_ID, currentItem.getId());
+                intent.putExtra(IMAGE_URL, currentItem.getAvatar().getMediumUrl());
+                intent.putExtra(NAME, String.format("%s %s", currentItem.getFirstName(), currentItem.getLastName()));
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -102,7 +134,7 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.Foll
         };
     }
 
-    public class FollowingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class FollowingViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.ivIcon)
         ImageView ivIcon;
@@ -116,31 +148,6 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.Foll
         public FollowingViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
-            tvName.setOnClickListener(this);
-            ivFollow.setOnClickListener(this);
-            ivUnFollow.setOnClickListener(this);
-        }
-
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.tvName:
-                    Intent intent = new Intent(context, AthleteProfileActivity.class);
-                    intent.putExtra(PROFILE_ID, athleteModelList.get(getAdapterPosition()).getId());
-                    intent.putExtra(IMAGE_URL, athleteModelList.get(getAdapterPosition()).getAvatar().getMediumUrl());
-                    intent.putExtra(NAME, String.format("%s %s", athleteModelList.get(getAdapterPosition()).getFirstName(),athleteModelList.get(getAdapterPosition()).getLastName()));
-                    context.startActivity(intent);
-                    break;
-                case R.id.ivFollow:
-                    athleteModelList.get(getAdapterPosition()).setFollowedByCurrentUser(false);
-                    String name = String.format("%s %s", athleteModelList.get(getAdapterPosition()).getFirstName(),
-                            athleteModelList.get(getAdapterPosition()).getLastName());
-                    presenter.unFollowAthlete(athleteModelList.get(getAdapterPosition()).getId(), name);
-                    break;
-                case R.id.ivUnFollow:
-                    athleteModelList.get(getAdapterPosition()).setFollowedByCurrentUser(true);
-                    presenter.followAthlete(athleteModelList.get(getAdapterPosition()).getId());
-                    break;
-            }
         }
     }
 }

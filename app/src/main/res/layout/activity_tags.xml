@@ -40,8 +40,22 @@
                     android:text="@string/tag_your_friends"
                     android:textAllCaps="true"
                     android:textStyle="bold"
-                    android:textSize="@dimen/dp_16"
+                    android:textSize="@dimen/sp_16"
                     android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/post_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/dp_12"
+                    android:gravity="center"
+                    android:text="Post"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/sp_14"
+                    android:textColor="@color/green"
+                    android:visibility="gone"
+                    android:layout_alignParentRight="true" />
 
             </RelativeLayout>
 

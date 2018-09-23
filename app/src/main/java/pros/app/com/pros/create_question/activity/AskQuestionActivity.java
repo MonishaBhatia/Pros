@@ -2,7 +2,6 @@ package pros.app.com.pros.create_question.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -25,7 +24,7 @@ import pros.app.com.pros.create_question.presenter.CreateQuestionPresenter;
 import pros.app.com.pros.create_question.view.CreateQuestionView;
 import pros.app.com.pros.home.model.AthleteModel;
 
-public class AskQuestionActivity extends BaseActivity implements CreateQuestionView{
+public class AskQuestionActivity extends BaseActivity implements CreateQuestionView {
 
     @BindView(R.id.ivIcon)
     CircleImageView athleteIcon;
@@ -51,7 +50,7 @@ public class AskQuestionActivity extends BaseActivity implements CreateQuestionV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ask_question);
         ButterKnife.bind(this);
-        if(PrefUtils.getUser().getThumbUrl() != null) {
+        if (PrefUtils.getUser().getThumbUrl() != null) {
             Picasso.get().load(PrefUtils.getUser().getThumbUrl()).placeholder(R.drawable.profile).into(athleteIcon);
         }
         questionEditText.requestFocus();
@@ -63,13 +62,13 @@ public class AskQuestionActivity extends BaseActivity implements CreateQuestionV
     }
 
     @OnClick(R.id.close_button)
-    void closeApp(){
+    void closeApp() {
         this.finish();
     }
 
     @Override
     public void updateAthletesData(List<AthleteModel> athletes) {
-        athletesCount.setText(""+athletes.size());
+        athletesCount.setText("" + athletes.size());
         athleteModelArrayList = new ArrayList<>(athletes);
     }
 
@@ -90,25 +89,25 @@ public class AskQuestionActivity extends BaseActivity implements CreateQuestionV
 
 
     @OnClick({R.id.tags_iv, R.id.tags_button})
-    void openTagsActivity(){
-        if(athleteModelArrayList.size()>0) {
+    void openTagsActivity() {
+        if (athleteModelArrayList.size() > 0) {
             Intent intent = new Intent(this, TagsActivity.class);
             intent.putExtra("athletesList", athleteModelArrayList);
             intent.putExtra("userSelectedList", userSelectedList);
             startActivityForResult(intent, TAGS_ACTIVITY);
         } else {
-            Toast.makeText(this, "Fetching List Please Wait...",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Fetching List Please Wait...", Toast.LENGTH_SHORT).show();
         }
     }
 
     @OnClick(R.id.post_button)
-    void postQuestion(){
+    void postQuestion() {
         String question = questionEditText.getText().toString();
         ArrayList<String> tagsIds = new ArrayList<>();
 
-        if(!userSelectedList.isEmpty()) {
-            for(AthleteModel athleteModel: userSelectedList){
-                tagsIds.add(""+athleteModel.getId());
+        if (!userSelectedList.isEmpty()) {
+            for (AthleteModel athleteModel : userSelectedList) {
+                tagsIds.add("" + athleteModel.getId());
             }
             String[] tagsArray = new String[tagsIds.size()];
             tagsArray = tagsIds.toArray(tagsArray);
@@ -125,7 +124,7 @@ public class AskQuestionActivity extends BaseActivity implements CreateQuestionV
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == TAGS_ACTIVITY) {
-            if(resultCode == Activity.RESULT_OK){
+            if (resultCode == Activity.RESULT_OK) {
                 userSelectedList = data.getParcelableArrayListExtra("userSelectedList");
                 updateTags(userSelectedList);
             }
@@ -136,9 +135,9 @@ public class AskQuestionActivity extends BaseActivity implements CreateQuestionV
     }
 
     private void updateTags(ArrayList<AthleteModel> userSelectedList) {
-        if(userSelectedList.size() > 0) {
+        if (userSelectedList.size() > 0) {
             tagsTextview.setText("" + userSelectedList.size() + " Tags");
-        } else if(userSelectedList.isEmpty()){
+        } else if (userSelectedList.isEmpty()) {
             tagsTextview.setText("Tags");
         }
 

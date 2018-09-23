@@ -18,8 +18,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,8 +28,8 @@ import pros.app.com.pros.base.CustomDialogFragment;
 import pros.app.com.pros.base.CustomDialogListener;
 import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.launch_screen.LaunchActivity;
-import pros.app.com.pros.profile.views.SettingsView;
 import pros.app.com.pros.profile.presenter.SettingsPresenter;
+import pros.app.com.pros.profile.views.SettingsView;
 
 import static pros.app.com.pros.base.ProsConstants.FOLLOWING_LIST;
 import static pros.app.com.pros.base.ProsConstants.IS_FAN;
@@ -175,6 +173,8 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             ivPic.setImageBitmap(imageBitmap);
 
+
+
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
@@ -184,8 +184,11 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
             // CALL THIS METHOD TO GET THE ACTUAL PATH
             File finalFile = new File(getRealPathFromURI(tempUri));
 
+            byte[] byteArray = baos.toByteArray();
+            imageBitmap.recycle();
+
             PrefUtils.putString("Image", Uri.fromFile(finalFile).toString());
-            settingsPresenter.getUploadUrl(Uri.fromFile(finalFile));
+            settingsPresenter.getUploadUrl(byteArray);
         }
     }
 
