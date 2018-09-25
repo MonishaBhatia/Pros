@@ -149,7 +149,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_40"
-            android:gravity="center"
+            android:gravity="center|bottom"
             android:orientation="horizontal">
 
             <TextView

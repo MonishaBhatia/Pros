@@ -102,9 +102,9 @@ public class SearchActivity extends AppCompatActivity implements SearchView {
         setContentView(R.layout.activity_search);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ButterKnife.bind(this);
-        if (!TextUtils.isEmpty(PrefUtils.getUser().getThumbUrl())) {
-            Picasso.get().load(PrefUtils.getUser().getThumbUrl()).placeholder(R.drawable.profile).into(ivProfile);
-        }
+
+        setImage();
+
         searchPresenter = new SearchPresenter(this);
         searchPresenter.getSearchData();
         topPostsRecyclerview.setNestedScrollingEnabled(false);
@@ -121,6 +121,20 @@ public class SearchActivity extends AppCompatActivity implements SearchView {
                 return false;
             }
         });
+    }
+
+    private void setImage() {
+        if (!TextUtils.isEmpty(PrefUtils.getString("Image"))) {
+            Picasso.get().load(PrefUtils.getString("Image")).into(ivProfile);
+        } else if (!TextUtils.isEmpty(PrefUtils.getUser().getThumbUrl())) {
+            Picasso.get().load(PrefUtils.getUser().getThumbUrl()).placeholder(R.drawable.profile).into(ivProfile);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setImage();
     }
 
     @OnClick(R.id.ivProfile)

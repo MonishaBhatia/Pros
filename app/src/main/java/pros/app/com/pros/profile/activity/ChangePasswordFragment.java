@@ -70,9 +70,7 @@ public class ChangePasswordFragment extends BaseDialogFragment implements BaseVi
 
     @OnClick(R.id.tvSave)
     public void onClickSave() {
-
         changePasswordPresenter.validateData(edtNewPassword.getText().toString(), edtRePassword.getText().toString());
-
     }
 
     @Override
