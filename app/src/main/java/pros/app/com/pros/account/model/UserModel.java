@@ -98,6 +98,10 @@ public class UserModel {
         return mediumUrl;
     }
 
+    public void setMediumUrl(String mediumUrl) {
+        this.mediumUrl = mediumUrl;
+    }
+
     public String getOriginalUrl() {
         return originalUrl;
     }

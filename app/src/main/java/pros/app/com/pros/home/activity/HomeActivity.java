@@ -76,9 +76,8 @@ public class HomeActivity extends BaseActivity implements HomeView {
 
         ButterKnife.bind(this);
         homePresenter = new HomePresenter(this);
-        if (!TextUtils.isEmpty(PrefUtils.getUser().getThumbUrl())) {
-            Picasso.get().load(PrefUtils.getUser().getThumbUrl()).placeholder(R.drawable.profile).into(ivProfile);
-        }
+
+        setImage();
         homePresenter.getPostData(false);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -96,6 +95,20 @@ public class HomeActivity extends BaseActivity implements HomeView {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
+    }
+
+    private void setImage() {
+        if (!TextUtils.isEmpty(PrefUtils.getString("Image"))) {
+            Picasso.get().load(PrefUtils.getString("Image")).into(ivProfile);
+        }else if (!TextUtils.isEmpty(PrefUtils.getUser().getThumbUrl())) {
+            Picasso.get().load(PrefUtils.getUser().getThumbUrl()).placeholder(R.drawable.profile).into(ivProfile);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setImage();
     }
 
     @OnClick(R.id.ivProfile)
