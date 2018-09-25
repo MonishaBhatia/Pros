@@ -198,9 +198,9 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
         String thumbnailUrl = "";
         String athleteThumbnailUrl = "";
 
-        if(PrefUtils.isAthlete()){
-            if(REACTIONS.equalsIgnoreCase(recievedContentType)
-                    || ANSWERS.equalsIgnoreCase(recievedContentType)){
+        if (PrefUtils.isAthlete()) {
+            if (REACTIONS.equalsIgnoreCase(recievedContentType)
+                    || ANSWERS.equalsIgnoreCase(recievedContentType)) {
                 reactionButton.setVisibility(View.GONE);
             } else {
                 reactionButton.setVisibility(View.VISIBLE);
@@ -265,7 +265,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
                 reactionUrlList.add(reactionsList.get(i).getUrls().getMobileUrl());
             }
 
-            ReactionAthlete reactionAthleteAdapter = new ReactionAthlete(getActivity(), athleteModels, reactionUrlList,  this);
+            ReactionAthlete reactionAthleteAdapter = new ReactionAthlete(getActivity(), athleteModels, reactionUrlList, this);
 
             athleteRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
             athleteRecyclerview.setAdapter(reactionAthleteAdapter);
@@ -281,18 +281,19 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
         }
 
         if (contentType != null && contentType.equalsIgnoreCase("video")) {
-            videoView.setVideoPath(receivedPostModel.getUrls().getMobileUrl());
-            if (videoVisibleToUser) {
-                videoView.start();
-            }
-            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    thumbnailBackground.setVisibility(View.GONE);
+            if (receivedPostModel.getUrls().getMobileUrl() != null) {
+                videoView.setVideoPath(receivedPostModel.getUrls().getMobileUrl());
+                if (videoVisibleToUser) {
+                    videoView.start();
                 }
-            });
+                videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        thumbnailBackground.setVisibility(View.GONE);
+                    }
+                });
+            }
         }
-
     }
 
     private void playAllVideos() {
@@ -557,7 +558,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
     }
 
     @OnClick(R.id.reaction_button)
-    void createReaction(){
+    void createReaction() {
         PrefUtils.putString("LAST_SCREEN", DetailFragment.class.getName());
         Intent createPostIntent = new Intent(getActivity(), CreatePost.class);
         createPostIntent.putExtra("create_reaction", true);
