@@ -181,19 +181,14 @@ public class InviteAProFragment extends BaseDialogFragment implements BaseView {
 
             if (!TextUtils.isEmpty(edtEmail.getText().toString())) {
                 jsonRequest.put("email", edtEmail.getText().toString());
-            } else {
-                jsonRequest.put("email", "");
             }
+
             if (!TextUtils.isEmpty(edtNumber.getText().toString())) {
-                jsonRequest.put("phone_number", edtNumber.getText().toString());
-            } else {
-                jsonRequest.put("phone_number", "");
+                jsonRequest.put("phone_number", edtNumber.getText().toString().replace("-", ""));
             }
 
             if (!TextUtils.isEmpty(edtName.getText().toString())) {
                 jsonRequest.put("name", edtName.getText().toString());
-            } else {
-                jsonRequest.put("name", "");
             }
 
         } catch (JSONException e) {
