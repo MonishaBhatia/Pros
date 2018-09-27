@@ -1,19 +1,27 @@
 package pros.app.com.pros.profile.activity;
 
+import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.listener.single.DialogOnDeniedPermissionListener;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -58,6 +66,7 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
 
     private SettingsPresenter settingsPresenter;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int PERMISSION_CAMERA = 0;
 
 
     @Override
@@ -84,10 +93,11 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
             separator.setVisibility(View.GONE);
         }
 
-        if (!TextUtils.isEmpty(PrefUtils.getUser().getMediumUrl()))
-            Picasso.get().load(PrefUtils.getUser().getMediumUrl()).into(ivPic);
-        else if (!TextUtils.isEmpty(PrefUtils.getString("Image")))
+        if (!TextUtils.isEmpty(PrefUtils.getString("Image"))) {
             Picasso.get().load(PrefUtils.getString("Image")).into(ivPic);
+        } else if (!TextUtils.isEmpty(PrefUtils.getUser().getMediumUrl())) {
+            Picasso.get().load(PrefUtils.getUser().getMediumUrl()).into(ivPic);
+        }
 
         tvName.setText(String.format("%s %s", PrefUtils.getUser().getFirstName(), PrefUtils.getUser().getLastName()));
         tvNumFollowing.setText(String.valueOf(getIntent().getIntExtra("Follow_Count", 0)));
@@ -158,6 +168,61 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
 
     @OnClick(R.id.ivAvatar)
     public void onClickAvatar() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        }
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED)
+
+        {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    PERMISSION_CAMERA);
+        } else
+
+        {
+            openCamera();
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_CAMERA: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                    openCamera();
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+
+                    if (ActivityCompat.shouldShowRequestPermissionRationale
+                            (this, Manifest.permission.CAMERA)) {
+
+                        openDialog("", "Change your Settings to allow Pros to access Camera", "Ok");
+
+                    }
+                }
+                return;
+            }
+        }
+    }
+
+    private void openCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -174,7 +239,6 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
             ivPic.setImageBitmap(imageBitmap);
 
 
-
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
@@ -185,7 +249,6 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
             File finalFile = new File(getRealPathFromURI(tempUri));
 
             byte[] byteArray = baos.toByteArray();
-            imageBitmap.recycle();
 
             PrefUtils.putString("Image", Uri.fromFile(finalFile).toString());
             settingsPresenter.getUploadUrl(byteArray);

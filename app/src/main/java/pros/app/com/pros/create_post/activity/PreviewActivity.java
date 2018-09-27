@@ -131,9 +131,9 @@ public class PreviewActivity extends AppCompatActivity {
 
     private void convertImageToByteArray(Bitmap bitmap) {
 
-        Bitmap converetdImage = getResizedBitmap(bitmap, 500);
+        Bitmap converetdImage = getResizedBitmap(bitmap, 950);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        converetdImage.compress(Bitmap.CompressFormat.PNG, 80, stream);
+        converetdImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
         imageByteArray = stream.toByteArray();
     }
 

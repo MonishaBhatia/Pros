@@ -88,13 +88,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView,
 
         profilePresenter.getProfileData();
 
-        if (!TextUtils.isEmpty(PrefUtils.getUser().getMediumUrl())) {
-            Picasso.get().load(PrefUtils.getUser().getMediumUrl()).into(ivAvatar);
-            ivAvatarDefault.setVisibility(View.GONE);
-        } else if (!TextUtils.isEmpty(PrefUtils.getString("Image"))) {
-            Picasso.get().load(PrefUtils.getString("Image")).into(ivAvatar);
-            ivAvatarDefault.setVisibility(View.GONE);
-        }
+        setImage();
 
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
@@ -107,6 +101,22 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView,
         viewPager.measure(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         tabLayout.setupWithViewPager(viewPager);
 
+    }
+
+    private void setImage() {
+        if (!TextUtils.isEmpty(PrefUtils.getString("Image"))) {
+            Picasso.get().load(PrefUtils.getString("Image")).into(ivAvatar);
+            ivAvatarDefault.setVisibility(View.GONE);
+        } else if (!TextUtils.isEmpty(PrefUtils.getUser().getMediumUrl())) {
+            Picasso.get().load(PrefUtils.getUser().getMediumUrl()).into(ivAvatar);
+            ivAvatarDefault.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setImage();
     }
 
     @OnClick(R.id.ivSettings)

@@ -21,13 +21,12 @@
             android:id="@+id/videoView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="fill" />
+            android:layout_gravity="center"/>
 
         <ImageView
             android:id="@+id/thumbnail_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
             android:src="@drawable/background" />
 
 

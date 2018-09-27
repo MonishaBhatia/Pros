@@ -69,12 +69,7 @@ public class ReactionAthlete extends RecyclerView.Adapter<ReactionAthlete.ViewHo
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.athlete_thumb:
-                    /*Intent intent = new Intent(context, AthleteProfileActivity.class);
-                    intent.putExtra(PROFILE_ID, athleteModelArrayList.get(getAdapterPosition()).getId());
-                    intent.putExtra(IMAGE_URL, athleteModelArrayList.get(getAdapterPosition()).getAvatar().getMediumUrl());
-                    intent.putExtra(NAME, String.format("%s %s", athleteModelArrayList.get(getAdapterPosition()).getFirstName(), athleteModelArrayList.get(getAdapterPosition()).getLastName()));
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);*/
+
                     if(detailView != null ) {
                         detailView.playVideo(reactionsUrlList.get(getAdapterPosition()));
                     }
