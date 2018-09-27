@@ -13,7 +13,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import pros.app.com.pros.base.ApiEndPoints;
 import pros.app.com.pros.base.HttpServiceUtil;
@@ -72,12 +74,13 @@ public class CreatePostPresenter implements HttpServiceView {
                 try {
                     fis = new FileInputStream(new File(outPath));
 
-                    byte[] buf = new byte[1024];
+                    byte[] buf = new byte[1024 * 8];
                     int n;
                     while (-1 != (n = fis.read(buf)))
                         baos.write(buf, 0, n);
 
                     byteArray = baos.toByteArray();
+
                     getVideoUploadPath(ApiEndPoints.upload_video.getApi() + "?file_name=movie.m4v&file_size=" + length);
 
                 } catch (Exception e) {

@@ -1,6 +1,9 @@
 package pros.app.com.pros.profile.activity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
@@ -44,6 +47,7 @@ public class InviteAProFragment extends BaseDialogFragment implements BaseView {
     TextView tvSend;
 
     private ChangePasswordPresenter changePasswordPresenter;
+    static final int PICK_CONTACT = 1;
 
     public static final String TAG = "InviteAProFragment";
 
@@ -85,13 +89,13 @@ public class InviteAProFragment extends BaseDialogFragment implements BaseView {
                 StringBuffer stringBuffer = new StringBuffer();
                 if (a != null && a.length() > 0) {
                     stringBuffer.append(a);
-                    if (a.length() == 3) {
+                    if (a.length() == 3 && b.length() > 0) {
                         stringBuffer.append("-");
                     }
                 }
                 if (b != null && b.length() > 0) {
                     stringBuffer.append(b);
-                    if (b.length() == 3) {
+                    if (b.length() == 3 && c.length() > 0) {
                         stringBuffer.append("-");
                     }
                 }
@@ -170,8 +174,33 @@ public class InviteAProFragment extends BaseDialogFragment implements BaseView {
     @OnClick(R.id.tvContacts)
     public void onClickContact() {
         Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        startActivityForResult(intent, 0);
+        startActivityForResult(intent, PICK_CONTACT);
 
+    }
+
+    @Override
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+
+        switch (reqCode) {
+            case (PICK_CONTACT):
+                /*if (resultCode == Activity.RESULT_OK) {
+
+                    Uri uri = data.getData();
+                    String[] projection = {ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME};
+
+                    Cursor cursor = getContext().getContentResolver().query(uri, projection,
+                            null, null, null);
+                    cursor.moveToFirst();
+
+                    int numberColumnIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                    String number = cursor.getString(numberColumnIndex);
+
+                    int nameColumnIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+                    String name = cursor.getString(nameColumnIndex);
+
+                }*/
+        }
     }
 
     @OnClick(R.id.tvSend)

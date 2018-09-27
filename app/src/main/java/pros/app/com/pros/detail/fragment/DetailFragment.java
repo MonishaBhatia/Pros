@@ -269,6 +269,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
 
             athleteRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
             athleteRecyclerview.setAdapter(reactionAthleteAdapter);
+
         }
 
 
@@ -565,6 +566,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
 
     @OnClick(R.id.reaction_button)
     void createReaction() {
+        PrefUtils.putString("LAST_SCREEN", DetailFragment.class.getName());
         if (TextUtils.isEmpty(receivedPostModel.getContentType()))
             PrefUtils.putString("CONTENT_TYPE", "answer");
         else
