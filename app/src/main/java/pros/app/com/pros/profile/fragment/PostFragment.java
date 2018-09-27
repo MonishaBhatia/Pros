@@ -105,17 +105,6 @@ public class PostFragment extends Fragment implements ProfileView {
         View view = inflater.inflate(R.layout.fragment_post, container, false);
         lableNothing = view.findViewById(R.id.label_nothing);
         emptyStateiv = view.findViewById(R.id.empty_state_iv);
-        if (dataType.equalsIgnoreCase("postData")) {
-            lableNothing.setText("No Posts Yet");
-        } else if (dataType.equalsIgnoreCase("reactionsData")) {
-            receivedContentType = "reactions";
-            lableNothing.setText("No Reactions Yet");
-        } else if (dataType.equalsIgnoreCase("athleteAnswers")) {
-            receivedContentType = "answers";
-            lableNothing.setText("No Answers Yet");
-        } else if (dataType.equalsIgnoreCase("likedPosts")) {
-            lableNothing.setText("No Liked Post Yet");
-        }
         likedPostsRecyclerview = view.findViewById(R.id.liked_posts);
         likedPostsRecyclerview.setNestedScrollingEnabled(false);
         return view;
@@ -157,6 +146,19 @@ public class PostFragment extends Fragment implements ProfileView {
     @Override
     public void updateLikedPosts(ArrayList<PostModel> postList) {
         if (postList != null && !postList.isEmpty()) {
+
+            if (dataType.equalsIgnoreCase("postData")) {
+                lableNothing.setText("Loading Posts");
+            } else if (dataType.equalsIgnoreCase("reactionsData")) {
+                receivedContentType = "reactions";
+                lableNothing.setText("Loading Reactions");
+            } else if (dataType.equalsIgnoreCase("athleteAnswers")) {
+                receivedContentType = "answers";
+                lableNothing.setText("Loading Answers");
+            } else if (dataType.equalsIgnoreCase("likedPosts")) {
+                lableNothing.setText("Loading Liked Post");
+            }
+
             lableNothing.setVisibility(View.GONE);
             emptyStateiv.setVisibility(View.GONE);
             likedPostsRecyclerview.setActivity(getActivity());
@@ -178,6 +180,18 @@ public class PostFragment extends Fragment implements ProfileView {
             likedPostsRecyclerview.setLayoutManager(mLayoutManager);
             likedPostsRecyclerview.setItemAnimator(new DefaultItemAnimator());
             likedPostsRecyclerview.setAdapter(postAdapter);
+        } else {
+            if (dataType.equalsIgnoreCase("postData")) {
+                lableNothing.setText("No Posts Yet");
+            } else if (dataType.equalsIgnoreCase("reactionsData")) {
+                receivedContentType = "reactions";
+                lableNothing.setText("No Reactions Yet");
+            } else if (dataType.equalsIgnoreCase("athleteAnswers")) {
+                receivedContentType = "answers";
+                lableNothing.setText("No Answers Yet");
+            } else if (dataType.equalsIgnoreCase("likedPosts")) {
+                lableNothing.setText("No Liked Post Yet");
+            }
         }
 
     }

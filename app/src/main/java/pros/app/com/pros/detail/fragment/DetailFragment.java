@@ -369,6 +369,12 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
                 String contentType = receivedPostModel.getContentType();
 
                 //play your video
+                if(receivedPostModel.getUrls() == null){
+                    return;
+                }
+                if(TextUtils.isEmpty(receivedPostModel.getUrls().getMobileUrl()))
+                    return;
+
                 if (contentType != null && contentType.equalsIgnoreCase("video") && videoView != null) {
                     videoView.setVideoPath(receivedPostModel.getUrls().getMobileUrl());
                     videoView.start();
@@ -559,9 +565,12 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
 
     @OnClick(R.id.reaction_button)
     void createReaction() {
-        PrefUtils.putString("LAST_SCREEN", DetailFragment.class.getName());
+        if (TextUtils.isEmpty(receivedPostModel.getContentType()))
+            PrefUtils.putString("CONTENT_TYPE", "answer");
+        else
+            PrefUtils.putString("CONTENT_TYPE", "reaction");
+        PrefUtils.putInt("PARENT_ID", receivedPostModel.getId());
         Intent createPostIntent = new Intent(getActivity(), CreatePost.class);
-        createPostIntent.putExtra("create_reaction", true);
         startActivity(createPostIntent);
     }
 
