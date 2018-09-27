@@ -52,7 +52,7 @@ public class CreatePostPresenter implements HttpServiceView {
                 + COMPRESSED_VIDEOS_DIR
                 + "video.mp4";
 
-        VideoCompress.compressVideoHigh(videoPath, outPath, new VideoCompress.CompressListener() {
+        VideoCompress.compressVideoMedium(videoPath, outPath, new VideoCompress.CompressListener() {
             @Override
             public void onStart() {
                 //Start Compress
