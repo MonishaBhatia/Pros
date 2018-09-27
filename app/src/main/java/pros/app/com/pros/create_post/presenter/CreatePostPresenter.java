@@ -24,7 +24,6 @@ import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.base.ProsConstants;
 import pros.app.com.pros.create_post.model.VideoPathModel;
 import pros.app.com.pros.create_post.model.VideoUploadModel;
-import pros.app.com.pros.detail.fragment.DetailFragment;
 import pros.app.com.pros.home.model.AthleteModel;
 import pros.app.com.pros.profile.model.UploadUrlModel;
 
@@ -51,10 +50,9 @@ public class CreatePostPresenter implements HttpServiceView {
                 + File.separator
                 + APP_DIR
                 + COMPRESSED_VIDEOS_DIR
-                + "video.mp4"
-                ;
+                + "video.mp4";
 
-        VideoCompress.compressVideoLow(videoPath, outPath, new VideoCompress.CompressListener() {
+        VideoCompress.compressVideoMedium(videoPath, outPath, new VideoCompress.CompressListener() {
             @Override
             public void onStart() {
                 //Start Compress
@@ -73,12 +71,13 @@ public class CreatePostPresenter implements HttpServiceView {
                 try {
                     fis = new FileInputStream(new File(outPath));
 
-                    byte[] buf = new byte[1024];
+                    byte[] buf = new byte[1024 * 8];
                     int n;
                     while (-1 != (n = fis.read(buf)))
                         baos.write(buf, 0, n);
 
                     byteArray = baos.toByteArray();
+
                     getVideoUploadPath(ApiEndPoints.upload_video.getApi() + "?file_name=movie.m4v&file_size=" + length);
 
                 } catch (Exception e) {
@@ -137,18 +136,25 @@ public class CreatePostPresenter implements HttpServiceView {
             JSONObject jsonObject = new JSONObject();
             JSONArray array = new JSONArray();
 
-            if(userSelectedList != null && !userSelectedList.isEmpty() ) {
+            String content = PrefUtils.getString("CONTENT_TYPE");
+            int parentId = PrefUtils.getInt("PARENT_ID");
+
+            if (userSelectedList != null && !userSelectedList.isEmpty()) {
 
                 for (int i = 0; i < userSelectedList.size(); i++) {
                     array.put(String.valueOf(userSelectedList.get(i).getId()));
                 }
             }
-            if(isImage) {
+            if (isImage) {
                 try {
-                    jsonObject.put("content_type", "image");
+                    if (TextUtils.isEmpty(content))
+                        jsonObject.put("content_type", "image");
+                    else
+                        jsonObject.put("content_type", content);
                     jsonObject.put("image_guid", uploadUrlModel.getGuid());
                     jsonObject.put("tags", array);
-                    //jsonObject.put("parent_id", PrefUtils.getUser().getId());
+                    if (parentId != 0)
+                        jsonObject.put("parent_id", parentId);
 
                     jsonRequest.put("post", jsonObject);
 
@@ -159,26 +165,34 @@ public class CreatePostPresenter implements HttpServiceView {
             } else {
                 try {
                     VideoUploadModel videoUploadModel = JsonUtils.from(response, VideoUploadModel.class);
-                    jsonObject.put("content_type", "video");
-                    jsonObject.put("video_guid", videoPathModel.getVideoGuid());
+
+                    if (TextUtils.isEmpty(content))
+                        jsonObject.put("content_type", "video");
+                    else
+                        jsonObject.put("content_type", content);
+
+                    jsonObject.put("video_guid", videoUploadModel.getPath());
                     jsonObject.put("panda_video_id", videoUploadModel.getId());
                     jsonObject.put("tags", array);
-                    /*if(DetailFragment.class.getName().equals(PrefUtils.getString("LAST_SCREEN"))){
-                        jsonObject.put("parent_type", "Question");
-                        PrefUtils.putString("LAST_SCREEN", "");
-                    } else {
-                        jsonObject.put("parent_type", "Post");
-                    }*/
-                    //jsonObject.put("parent_id", PrefUtils.getUser().getId());
+
+                    if (parentId != 0) {
+                        jsonObject.put("parent_id", parentId);
+
+                        if(content.equals("answer")){
+                            jsonObject.put("parent_type", "Question");
+                        } else {
+                            jsonObject.put("parent_type", "Post");
+                        }
+                    }
 
                     jsonRequest.put("post", jsonObject);
-                    PrefUtils.putString("LAST_SCREEN", "");
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
             postContent(jsonRequest.toString());
+            PrefUtils.putString("CONTENT_TYPE", "");
+            PrefUtils.putInt("PARENT_ID", 0);
         } else {
             LogUtils.LOGD("Hurray", "file Uploaded");
         }
@@ -220,7 +234,7 @@ public class CreatePostPresenter implements HttpServiceView {
         this.userSelectedList = userSelectedList;
         this.byteArray = byteArray;
         isImage = true;
-        
+
         new HttpServiceUtil(
                 this,
                 ApiEndPoints.upload_image.getApi(),

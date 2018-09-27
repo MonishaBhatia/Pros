@@ -119,6 +119,18 @@ public class TagsActivity extends AppCompatActivity implements TagsView, CreateQ
         if (athleteArrayList != null || !athleteArrayList.isEmpty()) {
             initializeRecyclerView();
         }
+
+        edtSearch.addTextChangedListener(watcher);
+        edtSearch.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                tvCancel.setVisibility(View.VISIBLE);
+                InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                keyboard.showSoftInput(edtSearch, 0);
+                edtSearch.requestFocus();
+                return false;
+            }
+        });
     }
 
     private void initializeRecyclerView() {
@@ -137,17 +149,7 @@ public class TagsActivity extends AppCompatActivity implements TagsView, CreateQ
 
     @OnClick(R.id.viewSearch)
     public void onClickSearch() {
-        edtSearch.addTextChangedListener(watcher);
-        edtSearch.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                tvCancel.setVisibility(View.VISIBLE);
-                InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                keyboard.showSoftInput(edtSearch, 0);
-                edtSearch.requestFocus();
-                return false;
-            }
-        });
+
     }
 
     private void sendDataBack() {

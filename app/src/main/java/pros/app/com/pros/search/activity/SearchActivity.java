@@ -33,6 +33,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import pros.app.com.pros.R;
 import pros.app.com.pros.base.KeyboardAction;
 import pros.app.com.pros.base.PrefUtils;
+import pros.app.com.pros.home.activity.HomeActivity;
 import pros.app.com.pros.home.model.AthleteModel;
 import pros.app.com.pros.home.model.PostModel;
 import pros.app.com.pros.profile.activity.AthleteActivity;
@@ -63,7 +64,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView {
 
     @BindView(R.id.tvCancel)
     TextView tvCancel;
-
 
     @BindView(R.id.ivClose)
     ImageView ivClose;
@@ -107,20 +107,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView {
 
         searchPresenter = new SearchPresenter(this);
         searchPresenter.getSearchData();
-        topPostsRecyclerview.setNestedScrollingEnabled(false);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        edtSearch.addTextChangedListener(watcher);
-        edtSearch.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                allAthletesListRecyclerview.setVisibility(View.VISIBLE);
-                tvCancel.setVisibility(View.VISIBLE);
-                InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                keyboard.showSoftInput(edtSearch, 0);
-                edtSearch.requestFocus();
-                return false;
-            }
-        });
     }
 
     private void setImage() {
@@ -159,8 +146,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView {
     @Override
     public void updateTopPosts(ArrayList<PostModel> topPostsList) {
 
-        topPostsAdapter = new TopPostsAdapter(topPostsList);
-
         topPostsRecyclerview.setActivity(this);
         topPostsRecyclerview.setDownloadPath(Environment.getExternalStorageDirectory() + "/MyVideo"); //optional
         topPostsRecyclerview.setDownloadVideos(true);
@@ -174,6 +159,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView {
         topPostsRecyclerview.setItemAnimator(new DefaultItemAnimator());
         topPostsRecyclerview.setVisiblePercent(50);
 
+        topPostsAdapter = new TopPostsAdapter(topPostsList);
         topPostsRecyclerview.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         topPostsRecyclerview.setAdapter(topPostsAdapter);
     }
@@ -206,5 +192,28 @@ public class SearchActivity extends AppCompatActivity implements SearchView {
         tvCancel.setVisibility(View.GONE);
         ivClose.setVisibility(View.GONE);
         KeyboardAction.hideSoftKeyboard(this, edtSearch);
+    }
+
+    @OnClick(R.id.tvPros)
+    public void onClickPros() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.viewSearch)
+    public void onClickSearch() {
+        edtSearch.addTextChangedListener(watcher);
+        edtSearch.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                allAthletesListRecyclerview.setVisibility(View.VISIBLE);
+                tvCancel.setVisibility(View.VISIBLE);
+                InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                keyboard.showSoftInput(edtSearch, 0);
+                edtSearch.requestFocus();
+                return false;
+            }
+        });
     }
 }

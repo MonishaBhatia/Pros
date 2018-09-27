@@ -97,12 +97,6 @@ public class QuestionFragment extends Fragment implements ProfileView {
         View view = inflater.inflate(R.layout.fragment_question, container, false);
         labelNothing = view.findViewById(R.id.label_nothing);
         emptyStateiv = view.findViewById(R.id.empty_state_iv);
-        if (dataType.equalsIgnoreCase("athlete_questions")) {
-            labelNothing.setText("No Questions Yet");
-        } else if (dataType.equalsIgnoreCase("liked_questions")) {
-            labelNothing.setText("No Liked Questions Yet");
-        }
-
         likedQuestionsRecyclerview = view.findViewById(R.id.liked_questions);
         likedQuestionsRecyclerview.setNestedScrollingEnabled(false);
         return view;
@@ -148,6 +142,13 @@ public class QuestionFragment extends Fragment implements ProfileView {
             likedQuestionsRecyclerview.setLayoutManager(layoutManager);
             likedQuestionsAdapter = new LikedQuestionsAdapter(getActivity(), postsList);
             likedQuestionsRecyclerview.setAdapter(likedQuestionsAdapter);
+        } else {
+            if (dataType.equalsIgnoreCase("athlete_questions")) {
+                labelNothing.setText("No Questions Yet");
+            } else if (dataType.equalsIgnoreCase("liked_questions")) {
+                labelNothing.setText("No Liked Questions Yet");
+            }
+
         }
     }
 

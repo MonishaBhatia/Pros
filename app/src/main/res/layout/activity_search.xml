@@ -130,7 +130,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ScrollView
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true">
@@ -151,7 +151,8 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/topPros"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -164,13 +165,13 @@
                     android:id="@+id/topPosts"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:itemCount="3"
-                    tools:listitem="@layout/item_home_posts" />
+                    tools:listitem="@layout/item_home_posts"
+                    android:nestedScrollingEnabled="false"/>
 
             </LinearLayout>
 
 
-        </ScrollView>
+        </android.support.v4.widget.NestedScrollView>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/all_athletes_list"
