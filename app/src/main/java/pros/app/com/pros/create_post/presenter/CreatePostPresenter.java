@@ -13,9 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import pros.app.com.pros.base.ApiEndPoints;
 import pros.app.com.pros.base.HttpServiceUtil;
@@ -26,7 +24,6 @@ import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.base.ProsConstants;
 import pros.app.com.pros.create_post.model.VideoPathModel;
 import pros.app.com.pros.create_post.model.VideoUploadModel;
-import pros.app.com.pros.detail.fragment.DetailFragment;
 import pros.app.com.pros.home.model.AthleteModel;
 import pros.app.com.pros.profile.model.UploadUrlModel;
 
@@ -55,7 +52,7 @@ public class CreatePostPresenter implements HttpServiceView {
                 + COMPRESSED_VIDEOS_DIR
                 + "video.mp4";
 
-        VideoCompress.compressVideoLow(videoPath, outPath, new VideoCompress.CompressListener() {
+        VideoCompress.compressVideoHigh(videoPath, outPath, new VideoCompress.CompressListener() {
             @Override
             public void onStart() {
                 //Start Compress
