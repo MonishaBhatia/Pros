@@ -1,11 +1,16 @@
 package pros.app.com.pros.profile.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -31,6 +36,7 @@ import pros.app.com.pros.profile.presenter.ChangePasswordPresenter;
 
 public class InviteAProFragment extends BaseDialogFragment implements BaseView {
 
+    private static final int READ_CONTACT_REQUEST = 101;
     @BindView(R.id.tvEmail)
     TextView tvEmail;
     @BindView(R.id.tvMessage)
@@ -173,9 +179,42 @@ public class InviteAProFragment extends BaseDialogFragment implements BaseView {
 
     @OnClick(R.id.tvContacts)
     public void onClickContact() {
+
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.READ_CONTACTS}, READ_CONTACT_REQUEST);
+        } else {
+            openContacts();
+        }
+    }
+
+    private void openContacts() {
         Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
         startActivityForResult(intent, PICK_CONTACT);
+    }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case READ_CONTACT_REQUEST: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    openContacts();
+
+                } else {
+
+                    if (ActivityCompat.shouldShowRequestPermissionRationale
+                            (requireActivity(), Manifest.permission.CAMERA)) {
+
+                        openDialog("", "Change your Settings to allow Pros to access Contacts", "Ok");
+
+                    }
+                }
+                return;
+            }
+        }
     }
 
     @Override
@@ -184,22 +223,31 @@ public class InviteAProFragment extends BaseDialogFragment implements BaseView {
 
         switch (reqCode) {
             case (PICK_CONTACT):
-                /*if (resultCode == Activity.RESULT_OK) {
+                if (resultCode == Activity.RESULT_OK) {
 
-                    Uri uri = data.getData();
-                    String[] projection = {ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME};
+                    Uri contactData = data.getData();
 
-                    Cursor cursor = getContext().getContentResolver().query(uri, projection,
-                            null, null, null);
-                    cursor.moveToFirst();
+                    Cursor cur =  requireContext().getContentResolver().query(contactData, null, null, null, null);
+                    if (cur.getCount() > 0) {// thats mean some resutl has been found
+                        if(cur.moveToNext()) {
+                            String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                            String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 
-                    int numberColumnIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                    String number = cursor.getString(numberColumnIndex);
 
-                    int nameColumnIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-                    String name = cursor.getString(nameColumnIndex);
+                            if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0)
+                            {
 
-                }*/
+                                Cursor phones = requireContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = "+ id,null, null);
+                                while (phones.moveToNext()) {
+                                    String phoneNumber = cur.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                }
+                                phones.close();
+                            }
+
+                        }
+                    }
+                    cur.close();
+                }
         }
     }
 
@@ -212,8 +260,11 @@ public class InviteAProFragment extends BaseDialogFragment implements BaseView {
                 jsonRequest.put("email", edtEmail.getText().toString());
             }
 
-            if (!TextUtils.isEmpty(edtNumber.getText().toString())) {
+            if (!TextUtils.isEmpty(edtNumber.getText().toString()) && edtNumber.getText().toString().length() == 12) {
                 jsonRequest.put("phone_number", edtNumber.getText().toString().replace("-", ""));
+            } else {
+                openDialog("", "Enter 10 Digit Mobile Number", "CLOSE");
+                return;
             }
 
             if (!TextUtils.isEmpty(edtName.getText().toString())) {
@@ -229,6 +280,7 @@ public class InviteAProFragment extends BaseDialogFragment implements BaseView {
 
     @Override
     public void onSuccess() {
+        dismiss();
         openDialog("Success", "Your invite has been sent!", "Ok");
     }
 
@@ -242,6 +294,7 @@ public class InviteAProFragment extends BaseDialogFragment implements BaseView {
 
     @Override
     public void onFailure(int message) {
+        dismiss();
         openDialog("Pending Invite", "This Athlete has a pending invitation to join Pros", "Close");
     }
 }

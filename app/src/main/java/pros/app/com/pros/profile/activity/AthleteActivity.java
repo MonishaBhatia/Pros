@@ -154,22 +154,21 @@ public class AthleteActivity extends BaseActivity implements ProfileView,
                 if (PrefUtils.isAthlete()) {
                     if (isViewVisible()) {
                         // Any portion of the imageView, even a single pixel, is within the visible window
-                        LogUtils.LOGE("Preeti Testing", "Visible");
                         hideDropDown();
 
                     } else {
                         // NONE of the imageView is within the visible window
                         showDropDown();
-                        LogUtils.LOGE("Preeti Testing", "Not Visible");
                     }
                 }
             }
         });
 
-        if (!TextUtils.isEmpty(PrefUtils.getUser().getThumbUrl())) {
+        if (!TextUtils.isEmpty(PrefUtils.getString("Image"))) {
+            Picasso.get().load(PrefUtils.getString("Image")).placeholder(R.drawable.profile).into(ivProfile);
+        } else if (!TextUtils.isEmpty(PrefUtils.getUser().getThumbUrl())) {
             Picasso.get().load(PrefUtils.getUser().getThumbUrl()).placeholder(R.drawable.profile).into(ivProfile);
         }
-
     }
 
     private void showDropDown() {
@@ -244,9 +243,12 @@ public class AthleteActivity extends BaseActivity implements ProfileView,
 
         metaData = profileMainModel.getMetadata();
 
-        if (!TextUtils.isEmpty(imageUrl)) {
+        if (!TextUtils.isEmpty(PrefUtils.getString("Image"))) {
+            Picasso.get().load(PrefUtils.getString("Image")).into(ivAvatar);
+        } else if (!TextUtils.isEmpty(imageUrl)) {
             Picasso.get().load(imageUrl).into(ivAvatar);
         }
+
         tvName.setText(name);
         tvNumFollowing.setText(String.valueOf(metaData.getFollowCount()));
         tvNumFollowers.setText(String.valueOf(metaData.getFollowersCount()));
