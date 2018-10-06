@@ -3,6 +3,7 @@ package pros.app.com.pros.profile.activity;
 import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,6 +28,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +38,7 @@ import pros.app.com.pros.base.BaseActivity;
 import pros.app.com.pros.base.CustomDialogFragment;
 import pros.app.com.pros.base.CustomDialogListener;
 import pros.app.com.pros.base.PrefUtils;
+import pros.app.com.pros.create_post.activity.CreatePost;
 import pros.app.com.pros.launch_screen.LaunchActivity;
 import pros.app.com.pros.profile.presenter.SettingsPresenter;
 import pros.app.com.pros.profile.views.SettingsView;
@@ -65,8 +69,10 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
     View separator;
 
     private SettingsPresenter settingsPresenter;
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_IMAGE_CAPTURE = 101;
+    private static final int REQUEST_OPEN_GALLERY = 102;
     private static final int PERMISSION_CAMERA = 0;
+    private Bitmap imageBitmap;
 
 
     @Override
@@ -168,6 +174,38 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
 
     @OnClick(R.id.ivAvatar)
     public void onClickAvatar() {
+
+        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
+        pictureDialog.setTitle("Select Action");
+        String[] pictureDialogItems = {
+                "Select photo from gallery",
+                "Capture photo from camera"};
+        pictureDialog.setItems(pictureDialogItems,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                choosePhotoFromGallary();
+                                break;
+                            case 1:
+                                takePhotoFromCamera();
+                                break;
+                        }
+                    }
+                });
+        pictureDialog.show();
+    }
+
+    private void choosePhotoFromGallary() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        startActivityForResult(galleryIntent, REQUEST_OPEN_GALLERY);
+    }
+
+    private void takePhotoFromCamera() {
+
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
 
@@ -188,7 +226,6 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
         {
             openCamera();
         }
-
     }
 
     @Override
@@ -233,9 +270,22 @@ public class SettingsActivity extends BaseActivity implements SettingsView, Cust
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+        if (resultCode == RESULT_OK) {
+
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                Bundle extras = data.getExtras();
+                imageBitmap = (Bitmap) extras.get("data");
+
+            } else if (requestCode == REQUEST_OPEN_GALLERY) {
+                Uri contentURI = data.getData();
+                try {
+                    imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
             ivPic.setImageBitmap(imageBitmap);
 
 

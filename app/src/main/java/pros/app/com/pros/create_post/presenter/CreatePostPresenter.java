@@ -71,7 +71,7 @@ public class CreatePostPresenter implements HttpServiceView {
                 try {
                     fis = new FileInputStream(new File(outPath));
 
-                    byte[] buf = new byte[1024 * 8];
+                    byte[] buf = new byte[1024];
                     int n;
                     while (-1 != (n = fis.read(buf)))
                         baos.write(buf, 0, n);

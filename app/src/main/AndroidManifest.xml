@@ -67,6 +67,11 @@
             android:label="@string/title_activity_create_post"
             android:theme="@style/FullscreenTheme" />
         <activity
+            android:name=".create_post.activity.CreatePostNew"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_create_post"
+            android:theme="@style/FullscreenTheme" />
+        <activity
             android:name=".create_question.activity.AskQuestionActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".create_question.activity.TagsActivity" />
