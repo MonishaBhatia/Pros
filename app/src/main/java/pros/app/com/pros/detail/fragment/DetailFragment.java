@@ -137,6 +137,8 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
     private int commentId;
     private int commentPosition;
     private String recievedContentType;
+    private List<PostModel> reactionsList;
+    private boolean processing;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -225,16 +227,21 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
             questionContainer.setVisibility(View.VISIBLE);
             questionText.setText(receivedPostModel.getText());
             questionAthleteName.setText(receivedPostModel.getQuestioner().getName());
+            commentsCount.setVisibility(View.GONE);
+            commentsIcon.setVisibility(View.GONE);
+            thumbnailBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            thumbnailBackground.setColorFilter(ContextCompat.getColor(requireContext(), R.color.light_gray), android.graphics.PorterDuff.Mode.MULTIPLY);
 
-            List<PostModel> reactionsList = receivedPostModel.getReactions();
+
+            reactionsList = receivedPostModel.getReactions();
             if (reactionsList.size() > 0) {
+                likesCount.setEnabled(true);
                 for (int i = 0; i < reactionsList.size(); i++) {
                     totalReactionsVideos.add(reactionsList.get(i).getUrls().getMobileUrl());
                 }
-
                 playAllVideos();
-
-
+            } else{
+                likesCount.setEnabled(false);
             }
 
         }
@@ -427,6 +434,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
         likesCount.setText(String.valueOf(receivedPostModel.getLikes().getCount() + 1));
         receivedPostModel.getLikes().setLikedByCurrentUser(true);
         receivedPostModel.getLikes().setCount(receivedPostModel.getLikes().getCount() + 1);
+        processing = false;
     }
 
     @Override
@@ -438,6 +446,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
         likesCount.setText(String.valueOf(receivedPostModel.getLikes().getCount() - 1));
         receivedPostModel.getLikes().setLikedByCurrentUser(false);
         receivedPostModel.getLikes().setCount(receivedPostModel.getLikes().getCount() - 1);
+        processing = false;
     }
 
     @Override
@@ -463,6 +472,10 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
     @OnClick(R.id.likes_count)
     public void onclickLike() {
 
+        if(processing){
+            return;
+        }
+        processing = true;
         if (TextUtils.isEmpty(receivedPostModel.getContentType())) {
             if (receivedPostModel.getLikes().isLikedByCurrentUser()) {
                 detailPresenter.unlikeQuestion(receivedPostModel.getId());
@@ -470,11 +483,12 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
                 detailPresenter.likeQuestion(receivedPostModel.getId());
             }
         } else {
-
-            if (receivedPostModel.getLikes().isLikedByCurrentUser()) {
-                detailPresenter.unlikePost(receivedPostModel.getId());
-            } else {
-                detailPresenter.likePost(receivedPostModel.getId());
+            if(reactionsList.size() > 0) {
+                if (receivedPostModel.getLikes().isLikedByCurrentUser()) {
+                    detailPresenter.unlikePost(receivedPostModel.getId());
+                } else {
+                    detailPresenter.likePost(receivedPostModel.getId());
+                }
             }
         }
     }

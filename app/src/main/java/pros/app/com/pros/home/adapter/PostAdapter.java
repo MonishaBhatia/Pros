@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -98,6 +99,7 @@ public class PostAdapter extends AAH_VideosAdapter {
 
                 holder.setImageUrl(thumbnailUrl);
                 Picasso.get().load(holder.getImageUrl()).into(holder.getAAH_ImageView());
+                holder.getAAH_ImageView().setColorFilter(ContextCompat.getColor(context, R.color.gray), android.graphics.PorterDuff.Mode.MULTIPLY);
 
             } else {
                 thumbnailUrl = postModel.getUrls().getMediumUrl();
