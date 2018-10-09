@@ -65,6 +65,8 @@ public class PostAdapter extends AAH_VideosAdapter {
         String contentType = postModel.getContentType();
         String dateDifference = DateUtils.getDateDifference(postModel.getCreatedAt(), false);
 
+        holder.setIsRecyclable(false);
+
         if (postModel.getQuestioner() != null ||
                 (contentType != null &&
                         (contentType.equalsIgnoreCase("image") || contentType.equalsIgnoreCase("video")))) {
@@ -76,6 +78,8 @@ public class PostAdapter extends AAH_VideosAdapter {
             List<PostModel> reactionsList = postModel.getReactions();
 
             if (reactionsList.size() > 0) {
+                ((PostsViewHolder) holder).separator.setVisibility(View.VISIBLE);
+                ((PostsViewHolder) holder).athleteRecyclerview.setVisibility(View.VISIBLE);
 
                 ArrayList<AthleteModel> athleteModels = new ArrayList<>();
 
@@ -83,8 +87,12 @@ public class PostAdapter extends AAH_VideosAdapter {
                     athleteModels.add(reactionsList.get(i).getAthlete());
                 }
 
-                ReactionAthlete reactionAthleteAdapter = new ReactionAthlete(context, athleteModels, null, null);
+                ((PostsViewHolder) holder).athleteRecyclerview.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+                ReactionAthlete reactionAthleteAdapter = new ReactionAthlete(athleteModels, null, null);
                 ((PostsViewHolder) holder).athleteRecyclerview.setAdapter(reactionAthleteAdapter);
+            } else {
+                ((PostsViewHolder) holder).separator.setVisibility(View.GONE);
+                ((PostsViewHolder) holder).athleteRecyclerview.setVisibility(View.GONE);
             }
 
 
@@ -163,12 +171,13 @@ public class PostAdapter extends AAH_VideosAdapter {
 
         @BindView(R.id.athlete_list)
         RecyclerView athleteRecyclerview;
+        @BindView(R.id.separator)
+        View separator;
 
         public PostsViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
             postContainer.setOnClickListener(this);
-            athleteRecyclerview.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         }
 
         @Override

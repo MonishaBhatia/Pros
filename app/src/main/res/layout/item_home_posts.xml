@@ -143,12 +143,21 @@
                     android:background="@drawable/circle"
                     android:src="@drawable/profile" />
 
+                <View
+                    android:id="@+id/separator"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/gray"
+                    android:layout_marginLeft="@dimen/dp_8"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:layout_toRightOf="@id/athlete_thumb"/>
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/athlete_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_toRightOf="@id/athlete_thumb"
+                    android:layout_toRightOf="@id/separator"
                     android:layout_below="@+id/athlete_name" />
 
             </RelativeLayout>

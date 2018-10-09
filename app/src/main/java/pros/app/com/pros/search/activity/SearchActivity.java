@@ -201,7 +201,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView {
         startActivity(intent);
     }
 
-    @OnClick(R.id.viewSearch)
+    @OnClick({R.id.viewSearch,R.id.edtSearch})
     public void onClickSearch() {
         edtSearch.addTextChangedListener(watcher);
         edtSearch.setOnTouchListener(new View.OnTouchListener() {

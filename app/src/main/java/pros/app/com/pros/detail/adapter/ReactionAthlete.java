@@ -22,13 +22,12 @@ public class ReactionAthlete extends RecyclerView.Adapter<ReactionAthlete.ViewHo
 
 
     private ArrayList<AthleteModel> athleteModelArrayList;
-    private Context context;
     private DetailView detailView;
     private ArrayList<String> reactionsUrlList;
 
 
-    public ReactionAthlete(Context context, ArrayList<AthleteModel> athleteModels, ArrayList<String> reactionUrlList, DetailView detailView) {
-        this.context = context;
+    public ReactionAthlete(ArrayList<AthleteModel> athleteModels, ArrayList<String> reactionUrlList, DetailView detailView) {
+
         this.athleteModelArrayList = athleteModels;
         this.detailView = detailView;
         this.reactionsUrlList = reactionUrlList;
@@ -45,8 +44,7 @@ public class ReactionAthlete extends RecyclerView.Adapter<ReactionAthlete.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        AthleteModel athleteModel = athleteModelArrayList.get(position);
-        Picasso.get().load(athleteModel.getAvatar().getThumbnailUrl()).into(holder.prosThumb);
+        Picasso.get().load(athleteModelArrayList.get(position).getAvatar().getThumbnailUrl()).into(holder.prosThumb);
     }
 
     @Override
