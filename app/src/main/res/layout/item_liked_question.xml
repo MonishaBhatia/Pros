@@ -50,7 +50,7 @@
             android:textColor="@color/white"
             android:textSize="@dimen/sp_14"
             android:layout_marginTop="@dimen/dp_8"
-            tools:text="Preeti Wadhwani" />
+            tools:text="Testing Testing" />
 
         <TextView
             android:id="@+id/question_description"

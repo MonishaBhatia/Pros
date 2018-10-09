@@ -105,7 +105,7 @@
                     android:layout_below="@+id/athlete_thumb"
                     android:layout_marginLeft="@dimen/dp_16"
                     android:layout_marginTop="@dimen/dp_8"
-                    android:text="Preeti"
+                    android:text="Test"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp_16" />
 

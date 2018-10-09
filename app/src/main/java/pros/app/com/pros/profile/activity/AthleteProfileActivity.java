@@ -165,13 +165,11 @@ public class AthleteProfileActivity extends BaseActivity implements ProfileView,
                 if (PrefUtils.isAthlete()) {
                     if (isViewVisible()) {
                         // Any portion of the imageView, even a single pixel, is within the visible window
-                        LogUtils.LOGE("Preeti Testing", "Visible");
                         hideDropDown();
 
                     } else {
                         // NONE of the imageView is within the visible window
                         showDropDown();
-                        LogUtils.LOGE("Preeti Testing", "Not Visible");
                     }
                 }
             }
