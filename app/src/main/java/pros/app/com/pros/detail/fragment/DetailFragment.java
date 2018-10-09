@@ -137,6 +137,8 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
     private int commentId;
     private int commentPosition;
     private String recievedContentType;
+    private List<PostModel> reactionsList;
+    private boolean processing;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -208,6 +210,13 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
         } else {
             reactionButton.setVisibility(View.GONE);
         }
+        reactionsList = receivedPostModel.getReactions();
+        if (reactionsList.size() > 0) {
+            likesCount.setEnabled(true);
+            for (int i = 0; i < reactionsList.size(); i++) {
+                totalReactionsVideos.add(reactionsList.get(i).getUrls().getMobileUrl());
+            }
+        }
 
         if (contentType != null &&
                 (contentType.equalsIgnoreCase("image") || contentType.equalsIgnoreCase("video"))) {
@@ -225,18 +234,17 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
             questionContainer.setVisibility(View.VISIBLE);
             questionText.setText(receivedPostModel.getText());
             questionAthleteName.setText(receivedPostModel.getQuestioner().getName());
-
-            List<PostModel> reactionsList = receivedPostModel.getReactions();
-            if (reactionsList.size() > 0) {
-                for (int i = 0; i < reactionsList.size(); i++) {
-                    totalReactionsVideos.add(reactionsList.get(i).getUrls().getMobileUrl());
-                }
-
-                playAllVideos();
-
-
+            commentsCount.setVisibility(View.GONE);
+            commentsIcon.setVisibility(View.GONE);
+            thumbnailBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            thumbnailBackground.setColorFilter(ContextCompat.getColor(requireContext(), R.color.light_gray), android.graphics.PorterDuff.Mode.MULTIPLY);
+            if (totalReactionsVideos == null && totalReactionsVideos.isEmpty()) {
+                likesCount.setEnabled(false);
             }
+        }
 
+        if (totalReactionsVideos != null && !totalReactionsVideos.isEmpty()) {
+            playAllVideos();
         }
 
         String dateDifference = DateUtils.getDateDifference(receivedPostModel.getCreatedAt(), true);
@@ -265,7 +273,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
                 reactionUrlList.add(reactionsList.get(i).getUrls().getMobileUrl());
             }
 
-            ReactionAthlete reactionAthleteAdapter = new ReactionAthlete(getActivity(), athleteModels, reactionUrlList, this);
+            ReactionAthlete reactionAthleteAdapter = new ReactionAthlete(athleteModels, reactionUrlList, this);
 
             athleteRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
             athleteRecyclerview.setAdapter(reactionAthleteAdapter);
@@ -369,31 +377,29 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
             if (receivedPostModel != null) {
                 String contentType = receivedPostModel.getContentType();
 
+                List<PostModel> reactionsList = receivedPostModel.getReactions();
+                if (reactionsList.size() > 0) {
+                    for (int i = 0; i < reactionsList.size(); i++) {
+                        totalReactionsVideos.add(reactionsList.get(i).getUrls().getMobileUrl());
+                    }
+                }
+
                 //play your video
-                if(receivedPostModel.getUrls() == null){
+                if (receivedPostModel.getUrls() == null) {
                     return;
                 }
-                if(TextUtils.isEmpty(receivedPostModel.getUrls().getMobileUrl()))
+                if (TextUtils.isEmpty(receivedPostModel.getUrls().getMobileUrl()))
                     return;
 
                 if (contentType != null && contentType.equalsIgnoreCase("video") && videoView != null) {
                     videoView.setVideoPath(receivedPostModel.getUrls().getMobileUrl());
                     videoView.start();
-                } else if (receivedPostModel.getQuestioner() != null) {
-                    List<PostModel> reactionsList = receivedPostModel.getReactions();
-                    if (reactionsList.size() > 0) {
-                        for (int i = 0; i < reactionsList.size(); i++) {
-                            totalReactionsVideos.add(reactionsList.get(i).getUrls().getMobileUrl());
-                        }
-
-                        playAllVideos();
-
-                    }
-
                 }
-
             }
 
+            if (totalReactionsVideos != null && !totalReactionsVideos.isEmpty()) {
+                playAllVideos();
+            }
         }
     }
 
@@ -427,6 +433,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
         likesCount.setText(String.valueOf(receivedPostModel.getLikes().getCount() + 1));
         receivedPostModel.getLikes().setLikedByCurrentUser(true);
         receivedPostModel.getLikes().setCount(receivedPostModel.getLikes().getCount() + 1);
+        processing = false;
     }
 
     @Override
@@ -438,6 +445,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
         likesCount.setText(String.valueOf(receivedPostModel.getLikes().getCount() - 1));
         receivedPostModel.getLikes().setLikedByCurrentUser(false);
         receivedPostModel.getLikes().setCount(receivedPostModel.getLikes().getCount() - 1);
+        processing = false;
     }
 
     @Override
@@ -463,6 +471,10 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
     @OnClick(R.id.likes_count)
     public void onclickLike() {
 
+        if (processing) {
+            return;
+        }
+        processing = true;
         if (TextUtils.isEmpty(receivedPostModel.getContentType())) {
             if (receivedPostModel.getLikes().isLikedByCurrentUser()) {
                 detailPresenter.unlikeQuestion(receivedPostModel.getId());
@@ -470,11 +482,12 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
                 detailPresenter.likeQuestion(receivedPostModel.getId());
             }
         } else {
-
-            if (receivedPostModel.getLikes().isLikedByCurrentUser()) {
-                detailPresenter.unlikePost(receivedPostModel.getId());
-            } else {
-                detailPresenter.likePost(receivedPostModel.getId());
+            if (reactionsList.size() > 0) {
+                if (receivedPostModel.getLikes().isLikedByCurrentUser()) {
+                    detailPresenter.unlikePost(receivedPostModel.getId());
+                } else {
+                    detailPresenter.likePost(receivedPostModel.getId());
+                }
             }
         }
     }
@@ -726,6 +739,7 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
             public void onCompletion(MediaPlayer mp) {
                 videoView.stopPlayback();
                 videoView.suspend();
+                playAllVideos();
             }
         });
     }
