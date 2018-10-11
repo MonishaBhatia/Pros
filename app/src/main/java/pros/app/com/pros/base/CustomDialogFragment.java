@@ -15,6 +15,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import pros.app.com.pros.R;
+import pros.app.com.pros.profile.activity.ContactListActivity;
 
 public class CustomDialogFragment extends BaseDialogFragment {
 
@@ -32,6 +33,7 @@ public class CustomDialogFragment extends BaseDialogFragment {
     View separator;
 
     private CustomDialogListener handleInterface;
+    private String lastScreen;
 
     public static CustomDialogFragment newInstance(Bundle bundle) {
         CustomDialogFragment fragment = new CustomDialogFragment();
@@ -74,11 +76,20 @@ public class CustomDialogFragment extends BaseDialogFragment {
     public void onClickActionOne() {
         if (null != handleInterface)
             handleInterface.handleYes();
+
+        if(ContactListActivity.class.getName().equals(lastScreen)){
+            ((ContactListActivity)getActivity()).finish();
+        }
         dismiss();
     }
 
     @OnClick(R.id.tvAction2)
-    public void onClickActionTwo() {
+    public void onClickActionTwo()
+    {
+
+        if(ContactListActivity.class.getName().equals(lastScreen)){
+            ((ContactListActivity)getActivity()).finish();
+        }
         dismiss();
     }
 
@@ -92,6 +103,7 @@ public class CustomDialogFragment extends BaseDialogFragment {
 
             tvContent.setText(bundle.getString("Content"));
             tvAction2.setText(bundle.getString("Action2"));
+            lastScreen = bundle.getString("LAST_SCREEN");
 
             String action1 = bundle.getString("Action1");
             if (TextUtils.isEmpty(action1)) {

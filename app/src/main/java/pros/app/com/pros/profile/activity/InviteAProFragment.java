@@ -190,8 +190,9 @@ public class InviteAProFragment extends BaseDialogFragment implements BaseView {
     }
 
     private void openContacts() {
-        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        startActivityForResult(intent, PICK_CONTACT);
+        dismiss();
+        Intent intent = new Intent(getActivity(), ContactListActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -214,40 +215,6 @@ public class InviteAProFragment extends BaseDialogFragment implements BaseView {
                 }
                 return;
             }
-        }
-    }
-
-    @Override
-    public void onActivityResult(int reqCode, int resultCode, Intent data) {
-        super.onActivityResult(reqCode, resultCode, data);
-
-        switch (reqCode) {
-            case (PICK_CONTACT):
-                if (resultCode == Activity.RESULT_OK) {
-
-                    Uri contactData = data.getData();
-
-                    Cursor cur =  requireContext().getContentResolver().query(contactData, null, null, null, null);
-                    if (cur.getCount() > 0) {// thats mean some resutl has been found
-                        if(cur.moveToNext()) {
-                            String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
-                            String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-
-
-                            if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0)
-                            {
-
-                                Cursor phones = requireContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = "+ id,null, null);
-                                while (phones.moveToNext()) {
-                                    String phoneNumber = cur.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                                }
-                                phones.close();
-                            }
-
-                        }
-                    }
-                    cur.close();
-                }
         }
     }
 
