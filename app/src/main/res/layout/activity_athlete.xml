@@ -138,7 +138,7 @@
             android:id="@+id/posts_underline"
             android:layout_width="40dp"
             android:layout_height="1.5dp"
-            android:layout_marginLeft="@dimen/dp_40"
+            android:layout_marginLeft="@dimen/dp_32"
             android:background="@color/green"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
@@ -168,11 +168,10 @@
             android:layout_width="64dp"
             android:layout_height="0.75dp"
             android:layout_marginLeft="@dimen/dp_32"
-            android:layout_marginTop="14dp"
             android:background="@color/green"
             android:visibility="gone"
             app:layout_constraintLeft_toRightOf="@+id/tvLikedVideos"
-            app:layout_constraintTop_toBottomOf="@+id/tvReactions" />
+            tools:layout_editor_absoluteY="371dp" />
 
         <TextView
             android:id="@+id/tv_answers"
