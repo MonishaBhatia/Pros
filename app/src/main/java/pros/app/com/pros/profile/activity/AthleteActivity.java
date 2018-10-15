@@ -253,7 +253,7 @@ public class AthleteActivity extends BaseActivity implements ProfileView,
         tvNumFollowing.setText(String.valueOf(metaData.getFollowCount()));
         tvNumFollowers.setText(String.valueOf(metaData.getFollowersCount()));
         tvVideos.setText(String.format(getString(R.string.label_posts), metaData.getLikedPostsCount()));
-        tvQuestions.setText(String.format(getString(R.string.label_questions), metaData.getLikedQuestionsCount()));
+        tvQuestions.setText(String.format(getString(R.string.label_questions), metaData.getQuestionsAskedCount()));
         tvReactions.setText(String.format(getString(R.string.label_reactions), metaData.getReactionsCount()));
         tvAnswers.setText(String.format(getString(R.string.label_answers), metaData.getQuestionsAnsweredCount()));
     }
