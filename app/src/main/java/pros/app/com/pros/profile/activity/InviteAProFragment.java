@@ -1,13 +1,9 @@
 package pros.app.com.pros.profile.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -177,6 +173,20 @@ public class InviteAProFragment extends BaseDialogFragment implements BaseView {
         tvSend.setVisibility(View.VISIBLE);
     }
 
+    private void changeToOriginal() {
+        tvEmail.setVisibility(View.VISIBLE);
+        tvMessage.setVisibility(View.VISIBLE);
+        tvContacts.setVisibility(View.VISIBLE);
+        edtName.setVisibility(View.GONE);
+        edtEmail.setVisibility(View.GONE);
+        edtNumber.setVisibility(View.GONE);
+        tvSend.setVisibility(View.GONE);
+        edtName.setText("");
+        edtEmail.setText("");
+        edtNumber.setText("");
+
+    }
+
     @OnClick(R.id.tvContacts)
     public void onClickContact() {
 
@@ -227,11 +237,13 @@ public class InviteAProFragment extends BaseDialogFragment implements BaseView {
                 jsonRequest.put("email", edtEmail.getText().toString());
             }
 
-            if (!TextUtils.isEmpty(edtNumber.getText().toString()) && edtNumber.getText().toString().length() == 12) {
-                jsonRequest.put("phone_number", edtNumber.getText().toString().replace("-", ""));
-            } else {
-                openDialog("", "Enter 10 Digit Mobile Number", "CLOSE");
-                return;
+            if (!TextUtils.isEmpty(edtNumber.getText().toString())) {
+                if (edtNumber.getText().toString().length() == 12) {
+                    jsonRequest.put("phone_number", edtNumber.getText().toString().replace("-", ""));
+                } else {
+                    openDialog("", "Enter 10 Digit Mobile Number", "CLOSE");
+                    return;
+                }
             }
 
             if (!TextUtils.isEmpty(edtName.getText().toString())) {
@@ -247,7 +259,7 @@ public class InviteAProFragment extends BaseDialogFragment implements BaseView {
 
     @Override
     public void onSuccess() {
-        dismiss();
+        changeToOriginal();
         openDialog("Success", "Your invite has been sent!", "Ok");
     }
 
@@ -261,7 +273,7 @@ public class InviteAProFragment extends BaseDialogFragment implements BaseView {
 
     @Override
     public void onFailure(int message) {
-        dismiss();
+        changeToOriginal();
         openDialog("Pending Invite", "This Athlete has a pending invitation to join Pros", "Close");
     }
 }

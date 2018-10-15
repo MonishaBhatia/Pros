@@ -109,6 +109,10 @@ public class ContactListActivity extends FragmentActivity implements LoaderManag
         JSONObject jsonRequest = new JSONObject();
         try {
 
+            if (!TextUtils.isEmpty(name)) {
+                jsonRequest.put("name", name);
+            }
+
             if (!TextUtils.isEmpty(phone)) {
                 jsonRequest.put("phone_number", phone
                         .replace("-", "")
@@ -116,10 +120,6 @@ public class ContactListActivity extends FragmentActivity implements LoaderManag
                         .replace("(", "")
                         .replace(")", "")
                         .replace("+91", ""));
-            }
-
-            if (!TextUtils.isEmpty(name)) {
-                jsonRequest.put("name", name);
             }
 
         } catch (JSONException e) {
