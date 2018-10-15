@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -21,25 +20,19 @@ import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-import com.vincent.videocompressor.VideoCompress;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pros.app.com.pros.R;
-import pros.app.com.pros.base.LogUtils;
 import pros.app.com.pros.base.PrefUtils;
 import pros.app.com.pros.create_post.presenter.CreatePostPresenter;
 import pros.app.com.pros.create_question.activity.TagsActivity;
 import pros.app.com.pros.detail.fragment.DetailFragment;
 import pros.app.com.pros.home.activity.HomeActivity;
-import pros.app.com.pros.home.model.AthleteModel;
 
 public class PreviewActivity extends AppCompatActivity {
 
@@ -133,7 +126,7 @@ public class PreviewActivity extends AppCompatActivity {
 
         Bitmap converetdImage = getResizedBitmap(bitmap, 950);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        converetdImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        converetdImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         imageByteArray = stream.toByteArray();
     }
 
@@ -184,7 +177,7 @@ public class PreviewActivity extends AppCompatActivity {
             intenty.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intenty);
         } else {
-            Intent intents = new Intent(PreviewActivity.this, TagsActivity.class);
+            Intent intents = new Intent(this, TagsActivity.class);
             intents.putExtra("ImageByte", imageByteArray);
             intents.putExtra("VideoPath", outPath);
             startActivity(intents);
