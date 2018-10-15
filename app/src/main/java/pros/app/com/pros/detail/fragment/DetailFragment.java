@@ -474,20 +474,21 @@ public class DetailFragment extends Fragment implements DetailView, CustomDialog
         if (processing) {
             return;
         }
+
         processing = true;
         if (TextUtils.isEmpty(receivedPostModel.getContentType())) {
-            if (receivedPostModel.getLikes().isLikedByCurrentUser()) {
-                detailPresenter.unlikeQuestion(receivedPostModel.getId());
-            } else {
-                detailPresenter.likeQuestion(receivedPostModel.getId());
-            }
-        } else {
             if (reactionsList.size() > 0) {
                 if (receivedPostModel.getLikes().isLikedByCurrentUser()) {
-                    detailPresenter.unlikePost(receivedPostModel.getId());
+                    detailPresenter.unlikeQuestion(receivedPostModel.getId());
                 } else {
-                    detailPresenter.likePost(receivedPostModel.getId());
+                    detailPresenter.likeQuestion(receivedPostModel.getId());
                 }
+            }
+        } else {
+            if (receivedPostModel.getLikes().isLikedByCurrentUser()) {
+                detailPresenter.unlikePost(receivedPostModel.getId());
+            } else {
+                detailPresenter.likePost(receivedPostModel.getId());
             }
         }
     }
